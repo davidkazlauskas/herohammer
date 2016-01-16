@@ -10,5 +10,4 @@
   :ring {:handler the-hero-hammer.handler/app}
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
-                        [ring/ring-mock "0.3.0"]
-                        [http-kit "2.1.18"]]}})
+                        [ring/ring-mock "0.3.0"]]}})
