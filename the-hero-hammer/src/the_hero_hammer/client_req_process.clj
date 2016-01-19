@@ -33,6 +33,9 @@
     )
   )
 
+(defn lol-get-question [id]
+  (get-key (lol-question-by-id-key id)))
+
 (defn store-question [arg-map]
   ())
 
