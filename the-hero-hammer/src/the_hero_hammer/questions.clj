@@ -24,7 +24,7 @@
 (defn get-question-and-answer-id [questionshort answer questions]
   (let [qid (get-question questionshort questions)]
   [qid
-   (->> (get (get (questions) qid) :options)
+   (->> (get (get questions qid) :options)
      (map-indexed #(if (= %2 answer) %1 nil))
      (filter some?)
      (first))]))

@@ -25,4 +25,6 @@
          ))
   (is (= (get-question "shortb" (apply questions (testvector)))
          1))
+  (is (= (get-question-and-answer-id "shortb" "0" (apply questions (testvector)))
+         [1 1]))
   ))
