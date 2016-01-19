@@ -12,3 +12,23 @@
 
 (defmacro questions-m [& args]
   (apply questions args))
+
+(defn get-question [questionshort args]
+  (println args)
+  (->> args
+       (map-indexed
+          #(if (= (get %2 :shortname) questionshort) %1 nil))
+       (filter some?)
+       (first)))
+
+(defn get-question-and-answer-id [questionshort answer questions]
+  (let [qid (get-question questionshort questions)]
+  [qid
+   (->> (get (get (questions) qid) :options)
+     (map-indexed #(if (= %2 answer) %1 nil))
+     (filter some?)
+     (first))]))
+
+(defmacro get-question-and-answer-id-m
+  [questionshort answer questions]
+  (get-question-and-answer-id questionshort answer))

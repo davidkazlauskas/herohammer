@@ -6,6 +6,9 @@
 (defn testvector []
   '(("shorta" "some q a" "yes" "no") ("shortb" "some another" "1" "0")))
 
+(defmacro testvector-m []
+  (testvector))
+
 (deftest question-tests
   (testing "Generate expected"
   (is (= (question 0 "sname" "some question" "yes" "no")
@@ -20,4 +23,6 @@
            :options ["1" "0"]}
          ]
          ))
+  (is (= (get-question "shortb" (apply questions (testvector)))
+         1))
   ))
