@@ -18,7 +18,7 @@
     ("last-hit" "I had trouble last hitting minions" "yes" "no")
     ))
 
-(def all-heroes-lol []
+(defn all-heroes-lol []
   [
   "Aatrox"
   "Ahri"
