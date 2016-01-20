@@ -11,15 +11,18 @@
        (into {})))
 
 (def ^:dynamic *global-hero-to-index-lol*
-  (into {} (map-indexed #(vector %2 %1) (all-heroes-lol))))
+  (into {} (map-indexed
+           #(vector (clojure.string/lower-case %2) %1)
+           (all-heroes-lol))))
 
 (defn lol-hero-index [name]
   (get *global-hero-to-index-lol* name))
 
 (defn gen-key-for-count-lol
   [hero-user hero-opponent question-id filter-id]
-  (str "lol-question-count-" hero-user
-       "-" hero-opponent "-" question-id "-" filter-id))
+  (str "lol-question-count-" (lol-hero-index hero-user)
+       "-" (lol-hero-index hero-opponent)
+       "-" question-id "-" filter-id))
 
 (defmacro lol-question-count-key [] "lol-total-question-counter")
 
