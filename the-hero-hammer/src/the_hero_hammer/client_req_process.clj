@@ -11,7 +11,10 @@
        (into {})))
 
 (def ^:dynamic *global-hero-to-index-lol*
-  (map-indexed #(vector %2 %1) (all-heroes-lol)))
+  (into [] (map-indexed #(vector %2 %1) (all-heroes-lol))))
+
+(defn lol-hero-index [name]
+  (get *global-hero-to-index-lol* name))
 
 (defn gen-key-for-count-lol
   [hero-user hero-opponent question-id filter-id]
