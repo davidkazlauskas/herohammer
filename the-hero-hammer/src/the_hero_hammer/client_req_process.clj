@@ -38,7 +38,17 @@
 (defn lol-question-by-id-key [id]
   (str "lol-question-by-id-" id))
 
-(defn lol-store-next-question [data]
+(defn lol-question-by-matchup-and-id-key
+  [hero-user hero-opponent id]
+  (str "lol-question-by-matchup-and-id-"
+       (lol-hero-index hero-user)
+       "-" (lol-hero-index hero-opponent)
+       "-" id
+       ))
+
+(defn lol-store-next-question-glob-index [data]
+  "Increment and store in global counter of questions.
+  We store keys to matchup questions."
   (let [curr (get-key (lol-question-count-key))]
     (let [toreturn
           (if (some? curr)
@@ -50,6 +60,24 @@
       toreturn)
     )
   )
+
+(defn lol-store-next-question-for-matchup
+  [hero-user hero-opponent data]
+  (let [the-key (lol-gen-key-for-matchup-question-count
+                 hero-user hero-opponent)
+        curr (get-key the-key)]
+    (let [toreturn (if (some? curr)
+      (do (set-key the-key (inc curr))
+          curr)
+      (do (set-key the-key 1) 0))]
+      (set-key (lol-question-by-matchup-and-id-key
+                 hero-user hero-opponent toreturn
+                 data))
+      )))
+
+(defn lol-get-question-for-matchup-by-id
+  [hero-user hero-opponent id]
+  (lol-gen-key-for-matchup-question-count))
 
 (defn lol-get-question [id]
   (get-key (lol-question-by-id-key id)))

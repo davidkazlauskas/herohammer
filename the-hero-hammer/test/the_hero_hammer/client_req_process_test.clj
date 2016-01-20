@@ -10,5 +10,7 @@
     (is (= (lol-question-by-id-key 7) "lol-question-by-id-7"))
     (is (= (lol-gen-key-for-matchup-question-count "tryndamere" "akali")
            "lol-question-index-count-104-2"))
+    (is (= (lol-question-by-matchup-and-id-key "tryndamere" "akali" 7)
+           "lol-question-by-matchup-and-id-104-2-7"))
     ))
 
