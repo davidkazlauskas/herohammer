@@ -71,8 +71,9 @@
           curr)
       (do (set-key the-key 1) 0))]
       (set-key (lol-question-by-matchup-and-id-key
-                 hero-user hero-opponent toreturn
-                 data))
+                 hero-user hero-opponent toreturn)
+               data)
+      toreturn
       )))
 
 (defn lol-get-question-for-matchup-by-id
