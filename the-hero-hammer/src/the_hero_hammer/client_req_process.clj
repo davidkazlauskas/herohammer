@@ -86,7 +86,7 @@
   (get-key (lol-question-by-id-key id)))
 
 (defn lol-traverse-matchup-questions
-  "Make iterator to traverse all question values"
+  "Make iterator to traverse all question values (lazy)"
   [hero-user hero-opponent]
   (let [matchup-count (get-key (lol-gen-key-for-matchup-question-count
                        hero-user hero-opponent))]
