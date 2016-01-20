@@ -76,8 +76,10 @@
       )))
 
 (defn lol-get-question-for-matchup-by-id
+  "Return question of matchup by number."
   [hero-user hero-opponent id]
-  (lol-gen-key-for-matchup-question-count))
+  (get-key (lol-question-by-matchup-and-id-key
+    hero-user hero-opponent id)))
 
 (defn lol-get-question [id]
   (get-key (lol-question-by-id-key id)))
