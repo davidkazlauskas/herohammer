@@ -21,9 +21,16 @@
         (:options q))
    [:br])))
 
+(defn wrap-html [towrap]
+  (html [:html
+         [:head]
+         [:body
+          towrap]
+         ]))
+
 (defn lol-render-questions []
-  ;(html (map #(vector :form (:question %1)) (all-questions-lol))))
-  (html [:form (map render-question (all-questions-lol))]))
+  (wrap-html [:form (map render-question (all-questions-lol))
+              [:input {:type "submit" :value "submit"}]]))
 
 (defroutes myapp
   (GET "/" [] (index))
