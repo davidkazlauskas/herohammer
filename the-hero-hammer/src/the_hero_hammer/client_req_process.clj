@@ -18,11 +18,20 @@
 (defn lol-hero-index [name]
   (get *global-hero-to-index-lol* name))
 
-(defn gen-key-for-count-lol
+(defn lol-gen-key-for-count
+  "Generate db key for question counter for question and filter."
   [hero-user hero-opponent question-id filter-id]
   (str "lol-question-count-" (lol-hero-index hero-user)
        "-" (lol-hero-index hero-opponent)
        "-" question-id "-" filter-id))
+
+(defn lol-gen-key-for-matchup-question-count
+  "Generate key for question count for specific matchup."
+  [hero-user hero-opponent]
+  (str "lol-question-index-count-"
+       (lol-hero-index hero-user)
+       "-" (lol-hero-index hero-opponent))
+  )
 
 (defmacro lol-question-count-key [] "lol-total-question-counter")
 
