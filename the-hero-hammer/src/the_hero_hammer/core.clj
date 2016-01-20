@@ -28,13 +28,22 @@
           towrap]
          ]))
 
+(defmacro q-post-link [] "/questions-post")
+
 (defn lol-render-questions []
-  (wrap-html [:form (map render-question (all-questions-lol))
-              [:input {:type "submit" :value "submit"}]]))
+  (wrap-html [:form {:method "POST" :action (q-post-link)}
+              (map render-question (all-questions-lol))
+              [:input {:type "submit"
+                       :value "Submit record"}]]))
+
+(defn lol-post-questions [data]
+  (println data))
 
 (defroutes myapp
   (GET "/" [] (index))
-  (GET "/questions" [] (lol-render-questions)))
+  (GET "/questions" [] (lol-render-questions))
+  (POST (q-post-link) [] (lol-post-questions))
+  )
 
 (defn -main []
   (println "Muah runnin!")
