@@ -3,7 +3,8 @@
             [the-hero-hammer.client_req_process :refer :all]
             [the-hero-hammer.questions_spec :refer :all]
             [org.httpkit.server :refer [run-server]])
-  (:use hiccup.core))
+  (:use hiccup.core
+        [ring.middleware.params :only [wrap-params]]))
 
 (defn index
   "meow"
@@ -36,15 +37,15 @@
               [:input {:type "submit"
                        :value "Submit record"}]]))
 
-(defn lol-post-questions [data]
-  (println data))
+(defn lol-post-questions [req]
+  (println "par" (:params req))
+  (html [:p (map #(html [:p %1]) req)]))
 
 (defroutes myapp
   (GET "/" [] (index))
   (GET "/questions" [] (lol-render-questions))
-  (POST (q-post-link) [] (lol-post-questions))
-  )
+  (POST (q-post-link) {params :params} (lol-post-questions params)))
 
 (defn -main []
   (println "Muah runnin!")
-  (run-server myapp {:port 5000}))
+  (run-server (wrap-params myapp) {:port 5000}))
