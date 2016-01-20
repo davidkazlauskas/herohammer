@@ -42,9 +42,25 @@
               [:input {:type "submit"
                        :value "Submit record"}]]))
 
+(defn lol-question-set-similarity
+  "Return percentage of values picked from user"
+  [request]
+  (let [cross (clojure.set/intersection *radio-set*
+                (into #{} (keys request)))]
+    (* (/ (count cross) (count *radio-set*)) 100)))
+
+(defmacro min-questions [] 77)
+
 (defn lol-post-questions [req]
-  (println "par" (:params req))
-  (html [:p (map #(html [:p %1]) req)]))
+  (let [answered (lol-question-set-similarity req)]
+    (println "ans" answered)
+    (if (> (min-questions) answered)
+      (str "Only " answered "% of questions were answered."
+           " Minimum is " (min-questions) "%.")
+      (html [:p (map #(html [:p %1]) req)])
+      )
+    )
+  )
 
 (defroutes myapp
   (GET "/" [] (index))
