@@ -11,6 +11,11 @@
   []
   (html [:h1 "Dazlow!"]))
 
+(def ^:dynamic *radio-set*
+  (into #{} (map #(str "radio-"
+             (:shortname %1))
+       (all-questions-lol))))
+
 (defn render-question [q]
   (let [shortname (:shortname q)] (html
     [:p (:question q)]
