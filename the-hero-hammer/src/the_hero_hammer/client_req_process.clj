@@ -11,7 +11,7 @@
        (into {})))
 
 (def ^:dynamic *global-hero-to-index-lol*
-  (into [] (map-indexed #(vector %2 %1) (all-heroes-lol))))
+  (into {} (map-indexed #(vector %2 %1) (all-heroes-lol))))
 
 (defn lol-hero-index [name]
   (get *global-hero-to-index-lol* name))
