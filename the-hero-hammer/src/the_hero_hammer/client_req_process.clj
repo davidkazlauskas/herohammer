@@ -10,6 +10,9 @@
        (map-indexed #(vector (get %2 :shortname) %1))
        (into {})))
 
+(def ^:dynamic *global-hero-to-index-lol*
+  (map-indexed #(vector %2 %1) (all-heroes-lol)))
+
 (defn gen-key-for-count-lol
   [hero-user hero-opponent question-id filter-id]
   (str "lol-question-count-" hero-user
