@@ -34,8 +34,8 @@
     [:p (:question q)]
    (map-indexed #(identity
          [:input {:type "radio" :value
-                  (str "choice-val-" shortname "-" %1)
-                  :name (str "radio-" shortname)
+                  %1
+                  :name shortname
                   } %2])
         (:options q))
    [:br])))
