@@ -85,7 +85,8 @@
         (println req)
       (str "Only " answered "% of questions were answered."
            " Minimum is " (min-questions) "%."))
-      (html [:p (map #(html [:p %1]) req)])
+      (do (lol-process-question (form-to-data req))
+          (html [:p (map #(html [:p %1]) req)]))
       )
     )
   )
