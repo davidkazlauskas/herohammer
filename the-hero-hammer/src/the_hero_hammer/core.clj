@@ -17,27 +17,16 @@
        (all-questions-lol))))
 
 (defn form-to-data [form]
-  ;(println "ferm " form)
   {
-   :hero-user (:hero-user form)
-   :hero-opponent (:hero-opponent form)
-   :comment (:user-comment form)
+   :hero-user (get form "user-hero")
+   :hero-opponent (get form "opponent-hero")
+   :comment (get form "user-comment")
    :answers (->> (all-questions-lol)
                  (map :shortname)
-                 (map #(get form %1))
-                 (filter some?)
+                 (map-indexed #(vector %1 (get form %2)))
+                 (filter #(some? (get %1 1)))
                  (into []))
    }
-  ;(into [] (map #(
-     ;(println "|" (get % 0) "|->|" (get % 1) "|")
-     ;(let [rawname (clojure.string/replace (get %1 0) "radio-" "")]
-     ;(println "rew" rawname)
-     ;[rawname
-       ;(clojure.string/replace (get % 1)
-         ;(str "choice-val-" rawname "-") "")]
-     ;["milky" "duck"]
-     ;)
-     ;) form))
   )
 
 (defn render-question [q]
