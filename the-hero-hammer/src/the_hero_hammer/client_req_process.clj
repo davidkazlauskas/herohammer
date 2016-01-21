@@ -33,6 +33,22 @@
        "-" (lol-hero-index hero-opponent))
   )
 
+(defn lol-gen-key-for-matchup-comment-count
+  "Generate key for comment count for specific matchup."
+  [hero-user hero-opponent]
+  (str "lol-question-comment-count-"
+       (lol-hero-index hero-user)
+       "-" (lol-hero-index hero-opponent))
+  )
+
+(defn lol-gen-key-for-matchup-comment
+  "Generate key to store specific comment."
+  [hero-user hero-opponent]
+  (str "lol-question-comment-id-"
+       (lol-hero-index hero-user)
+       "-" (lol-hero-index hero-opponent))
+  )
+
 (defmacro lol-question-count-key [] "lol-total-question-counter")
 
 (defn lol-question-by-id-key [id]
@@ -64,17 +80,10 @@
 (defn lol-store-next-question-glob-index [data]
   "Increment and store in global counter of questions.
   We store keys to matchup questions."
-  (let [curr (get-key (lol-question-count-key))]
-    (let [toreturn
-          (if (some? curr)
-          (do (set-key (lol-question-count-key) (inc curr))
-              curr)
-          (do (set-key (lol-question-count-key) 1)
-              0))]
-      (set-key (lol-question-by-id-key toreturn) data)
-      toreturn)
-    )
-  )
+  (generic-store-next-item
+    (lol-question-count-key)
+     lol-question-by-id-key
+     data))
 
 (defn lol-store-next-question-for-matchup
   [hero-user hero-opponent data]
@@ -90,8 +99,9 @@
   (generic-store-next-item
     (lol-gen-key-for-matchup-comment-count
       hero-user hero-opponent)
-    ()
-    )
+    (partial lol-gen-key-for-matchup-comment
+             hero-user hero-opponent)
+    data)
   )
 
 (defn lol-get-question-for-matchup-by-id
@@ -122,6 +132,11 @@
                  (produce-for-id 0))))
       nil)
     )
+  )
+
+(defn lol-process-question
+  "Process (save) question in form {:hero-user :hero-opponent :comment :answers []}"
+  [data]
   )
 
 ; todo next
