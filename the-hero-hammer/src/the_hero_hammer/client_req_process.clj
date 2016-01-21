@@ -114,7 +114,10 @@
   (get-key (lol-question-by-id-key id)))
 
 (defn generic-traverse-nodes
-  [start-at count-key id-gen-function]
+  "Generically traverse all nodes from start-at index
+  with count-key which stores value count and
+  id generation function id-gen-function"
+  ([start-at count-key id-gen-function]
   (let [matchup-count (get-key count-key)]
     (if (some? matchup-count)
       (let [produce-for-id
@@ -128,13 +131,15 @@
                    (produce-for-id (inc (:count val-map)))))
                  (produce-for-id start-at))))
       nil)
-    )
+    ))
+  ([count-key id-gen-function]
+   (generic-traverse-nodes 0 count-key id-gen-function))
   )
 
 (defn lol-traverse-matchup-questions
   "Make iterator to traverse all question values (lazy)"
   [hero-user hero-opponent]
-  (generic-traverse-nodes 0
+  (generic-traverse-nodes
     (lol-gen-key-for-matchup-question-count
       hero-user hero-opponent)
     (partial lol-get-question-for-matchup-by-id
