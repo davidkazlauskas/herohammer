@@ -59,9 +59,9 @@
 
 (defn lol-gen-key-for-matchup-comment-id
   "Generate key to store specific comment."
-  [hero-user hero-opponent]
+  [hero-user hero-opponent id]
   (str "lol-question-comment-id-"
-       hero-user "-" hero-opponent)
+       hero-user "-" hero-opponent "-" id)
   )
 
 (defmacro lol-question-count-key [] "lol-total-question-counter")
