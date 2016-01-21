@@ -52,9 +52,14 @@
 (defn lol-render-questions []
   (wrap-html [:form {:id "questions-form"
                      :method "POST" :action (q-post-link)}
+              [:select {:name "user-hero"}
+               (map-indexed #(html
+                       [:option {:value %1} %2]
+                       ) (all-heroes-lol))
+               ]
               (map render-question (all-questions-lol))
               [:textarea {:name "user-comment"
-                          :form "questions-form" :rows 4 :cols 50}]
+                          :rows 4 :cols 50}]
               [:input {:type "submit"
                        :value "Submit record"}]]))
 
