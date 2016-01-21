@@ -20,8 +20,8 @@
 
 (defn form-to-data [form]
   {
-   :hero-user (get form "user-hero")
-   :hero-opponent (get form "opponent-hero")
+   :hero-user (parse-int (get form "user-hero"))
+   :hero-opponent (parse-int (get form "opponent-hero"))
    :comment (get form "user-comment")
    :answers (->> (all-questions-lol)
                  (map :shortname)
