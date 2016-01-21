@@ -134,23 +134,11 @@
 (defn lol-traverse-matchup-questions
   "Make iterator to traverse all question values (lazy)"
   [hero-user hero-opponent]
-  (let [matchup-count (get-key (lol-gen-key-for-matchup-question-count
-                       hero-user hero-opponent))]
-    (if (some? matchup-count)
-      (let [produce-for-id
-        (fn [id]
-           {:count id
-            :until (dec matchup-count)
-            :val (lol-get-question-for-matchup-by-id
-                      hero-user hero-opponent id)})]
-        (take-while some? (iterate (fn [val-map]
-                 (if (= (:count val-map) (:until val-map))
-                   nil
-                   (produce-for-id (inc (:count val-map)))))
-                 (produce-for-id 0))))
-      nil)
-    )
-  )
+  (generic-traverse-nodes 0
+    (lol-gen-key-for-matchup-question-count
+      hero-user hero-opponent)
+    (partial lol-get-question-for-matchup-by-id
+      hero-user hero-opponent)))
 
 (defn lol-process-question
   "Process (save) question in form {:hero-user :hero-opponent :comment :answers []}"
