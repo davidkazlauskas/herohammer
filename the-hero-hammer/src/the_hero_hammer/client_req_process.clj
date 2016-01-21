@@ -194,7 +194,7 @@
   [data]
   (let [glob-id (lol-store-next-question-glob-index 0)
         frozen-questions (nippy/freeze
-         (:globid glob-id :date (curr-unix-timestamp) :answers data))
+         {:globid glob-id :date (curr-unix-timestamp) :answers data})
         hu (:hero-user data)
         ho (:hero-opponent data)
         ]
