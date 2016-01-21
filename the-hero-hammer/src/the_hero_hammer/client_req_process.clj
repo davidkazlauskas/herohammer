@@ -200,7 +200,7 @@
         ]
     (let [qid (lol-store-next-question-for-matchup-by-id
       hu ho frozen-questions)]
-      (set-key (lol-question-by-id-key glob-key)
+      (set-key (lol-question-by-id-key glob-id)
                (lol-gen-key-for-matchup-question-count-id hu ho))
       (lol-store-next-comment-for-matchup-id hu ho
          (nippy/freeze {:qid qid :comment data}))
