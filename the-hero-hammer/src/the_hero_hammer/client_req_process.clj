@@ -202,7 +202,8 @@
       hu ho frozen-questions)]
       (set-key (lol-question-by-id-key glob-key)
                (lol-gen-key-for-matchup-question-count-id hu ho))
-      (lol-store-next-comment-for-matchup-id hu ho (:comment data))
+      (lol-store-next-comment-for-matchup-id hu ho
+         (nippy/freeze {:qid qid :comment data}))
       )
     )
   )
