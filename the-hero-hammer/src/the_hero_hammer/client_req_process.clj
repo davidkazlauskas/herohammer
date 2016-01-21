@@ -165,7 +165,7 @@
         (fn [id]
            {:count id
             :until (dec matchup-count)
-            :val (id-gen-function id)})]
+            :val (get-key (id-gen-function id))})]
         (take-while some? (iterate (fn [val-map]
                  (if (= (:count val-map) (:until val-map))
                    nil
