@@ -78,18 +78,21 @@
 
 (defn lol-store-next-question-for-matchup
   [hero-user hero-opponent data]
-  (let [the-key (lol-gen-key-for-matchup-question-count
-                 hero-user hero-opponent)
-        curr (get-key the-key)]
-    (let [toreturn (if (some? curr)
-      (do (set-key the-key (inc curr))
-          curr)
-      (do (set-key the-key 1) 0))]
-      (set-key (lol-question-by-matchup-and-id-key
-                 hero-user hero-opponent toreturn)
-               data)
-      toreturn
-      )))
+  (generic-store-next-item
+    (lol-gen-key-for-matchup-question-count
+      hero-user hero-opponent)
+    (partial lol-question-by-matchup-and-id-key
+             hero-user hero-opponent)
+    data))
+
+(defn lol-store-next-comment-for-matchup
+  [hero-user hero-opponent data]
+  (generic-store-next-item
+    (lol-gen-key-for-matchup-comment-count
+      hero-user hero-opponent)
+    ()
+    )
+  )
 
 (defn lol-get-question-for-matchup-by-id
   "Return question of matchup by number."
