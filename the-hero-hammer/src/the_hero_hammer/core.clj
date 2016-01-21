@@ -15,6 +15,9 @@
   (into #{} (map #(:shortname %1)
        (all-questions-lol))))
 
+(defn parse-int [s]
+   (Integer. (re-find  #"\d+" s )))
+
 (defn form-to-data [form]
   {
    :hero-user (get form "user-hero")
@@ -22,7 +25,8 @@
    :comment (get form "user-comment")
    :answers (->> (all-questions-lol)
                  (map :shortname)
-                 (map-indexed #(vector %1 (get form %2)))
+                 (map-indexed #(vector %1
+                   (parse-int (get form %2))))
                  (filter #(some? (get %1 1)))
                  (into []))
    }
