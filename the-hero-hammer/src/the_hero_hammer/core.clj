@@ -12,8 +12,7 @@
   (html [:h1 "Dazlow!"]))
 
 (def ^:dynamic *radio-set*
-  (into #{} (map #(str "radio-"
-             (:shortname %1))
+  (into #{} (map #(:shortname %1)
        (all-questions-lol))))
 
 (defn form-to-data [form]
@@ -85,7 +84,8 @@
         (println req)
       (str "Only " answered "% of questions were answered."
            " Minimum is " (min-questions) "%."))
-      (do (lol-process-question (form-to-data req))
+      (do (println "Saving question!")
+        (lol-process-question (form-to-data req))
           (html [:p (map #(html [:p %1]) req)]))
       )
     )
