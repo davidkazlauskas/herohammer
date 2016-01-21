@@ -138,7 +138,7 @@
   [hero-user hero-opponent data]
   (generic-store-next-item
     (lol-gen-key-for-matchup-comment-count
-      hero-user hero-opponenta)
+      hero-user hero-opponent)
     (partial lol-gen-key-for-matchup-comment-id
              hero-user hero-opponent)
     data)
