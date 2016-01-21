@@ -1,7 +1,8 @@
 (ns the-hero-hammer.client_req_process
   (:require [the-hero-hammer.questions :refer :all]
             [the-hero-hammer.questions_spec :refer :all]
-            [the-hero-hammer.storage :refer :all]))
+            [the-hero-hammer.storage :refer :all]
+            [taoensso.nippy :as nippy]))
 
 
 (def ^:dynamic *global-questions-map-lol* (all-questions-lol))
@@ -33,6 +34,13 @@
        "-" (lol-hero-index hero-opponent))
   )
 
+(defn lol-gen-key-for-matchup-question-count-id
+  "Generate key for question count for specific matchup."
+  [hero-user hero-opponent]
+  (str "lol-question-index-count-"
+       hero-user "-" hero-opponent)
+  )
+
 (defn lol-gen-key-for-matchup-comment-count
   "Generate key for comment count for specific matchup."
   [hero-user hero-opponent]
@@ -49,6 +57,13 @@
        "-" (lol-hero-index hero-opponent))
   )
 
+(defn lol-gen-key-for-matchup-comment-id
+  "Generate key to store specific comment."
+  [hero-user hero-opponent]
+  (str "lol-question-comment-id-"
+       hero-user "-" hero-opponent)
+  )
+
 (defmacro lol-question-count-key [] "lol-total-question-counter")
 
 (defn lol-question-by-id-key [id]
@@ -60,6 +75,12 @@
        (lol-hero-index hero-user)
        "-" (lol-hero-index hero-opponent)
        "-" id
+       ))
+
+(defn lol-question-by-matchup-and-id-key-id
+  [hero-user hero-opponent id]
+  (str "lol-question-by-matchup-and-id-"
+       hero-user "-" hero-opponent "-" id
        ))
 
 (defn generic-store-next-item
@@ -94,12 +115,31 @@
              hero-user hero-opponent)
     data))
 
+(defn lol-store-next-question-for-matchup-by-id
+  [hero-user hero-opponent data]
+  (generic-store-next-item
+    (lol-gen-key-for-matchup-question-count-id
+      hero-user hero-opponent)
+    (partial lol-question-by-matchup-and-id-key-id
+             hero-user hero-opponent)
+    data))
+
 (defn lol-store-next-comment-for-matchup
   [hero-user hero-opponent data]
   (generic-store-next-item
     (lol-gen-key-for-matchup-comment-count
       hero-user hero-opponent)
     (partial lol-gen-key-for-matchup-comment
+             hero-user hero-opponent)
+    data)
+  )
+
+(defn lol-store-next-comment-for-matchup-id
+  [hero-user hero-opponent data]
+  (generic-store-next-item
+    (lol-gen-key-for-matchup-comment-count
+      hero-user hero-opponenta)
+    (partial lol-gen-key-for-matchup-comment-id
              hero-user hero-opponent)
     data)
   )
@@ -145,12 +185,25 @@
     (partial lol-get-question-for-matchup-by-id
       hero-user hero-opponent)))
 
-(defn lol-process-question
-  "Process (save) question in form {:hero-user :hero-opponent :comment :answers []}"
-  [data]
-  )
+(defn curr-unix-timestamp []
+  (quot (System/currentTimeMillis) 1000))
 
-; todo next
-(defn store-question [arg-map]
-  ())
+(defn lol-process-question
+  "Process (save) question in form
+  {:hero-user :hero-opponent :comment :answers []}"
+  [data]
+  (let [glob-id (lol-store-next-question-glob-index 0)
+        frozen-questions (nippy/freeze
+         (:globid glob-id :date (curr-unix-timestamp) :answers data))
+        hu (:hero-user data)
+        ho (:hero-opponent data)
+        ]
+    (let [qid (lol-store-next-question-for-matchup-by-id
+      hu ho frozen-questions)]
+      (set-key (lol-question-by-id-key glob-key)
+               (lol-gen-key-for-matchup-question-count-id hu ho))
+      (lol-store-next-comment-for-matchup-id hu ho (:comment data))
+      )
+    )
+  )
 
