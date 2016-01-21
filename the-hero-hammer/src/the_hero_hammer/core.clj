@@ -16,6 +16,19 @@
              (:shortname %1))
        (all-questions-lol))))
 
+(defn form-to-data [form]
+  (println "ferm " form)
+  (into [] (map #(
+     (println "|" (get % 0) "|->|" (get % 1) "|")
+     (let [rawname (clojure.string/replace (get %1 0) "radio-" "")]
+     (println "rew" rawname)
+     [rawname
+       (clojure.string/replace (get % 1)
+         (str "choice-val-" rawname "-") "")]
+     ["milky" "duck"]
+     )
+     ) form)))
+
 (defn render-question [q]
   (let [shortname (:shortname q)] (html
     [:p (:question q)]
@@ -37,8 +50,11 @@
 (defmacro q-post-link [] "/questions-post")
 
 (defn lol-render-questions []
-  (wrap-html [:form {:method "POST" :action (q-post-link)}
+  (wrap-html [:form {:id "questions-form"
+                     :method "POST" :action (q-post-link)}
               (map render-question (all-questions-lol))
+              [:textarea {:name "user-comment"
+                          :form "questions-form" :rows 4 :cols 50}]
               [:input {:type "submit"
                        :value "Submit record"}]]))
 
@@ -55,8 +71,10 @@
   (let [answered (lol-question-set-similarity req)]
     (println "ans" answered)
     (if (> (min-questions) answered)
+      (do
+        (println req)
       (str "Only " answered "% of questions were answered."
-           " Minimum is " (min-questions) "%.")
+           " Minimum is " (min-questions) "%."))
       (html [:p (map #(html [:p %1]) req)])
       )
     )
