@@ -51,10 +51,11 @@
 
 (defn lol-gen-key-for-matchup-comment
   "Generate key to store specific comment."
-  [hero-user hero-opponent]
+  [hero-user hero-opponent id]
   (str "lol-question-comment-id-"
        (lol-hero-index hero-user)
-       "-" (lol-hero-index hero-opponent))
+       "-" (lol-hero-index hero-opponent)
+       "-" id)
   )
 
 (defn lol-gen-key-for-matchup-comment-id
@@ -184,6 +185,16 @@
       hero-user hero-opponent)
     (partial lol-get-question-for-matchup-by-id
       hero-user hero-opponent)))
+
+(defn lol-traverse-matchup-comments
+  "Make iterator to traverse all question values (lazy)"
+  [hero-user hero-opponent]
+  (generic-traverse-nodes
+    (lol-gen-key-for-matchup-comment-count
+      hero-user hero-opponent)
+    (partial lol-gen-key-for-matchup-comment
+      hero-user hero-opponent)))
+
 
 (defn curr-unix-timestamp []
   (quot (System/currentTimeMillis) 1000))
