@@ -54,8 +54,13 @@
                      :method "POST" :action (q-post-link)}
               [:select {:name "user-hero"}
                (map-indexed #(html
-                       [:option {:value %1} %2]
-                       ) (all-heroes-lol))
+                   [:option {:value %1} %2]
+                   ) (all-heroes-lol))
+               ]
+              [:select {:name "opponent-hero"}
+               (map-indexed #(html
+                   [:option {:value %1} %2]
+                   ) (all-heroes-lol))
                ]
               (map render-question (all-questions-lol))
               [:textarea {:name "user-comment"
