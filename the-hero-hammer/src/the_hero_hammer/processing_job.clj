@@ -133,7 +133,10 @@
     (let [count-key (lol-gen-key-for-count-id
                      hero-user-id hero-opponent-id
                      (:id curr-q) (:id (get flt 1)))]
-      count-key)))
+      (let [key-res (get-key count-key)]
+        (if (some? key-res)
+          key-res
+          (get flt 0))))))
 
 (defn process-n-questions
   [q-range the-filters hero-user-id hero-opponent-id]
