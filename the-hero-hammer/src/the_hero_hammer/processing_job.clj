@@ -63,5 +63,7 @@
 (defn lol-get-unproccessed-questions-range [idx]
   (let [outdb (get-key (lol-new-unprocessed-questions-key idx))
         globcnt (lol-global-question-count)]
-    (if (= nil outdb))
-    ))
+    (cond
+      (= nil globcnt) nil
+      (= nil outdb) [0 globcnt]
+      :else [(:to outdb) globcnt])))
