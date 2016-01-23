@@ -6,7 +6,7 @@
 
 
 (def ^:dynamic *global-questions-map-lol* (all-questions-lol))
-(def ^:dynamic *global-short-to-index-map*
+(def ^:dynamic *lol-global-short-to-index-map*
   (->> *global-questions-map-lol*
        (map-indexed #(vector (get %2 :shortname) %1))
        (into {})))
@@ -167,12 +167,12 @@
 (defn lol-get-question [id]
   (get-key (lol-question-by-id-key id)))
 
-(defn generic-traverse-nodes
+(defn generic-traverse-nodes-raw-count
   "Generically traverse all nodes from start-at index
   with count-key which stores value count and
   id generation function id-gen-function"
-  ([start-at count-key id-gen-function]
-  (let [matchup-count (get-key count-key)]
+  ([start-at predef-count id-gen-function]
+  (let [matchup-count predef-count]
     (if (some? matchup-count)
       (let [produce-for-id
         (fn [id]
@@ -186,9 +186,18 @@
                  (produce-for-id start-at))))
       nil)
     ))
+  ([predef-count id-gen-function]
+   (generic-traverse-nodes-raw-count 0 predef-count id-gen-function)))
+
+(defn generic-traverse-nodes
+  "Generically traverse all nodes from start-at index
+  with count-key which stores value count and
+  id generation function id-gen-function"
+  ([start-at count-key id-gen-function]
+  (generic-traverse-nodes-raw-count
+    start-at (get-key count-key) id-gen-function))
   ([count-key id-gen-function]
-   (generic-traverse-nodes 0 count-key id-gen-function))
-  )
+   (generic-traverse-nodes 0 count-key id-gen-function)))
 
 (defn lol-traverse-matchup-questions-id
   "Make iterator to traverse all question values (lazy)"
