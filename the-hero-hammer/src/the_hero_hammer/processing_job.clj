@@ -119,15 +119,22 @@
        (sort-by #(get % 1) >)
        (into [])))
 
-(defn zip-counts-with-filters [counts]
-  (map vector counts (all-filters)))
+(defn zip-counts-with-filters [counts curr-newest-question]
+  (->> (map vector counts (all-filters))
+       (map #(vector (get %1 0) (get %1 1)
+                     ((:expected (get %1 1))
+                      curr-newest-question (get %1 0))))
+       (into [])))
 
-(defn lol-process-single-pair [to-process]
+(defn lol-process-single-pair [currmax to-process]
   (let [the-filters (apply get-all-filters-for-matchup to-process)]
-    (let [paired (zip-counts-with-filters the-filters)]
+    (let [paired (zip-counts-with-filters the-filters currmax)]
       ; paired -> [ [ <count> <metadata> ] .. ]
       paired
       )))
 
 (defn lol-process-pairs [to-process]
-  (into [] (map lol-process-single-pair to-process)))
+  (let [currmax (lol-global-question-count)]
+    (into [] (map
+       (partial lol-process-single-pair currmax)
+       to-process))))
