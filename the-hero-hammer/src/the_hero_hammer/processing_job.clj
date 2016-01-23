@@ -143,10 +143,7 @@
                     (- (:to q-range) (:from q-range)))]
     (let [all-nodes
       (get-matchup-questions-nodes
-        hero-user-id hero-opponent-id the-filters)
-        ;1
-      ]
-      (println "baptu" hero-user-id hero-opponent-id q-range)
+        hero-user-id hero-opponent-id the-filters)]
       all-nodes)))
 
 (defn process-according-to-frequences
