@@ -67,3 +67,8 @@
       (= nil globcnt) nil
       (= nil outdb) [0 globcnt]
       :else [(:to outdb) globcnt])))
+
+(defn lol-reduce-range-to-units [question-range]
+  (->> (range (get question-range 0) (get question-range 1))
+       (map lol-get-question)
+       (into [])))
