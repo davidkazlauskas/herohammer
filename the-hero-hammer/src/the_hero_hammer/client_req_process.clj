@@ -19,6 +19,9 @@
 (defn lol-hero-index [name]
   (get *global-hero-to-index-lol* name))
 
+(defn lol-gen-question-first-time-key [question-id]
+  (str "lol-question-first-occourence-" question-id))
+
 (defn lol-gen-key-for-count
   "Generate db key for question counter for question and filter."
   [hero-user hero-opponent question-id filter-id]
@@ -238,6 +241,10 @@
                (lol-question-by-matchup-and-id-key-id hu ho qid))
       (lol-store-next-comment-for-matchup-id hu ho
          (nippy/freeze {:qid qid :comment (:comment data)}))
+      (doseq [i (:answers data)]
+        (set-if-not-exists
+          (lol-gen-question-first-time-key
+            (get i 0)) glob-id))
       )
     )
   )
