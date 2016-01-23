@@ -72,4 +72,5 @@
   (->> (range (get question-range 0) (get question-range 1))
        (map lol-get-question)
        (map lol-extract-pair-from-key)
+       (distinct)
        (into [])))
