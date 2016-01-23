@@ -49,6 +49,13 @@
        "-" (lol-hero-index hero-opponent))
   )
 
+(defn lol-gen-key-for-matchup-comment-count-id
+  "Generate key for comment count for specific matchup."
+  [hero-user hero-opponent]
+  (str "lol-question-comment-count-"
+       hero-user "-" hero-opponent)
+  )
+
 (defn lol-gen-key-for-matchup-comment
   "Generate key to store specific comment."
   [hero-user hero-opponent id]
@@ -138,7 +145,7 @@
 (defn lol-store-next-comment-for-matchup-id
   [hero-user hero-opponent data]
   (generic-store-next-item
-    (lol-gen-key-for-matchup-comment-count
+    (lol-gen-key-for-matchup-comment-count-id
       hero-user hero-opponent)
     (partial lol-gen-key-for-matchup-comment-id
              hero-user hero-opponent)
@@ -177,13 +184,22 @@
    (generic-traverse-nodes 0 count-key id-gen-function))
   )
 
-(defn lol-traverse-matchup-questions
+(defn lol-traverse-matchup-questions-id
   "Make iterator to traverse all question values (lazy)"
   [hero-user hero-opponent]
   (generic-traverse-nodes
     (lol-gen-key-for-matchup-question-count-id
       hero-user hero-opponent)
     (partial lol-question-by-matchup-and-id-key-id
+      hero-user hero-opponent)))
+
+(defn lol-traverse-matchup-questions
+  "Make iterator to traverse all question values (lazy)"
+  [hero-user hero-opponent]
+  (generic-traverse-nodes
+    (lol-gen-key-for-matchup-question-count
+      hero-user hero-opponent)
+    (partial lol-question-by-matchup-and-id-key
       hero-user hero-opponent)))
 
 (defn lol-traverse-matchup-comments
