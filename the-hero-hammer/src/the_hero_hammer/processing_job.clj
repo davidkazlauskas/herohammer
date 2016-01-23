@@ -90,18 +90,19 @@
 
 (defn get-all-filters-for-matchup
   [hero-user-id hero-opponent-id]
-  (generic-traverse-nodes
-    (count (all-filters))
-    (partial gen-key-for-filter-matchup-id
-             hero-user-id hero-opponent-id)))
+  (->> (range (count (all-filters)))
+       (map (partial
+            fetch-filter-new-or-empy
+            hero-user-id hero-opponent-id))
+       (into [])))
 
 (defn new-filter-count [questions]
   (if (= nil questions)
     {:from 0 :to 0}
-    (let [
-          max-occourence
-          (max (get-first-occourences-of-questions
-                 questions))]
+    (let [max-occourence
+          (first (max
+            (get-first-occourences-of-questions
+                 questions)))]
       {:from max-occourence :to max-occourence})))
 
 (defn fetch-filter-new-or-empy
