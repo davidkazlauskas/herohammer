@@ -104,9 +104,7 @@
     (if (= nil curr)
       (new-filter-count
         (get-filter-questions filter-id))
-      curr)
-  )
-)
+      curr)))
 
 (defn lol-process-single-pair [to-process]
   to-process)
