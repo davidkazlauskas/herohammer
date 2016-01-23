@@ -135,8 +135,8 @@
                      (:id curr-q) (:id (get flt 1)))]
       (let [key-res (get-key count-key)]
         (if (some? key-res)
-          key-res
-          (get flt 0))))))
+          {:key count-key :count key-res}
+          {:key count-key :count (get flt 0)})))))
 
 (defn process-n-questions
   [q-range the-filters hero-user-id hero-opponent-id]
