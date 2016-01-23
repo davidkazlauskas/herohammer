@@ -145,8 +145,10 @@
                     (:from q-range)
                     (- (:to q-range) (:from q-range)))]
     (let [all-nodes
-      (get-matchup-questions-nodes
-        hero-user-id hero-opponent-id the-filters)]
+      ;(get-matchup-questions-nodes
+        ;hero-user-id hero-opponent-id the-filters)
+        1
+      ]
       all-nodes)))
 
 (defn process-according-to-frequences
@@ -154,8 +156,8 @@
   first greatest, then the rest"
   [frequences the-filters to-process]
   (for [x frequences]
-    (process-n-questions x the-filters
-      (get to-process 0) (get to-process 1))))
+      (process-n-questions (get x 0) the-filters
+        (get to-process 0) (get to-process 1))))
 
 (defn lol-process-single-pair [currmax to-process]
   (let [the-filters (apply get-all-filters-for-matchup to-process)]
