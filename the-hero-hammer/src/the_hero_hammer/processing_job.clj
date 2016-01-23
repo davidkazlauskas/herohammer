@@ -1,6 +1,7 @@
 (ns the-hero-hammer.processing_job
   (:require [the-hero-hammer.client_req_process :refer :all]
             [the-hero-hammer.storage :refer :all]
+            [the-hero-hammer.core :refer :all]
             ))
 
 (defn gen-key-for-filter-matchup-id
@@ -51,6 +52,13 @@
 (defmacro lol-new-unprocessed-questions-key
   [idx]
   (str "lol-processed-questions-for-filter-" idx))
+
+(defn lol-extract-pair-from-key
+  [the-key]
+  (into [] (rest
+    (map parse-int
+      (first (re-seq #"lol-question-by-matchup-and-id-(\d+)-(\d+)-\d+"
+         the-key))))))
 
 (defn lol-get-unproccessed-questions []
   (let [outdb] (get-key (lol-new-unprocessed-questions-key)))
