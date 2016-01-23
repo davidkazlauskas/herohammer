@@ -43,7 +43,7 @@
        (in-range curr-id rec) (ignore)
        (ahead-of-range curr-id rec) (drop-out)
        (end-of-range curr-id rec) (count-in)))
-   :required-questions ["poke"]
+   :required-questions ["poking"]
    })
 
 (defn all-filters []
@@ -83,7 +83,10 @@
        (into [])))
 
 (defn get-filter-questions [filter-id]
-  nil)
+  (->> (all-filters)
+       (filter #(= (:id %) filter-id))
+       (map #(:required-questions %))
+       (first)))
 
 (defn new-filter-count [questions]
   (if (= nil questions)
