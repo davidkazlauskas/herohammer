@@ -74,3 +74,9 @@
        (map lol-extract-pair-from-key)
        (distinct)
        (into [])))
+
+(defn lol-process-single-pair [to-process]
+  "")
+
+(defn lol-process-pairs [to-process]
+  (doseq [i to-process] (lol-process-single-pair i)))
