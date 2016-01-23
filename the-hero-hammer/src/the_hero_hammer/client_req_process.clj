@@ -29,6 +29,13 @@
        "-" (lol-hero-index hero-opponent)
        "-" question-id "-" filter-id))
 
+(defn lol-gen-key-for-count-id
+  "Generate db key for question counter for question and filter."
+  [hero-user hero-opponent question-id filter-id]
+  (str "lol-question-count-" hero-user
+       "-" hero-opponent
+       "-" question-id "-" filter-id))
+
 (defn lol-gen-key-for-matchup-question-count
   "Generate key for question count for specific matchup."
   [hero-user hero-opponent]
