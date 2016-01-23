@@ -195,6 +195,13 @@
     (partial lol-gen-key-for-matchup-comment
       hero-user hero-opponent)))
 
+(defn lol-traverse-all-questions
+  "Make iterator to traverse all question keys (globally)"
+  []
+  (generic-traverse-nodes
+    (lol-question-count-key)
+    lol-question-by-id-key))
+
 
 (defn curr-unix-timestamp []
   (quot (System/currentTimeMillis) 1000))
@@ -212,7 +219,7 @@
     (let [qid (lol-store-next-question-for-matchup-by-id
       hu ho frozen-questions)]
       (set-key (lol-question-by-id-key glob-id)
-               (lol-gen-key-for-matchup-question-count-id hu ho))
+               (lol-question-by-matchup-and-id-key-id hu ho))
       (lol-store-next-comment-for-matchup-id hu ho
          (nippy/freeze {:qid qid :comment data}))
       )
