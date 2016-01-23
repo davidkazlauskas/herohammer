@@ -112,6 +112,17 @@
 (defn lol-global-question-count []
   (get-key (lol-question-count-key)))
 
+(defn lol-get-n-questions-matchup-id
+  [hero-user-id hero-opponent-id start-at count-q]
+  (->> (generic-traverse-nodes-raw-count
+        start-at (+ start-at count-q)
+        (partial lol-question-by-matchup-and-id-key-id
+          hero-user-id hero-opponent-id))
+       (map :val)
+       (filter some?)
+       (map nippy/thaw)
+       (into [])))
+
 (defn lol-store-next-question-glob-index [data]
   "Increment and store in global counter of questions.
   We store keys to matchup questions."
