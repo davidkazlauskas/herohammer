@@ -76,7 +76,7 @@
        (into [])))
 
 (defn lol-process-single-pair [to-process]
-  "")
+  to-process)
 
 (defn lol-process-pairs [to-process]
-  (doseq [i to-process] (lol-process-single-pair i)))
+  (into [] (map lol-process-single-pair to-process)))
