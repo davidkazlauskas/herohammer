@@ -22,12 +22,31 @@
     {:from (:to my-range) :to curr-max}
     :else (:from (:to my-range) :to (:to my-range))))
 
+(defn in-range [number the-range]
+  (if (and
+        (> (:to the-range) number)
+        (<= (:from the-range) number)) true nil))
+
+(defn end-of-range [number the-range]
+  (if (= (:to the-range) number) true nil))
+
+(defn ahead-of-range [number the-range]
+  (if (< (:to the-range) number) true nil))
+
 (defn main-filter []
   {:id 0
    :record-key gen-key-for-filter-matchup-id
-   :expected (fn [curr-max record] "")
-   :process-question [curr-id record]
+   :expected max-available-range
+   :process-question (fn [curr-id rec]
+     (cond
+       (in-range curr-id rec) (ignore)
+       (ahead-of-range curr-id rec) (drop-out)
+       (end-of-range curr-id rec) (count-in)))
+   :required-questions ["poke"]
    })
+
+(defn all-filters
+  [(main-filter)])
 
 (defmacro lol-new-unprocessed-questions-key
   [idx]
