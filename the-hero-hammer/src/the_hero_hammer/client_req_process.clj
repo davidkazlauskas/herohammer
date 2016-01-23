@@ -237,7 +237,7 @@
       (set-key (lol-question-by-id-key glob-id)
                (lol-question-by-matchup-and-id-key-id hu ho qid))
       (lol-store-next-comment-for-matchup-id hu ho
-         (nippy/freeze {:qid qid :comment data}))
+         (nippy/freeze {:qid qid :comment (:comment data)}))
       )
     )
   )
