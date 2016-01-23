@@ -119,6 +119,9 @@
        (sort-by #(get % 1) >)
        (into [])))
 
+(defn zip-counts-with-filters [counts]
+  (map vector counts (all-filters)))
+
 (defn lol-process-single-pair [to-process]
   (let [the-filters (apply get-all-filters-for-matchup to-process)]
     the-filters))
