@@ -46,7 +46,7 @@
    :required-questions ["poke"]
    })
 
-(defn all-filters
+(defn all-filters []
   [(main-filter)])
 
 (defmacro lol-new-unprocessed-questions-key
@@ -60,6 +60,8 @@
       (first (re-seq #"lol-question-by-matchup-and-id-(\d+)-(\d+)-\d+"
          the-key))))))
 
-(defn lol-get-unproccessed-questions []
-  (let [outdb] (get-key (lol-new-unprocessed-questions-key)))
-)
+(defn lol-get-unproccessed-questions-range [idx]
+  (let [outdb (get-key (lol-new-unprocessed-questions-key idx))
+        globcnt (lol-global-question-count)]
+    (if (= nil outdb))
+    ))
