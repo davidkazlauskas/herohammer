@@ -115,6 +115,7 @@
 
 (defn filter-frequencies [filters-pending]
   (->> filters-pending
+       (map #(get % 2))
        frequencies
        (sort-by #(get % 1) >)
        (into [])))
@@ -126,12 +127,26 @@
                       curr-newest-question (get %1 0))))
        (into [])))
 
+(defn process-n-questions
+  [q-range the-filters hero-user-id hero-opponent-id]
+  (let [questions (lol-get-n-questions-matchup-id
+                    hero-user-id hero-opponent-id
+                    (:from q-range)
+                    (- (:to q-range) (:from q-range)))]
+    questions))
+
+(defn process-according-to-frequences
+  "Process according to frequences,
+  first greatest, then the rest"
+  [frequences the-filters]
+  frequences)
+
 (defn lol-process-single-pair [currmax to-process]
   (let [the-filters (apply get-all-filters-for-matchup to-process)]
     (let [paired (zip-counts-with-filters the-filters currmax)]
       ; paired -> [ [ <count> <metadata> ] .. ]
-      paired
-      )))
+      (let [freqs (filter-frequencies paired)]
+        (process-according-to-frequences freqs paired)))))
 
 (defn lol-process-pairs [to-process]
   (let [currmax (lol-global-question-count)]
