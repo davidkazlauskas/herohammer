@@ -88,6 +88,13 @@
        (map #(:required-questions %))
        (first)))
 
+(defn get-all-filters-for-matchup
+  [hero-user-id hero-opponent-id]
+  (generic-traverse-nodes
+    (count (all-filters))
+    (partial gen-key-for-filter-matchup-id
+             hero-user-id hero-opponent-id)))
+
 (defn new-filter-count [questions]
   (if (= nil questions)
     {:from 0 :to 0}
