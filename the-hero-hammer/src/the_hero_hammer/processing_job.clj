@@ -113,7 +113,11 @@
         (get-filter-questions filter-id))
       curr)))
 
-(defn filter-frequencies [filters-pending])
+(defn filter-frequencies [filters-pending]
+  (->> filters-pending
+       frequencies
+       (sort-by #(get % 1) >)
+       (into [])))
 
 (defn lol-process-single-pair [to-process]
   (let [the-filters (apply get-all-filters-for-matchup to-process)]
