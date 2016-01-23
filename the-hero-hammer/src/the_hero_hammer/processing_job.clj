@@ -75,6 +75,30 @@
        (distinct)
        (into [])))
 
+(defn get-first-occourences-of-questions [questions]
+  (->> questions
+       (map #(get *lol-global-short-to-index-map* %))
+       (map lol-gen-question-first-time-key)
+       (map get-key)
+       (into [])))
+
+(defn new-filter-count [questions]
+  (if (= nil questions)
+    {:from 0 :to 0}
+    (let [
+          max-occourence
+          (max (get-first-occourences-of-questions
+                 questions))]
+      {:from max-occourence :to max-occourence})))
+
+(defn fetch-filter-new-or-empy
+  "Create filter record if not exists."
+  [hero-user-id hero-opponent-id filter-id]
+  (let [curr (fetch-filter-count hero-user-id hero-opponent-id filter-id)]
+    (if (= nil curr) {:} curr)
+  )
+)
+
 (defn lol-process-single-pair [to-process]
   to-process)
 
