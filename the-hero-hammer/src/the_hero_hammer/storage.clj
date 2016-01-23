@@ -11,3 +11,9 @@
   "Put data into storage with specified key."
   [db-key value]
   (.put *db-imitation* db-key value))
+
+(defn set-if-not-exists
+  "Put data into storage if it doesn't exist"
+  [db-key value]
+  (if (nil? (get-key db-key))
+    (set-key db-key value)))
