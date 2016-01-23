@@ -181,9 +181,9 @@
   "Make iterator to traverse all question values (lazy)"
   [hero-user hero-opponent]
   (generic-traverse-nodes
-    (lol-gen-key-for-matchup-question-count
+    (lol-gen-key-for-matchup-question-count-id
       hero-user hero-opponent)
-    (partial lol-get-question-for-matchup-by-id
+    (partial lol-question-by-matchup-and-id-key-id
       hero-user hero-opponent)))
 
 (defn lol-traverse-matchup-comments
