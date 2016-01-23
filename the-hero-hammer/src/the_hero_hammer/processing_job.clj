@@ -130,13 +130,10 @@
 (defn get-matchup-questions-nodes
   [hero-user-id hero-opponent-id filters]
   (for [flt filters curr-q *global-questions-map-lol*]
-    (let [count-key (lol-gen-key-for-count
+    (let [count-key (lol-gen-key-for-count-id
                      hero-user-id hero-opponent-id
-                     (:id curr-q) (:id flt))]
-    ;[flt curr-q]
-    count-key
-      )
-    ))
+                     (:id curr-q) (:id (get flt 1)))]
+      count-key)))
 
 (defn process-n-questions
   [q-range the-filters hero-user-id hero-opponent-id]
@@ -145,10 +142,11 @@
                     (:from q-range)
                     (- (:to q-range) (:from q-range)))]
     (let [all-nodes
-      ;(get-matchup-questions-nodes
-        ;hero-user-id hero-opponent-id the-filters)
-        1
+      (get-matchup-questions-nodes
+        hero-user-id hero-opponent-id the-filters)
+        ;1
       ]
+      (println "baptu" hero-user-id hero-opponent-id q-range)
       all-nodes)))
 
 (defn process-according-to-frequences
