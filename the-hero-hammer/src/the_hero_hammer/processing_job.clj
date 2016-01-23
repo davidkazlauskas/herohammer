@@ -82,6 +82,9 @@
        (map get-key)
        (into [])))
 
+(defn get-filter-questions [filter-id]
+  nil)
+
 (defn new-filter-count [questions]
   (if (= nil questions)
     {:from 0 :to 0}
@@ -95,7 +98,10 @@
   "Create filter record if not exists."
   [hero-user-id hero-opponent-id filter-id]
   (let [curr (fetch-filter-count hero-user-id hero-opponent-id filter-id)]
-    (if (= nil curr) {:} curr)
+    (if (= nil curr)
+      (new-filter-count
+        (get-filter-questions filter-id))
+      curr)
   )
 )
 
