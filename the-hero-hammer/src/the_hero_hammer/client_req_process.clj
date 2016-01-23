@@ -109,6 +109,9 @@
       (set-key (id-gen-function toreturn) data)
       toreturn)))
 
+(defn lol-global-question-count []
+  (get-key (lol-question-count-key)))
+
 (defn lol-store-next-question-glob-index [data]
   "Increment and store in global counter of questions.
   We store keys to matchup questions."
