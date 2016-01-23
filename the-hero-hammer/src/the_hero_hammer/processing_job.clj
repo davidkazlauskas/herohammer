@@ -124,7 +124,10 @@
 
 (defn lol-process-single-pair [to-process]
   (let [the-filters (apply get-all-filters-for-matchup to-process)]
-    the-filters))
+    (let [paired (zip-counts-with-filters the-filters)]
+      ; paired -> [ [ <count> <metadata> ] .. ]
+      paired
+      )))
 
 (defn lol-process-pairs [to-process]
   (into [] (map lol-process-single-pair to-process)))
