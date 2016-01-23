@@ -16,12 +16,12 @@
 
 (defmacro count-in [] 1)
 (defmacro ignore [] 2)
-(defmacro drop-out [] 2)
+(defmacro drop-out [] -1)
 
 (defn max-available-range [curr-max my-range]
   (cond (<= (:to my-range) curr-max)
     {:from (:to my-range) :to curr-max}
-    :else (:from (:to my-range) :to (:to my-range))))
+    :else {:from (:to my-range) :to (:to my-range)}))
 
 (defn in-range [number the-range]
   (if (and
@@ -36,7 +36,6 @@
 
 (defn main-filter []
   {:id 0
-   :record-key gen-key-for-filter-matchup-id
    :expected max-available-range
    :process-question (fn [curr-id rec]
      (cond
@@ -113,6 +112,8 @@
       (new-filter-count
         (get-filter-questions filter-id))
       curr)))
+
+(defn filter-frequencies [filters-pending])
 
 (defn lol-process-single-pair [to-process]
   (let [the-filters (apply get-all-filters-for-matchup to-process)]
