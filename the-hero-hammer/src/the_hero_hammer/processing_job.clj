@@ -115,7 +115,8 @@
       curr)))
 
 (defn lol-process-single-pair [to-process]
-  to-process)
+  (let [the-filters (apply get-all-filters-for-matchup to-process)]
+    the-filters))
 
 (defn lol-process-pairs [to-process]
   (into [] (map lol-process-single-pair to-process)))
