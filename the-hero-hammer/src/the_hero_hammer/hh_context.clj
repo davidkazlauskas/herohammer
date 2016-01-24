@@ -65,3 +65,35 @@
             )]
       (set-key (id-gen-function toreturn) data)
       toreturn)))
+
+(defn generic-traverse-nodes-raw-count
+  "Generically traverse all nodes from start-at index
+  with count-key which stores value count and
+  id generation function id-gen-function"
+  ([start-at predef-count id-gen-function]
+  (let [matchup-count predef-count]
+    (if (some? matchup-count)
+      (let [produce-for-id
+        (fn [id]
+           {:count id
+            :until (dec matchup-count)
+            :val (get-key (id-gen-function id))})]
+        (take-while some? (iterate (fn [val-map]
+                 (if (= (:count val-map) (:until val-map))
+                   nil
+                   (produce-for-id (inc (:count val-map)))))
+                 (produce-for-id start-at))))
+      nil)
+    ))
+  ([predef-count id-gen-function]
+   (generic-traverse-nodes-raw-count 0 predef-count id-gen-function)))
+
+(defn generic-traverse-nodes
+  "Generically traverse all nodes from start-at index
+  with count-key which stores value count and
+  id generation function id-gen-function"
+  ([start-at count-key id-gen-function]
+  (generic-traverse-nodes-raw-count
+    start-at (get-key count-key) id-gen-function))
+  ([count-key id-gen-function]
+   (generic-traverse-nodes 0 count-key id-gen-function)))
