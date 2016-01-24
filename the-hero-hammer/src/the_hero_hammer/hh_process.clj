@@ -104,12 +104,11 @@
                       :date (:date %2)
                       :globid (:globid %2)
                       :currid (+ (:from range-to-get) %1)
-                      :curr-range
-                        {:from (get-in i [:count :from])
+                      :curr-range {
+                         :from (get-in i [:count :from])
                          :to (+
                            (get-in i [:count :to])
-                           (aget ^longs (:traversed to-sum) iter)
-                        )}
+                           (aget ^longs (:traversed to-sum) iter))}
                     }]
                   (if (= (get-in filter-arg [:curr-range :to])
                          (:currid filter-arg))
@@ -151,9 +150,11 @@
         victim-array
           {:counts (make-count-array filtered)
            :traversed (make-array Long/TYPE (count filtered))}]
-    (sum-up-filters
+    (let [res (sum-up-filters
       filtered (nth freqency 0)
-      victim-array matchup-pair limit)))
+      victim-array matchup-pair limit)]
+      (println (vec (:counts victim-array)))
+      res)))
 
 (defn proc-chunk-size [] 128)
 
