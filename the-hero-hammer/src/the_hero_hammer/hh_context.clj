@@ -130,6 +130,11 @@
   []
   (get-in (*ctx-get-func*) [:queries :matchup-comment-id]))
 
+(defn fn-question-first-time-id
+  "Returns function."
+  []
+  (get-in (*ctx-get-func*) [:queries :question-first-time]))
+
 ; SPEC OPS
 (defn store-next-question-global [data]
   (generic-store-next-item
@@ -172,3 +177,8 @@
   (generic-traverse-nodes
     ((fn-matchup-comment-count) matchup)
     (partial (fn-matchup-comment-id) matchup)))
+
+(defn get-question-first-time
+  "Get first occourence of question asked"
+  [question-id]
+  (get-key ((fn-question-first-time-id) question-id)))
