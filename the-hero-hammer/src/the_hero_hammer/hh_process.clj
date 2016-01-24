@@ -12,13 +12,14 @@
 
 (defn new-filter-count [questions]
   (if (= nil questions)
-    {:from 0 :to 0}
+    {:from 0 :to 0 :count 0}
     (let [max-occourence
           (first (max
             (get-first-occourences-of-questions
                  questions)))]
       (if (some? max-occourence)
-        {:from max-occourence :to max-occourence}
+        {:from max-occourence
+         :to max-occourence :count 0}
         nil))))
 
 (defn get-filter-questions [filter-id]
@@ -36,13 +37,18 @@
         (get-filter-questions filter-id))
       curr)))
 
+(defn extract-ids-from-cross
+  "Extract ids [<qid> <filterid>]"
+  [q-and-filter-cross]
+  [(:id (:question q-and-filter-cross))
+   (:id (:filter q-and-filter-cross))])
+
 (defn get-all-filters-for-matchup
   [matchup-pair]
   (->> (questions-filters-cross)
-       (map #(vector
-         (:id (:question %1)) (:id (:filter %1))))
-       (map #(apply fetch-filter-new-or-empy
-            matchup-pair %1))
+       (map #(assoc %1 :count
+            (apply fetch-filter-new-or-empy
+            matchup-pair (extract-ids-from-cross %1))))
        (into [])))
 
 (defn process-single-pair [currmax to-process]
