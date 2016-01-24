@@ -41,3 +41,6 @@
         (> (:to the-range) number)
         (<= (:from the-range) number)) true nil))
 
+(defn end-of-range [number the-range]
+  (if (= (:to the-range) number) true nil))
+
