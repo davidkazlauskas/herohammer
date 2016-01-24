@@ -1,6 +1,7 @@
 (ns the-hero-hammer.core
   (:require [compojure.core :refer :all]
             [the-hero-hammer.hh_context :refer :all]
+            [the-hero-hammer.lol_context :as lctx]
             [org.httpkit.server :refer [run-server]])
   (:use hiccup.core
         [ring.middleware.params :only [wrap-params]]))
@@ -9,6 +10,11 @@
   "meow"
   []
   (html [:h1 "Dazlow!"]))
+
+(defmacro lol-ctx [& args]
+  `(binding [*ctx-get-func* (fn [] lctx/*hh-context-lol*)]
+     ~@args
+   ))
 
 (def ^:dynamic *radio-set-lol*
   (lol-ctx (into #{} (map #(:shortname %1)
@@ -50,11 +56,6 @@
          ]))
 
 (defmacro q-post-link [] "/questions-post")
-
-(defmacro lol-ctx [& args]
-  `(binding [*ctx-get-func* (fn [] the-hero-hammer.lol_context/*hh-context-lol*)]
-     ~@args
-   ))
 
 (defn lol-render-questions []
   (lol-ctx (wrap-html [:form {:id "questions-form"
