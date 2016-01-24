@@ -23,7 +23,7 @@
 
 (defn questions-filters-cross []
   (get-in (*ctx-get-func*)
-    [:filters :cross-question-filter]))
+    [:questions :cross-question-filter]))
 
 ; CONTEXT UTIL
 (defn hero-name-full-to-short
