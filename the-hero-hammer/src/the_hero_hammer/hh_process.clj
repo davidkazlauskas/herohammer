@@ -83,12 +83,12 @@
       (if (and
             (< i (count frequences))
             (> to-process 0))
-        ((recur (- to-process
+        (recur (- to-process
           (process-frequency
             (nth frequences i)
             the-filters
             to-process))
-          (inc i)))))
+          (inc i))))
     frequences
   )
 
