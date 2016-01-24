@@ -264,6 +264,17 @@
   [question-id]
   (get-key ((fn-question-first-time-id) question-id)))
 
+(defn get-n-questions-matchup-id
+  [matchup-pair spec-range]
+  (->> (generic-traverse-nodes-raw-count
+        (:from spec-range) (:to spec-range)
+        (partial (fn-matchup-question-id)
+          matchup-pair))
+       (map :val)
+       (filter some?)
+       (map nippy/thaw)
+       (into [])))
+
 (defn set-question-first-time
   "Set first question occourence if not exists."
   [question-id data]
