@@ -251,7 +251,7 @@
 (defn get-matchup-filter-count
   [matchup-pair question-id filter-id]
   (get-key ((fn-question-filter-count)
-             matchup-pair question-id)))
+             matchup-pair question-id filter-id)))
 
 (defn process-question
   "Process (save) question in form
