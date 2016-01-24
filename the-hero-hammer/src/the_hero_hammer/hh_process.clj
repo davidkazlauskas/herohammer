@@ -72,6 +72,8 @@
                      frequency limit)
         questions (get-n-questions-matchup-id
                     matchup-pair range-to-get)]
+    (map-indexed #(
+    ) filtered)
   (- (:to range-to-get) (:from range-to-get))))
 
 (defn process-frequency
@@ -82,7 +84,8 @@
            #(= (:expected-rng %) (nth freqency 0))
            filters))
         victim-array
-          (make-array Long/TYPE (count filtered))]
+          {:counts (make-array Long/TYPE (count filtered))
+           :traversed (make-array Long/TYPE (count filtered))}]
     (println "fret" freqency matchup-pair)
     (sum-up-filters
       filtered (nth freqency 0)
