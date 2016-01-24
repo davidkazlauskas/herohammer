@@ -15,16 +15,16 @@
    :required-questions ["poking"]
    })
 
-(defn all-filters []
+(defn lol-filters []
   [(main-filter)])
 
-(def ^:dynamic *hh-context*
+(def ^:dynamic *hh-context-lol*
   {
    :dbinfo {
      :get-key the-hero-hammer.storage/get-key
      :set-key the-hero-hammer.storage/set-key
      :set-if-not-exists the-hero-hammer.storage/set-if-not-exists
    }
-   :filters (all-filters)
+   :filters (lol-filters)
   })
 
