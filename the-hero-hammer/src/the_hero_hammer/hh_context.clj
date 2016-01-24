@@ -18,7 +18,7 @@
   (if (nil? (get-key db-key))
     (set-key db-key value)))
 
-(defn all-filters []
+(defn filters-full []
   (get-in (*ctx-get-func*) [:filters :full]))
 
 ; CONTEXT UTIL
@@ -59,6 +59,11 @@
   (gen-matchup
     (hero-index hero-user-shortname)
     (hero-index hero-opponent-shortname)))
+
+(defn cross-questions-and-filters
+  [questions filters]
+  (into [] (for [q questions f filters]
+    {:question q :filter f})))
 
 ; QUESTONS
 (defn questions-full []
