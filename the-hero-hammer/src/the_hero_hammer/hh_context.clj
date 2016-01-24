@@ -201,7 +201,8 @@
   [data]
   (let [glob-id (store-next-question-global 0)
         frozen-questions (nippy/freeze
-         {:globid glob-id :date (curr-unix-timestamp) :answers (:answers data)})
+         {:globid glob-id :date (curr-unix-timestamp)
+          :answers (into [] (flatten (:answers data)))})
         matchup (gen-matchup (:hero-user data) (:hero-opponent data))
         ]
     (let [qid (store-next-question-matchup
