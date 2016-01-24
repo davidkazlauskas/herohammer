@@ -244,7 +244,7 @@
    }
    :questions {
      :full *all-questions-lol*
-     :shortname-to-index *shortname-to-index-question-lol*
+     :short-to-index *shortname-to-index-question-lol*
      :cross-question-filter
        (cross-questions-and-filters
          *all-questions-lol* *all-filters-lol*)
