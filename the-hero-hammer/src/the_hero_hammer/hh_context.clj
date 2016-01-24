@@ -210,6 +210,9 @@
 ; SPEC OPS
 (defn gen-matchup [u o] {:user u :opponent o})
 
+(defn short-gen-matchup [u o]
+  {:user (hero-index u) :opponent (hero-index o)})
+
 (defn store-next-question-global [data]
   (generic-store-next-item
     ((fn-global-question-count))
