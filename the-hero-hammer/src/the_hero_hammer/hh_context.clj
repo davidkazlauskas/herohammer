@@ -289,6 +289,11 @@
   (get-key ((fn-question-filter-count)
              matchup-pair question-id filter-id)))
 
+(defn set-matchup-filter-count
+  [matchup-pair question-id filter-id data]
+  (set-key ((fn-question-filter-count)
+             matchup-pair question-id filter-id) data))
+
 (defn process-question
   "Process (save) question in form
   {:hero-user :hero-opponent :comment :answers []}"
