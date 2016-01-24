@@ -22,8 +22,9 @@
   ((:filters (*ctx-get-func*)))
   )
 
-
-
+; QUESTONS
+(defn questions-full []
+  (get-in (*ctx-get-func*) [:questions :full]))
 
 ; FILTER FUNCS
 (defmacro count-in [] 1)
