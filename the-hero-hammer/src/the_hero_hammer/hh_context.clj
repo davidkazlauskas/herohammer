@@ -22,6 +22,22 @@
   ((:filters (*ctx-get-func*)))
   )
 
+; CONTEXT UTIL
+(defn hero-name-full-to-short
+  "Remove non alphanum chars from name.
+  Cho'Gath -> chogath"
+  [hname]
+  (clojure.string/replace
+    (clojure.string/lower-case hname)
+    #"[^a-z0-9]" ""))
+
+(defn heroes-full-to-short
+  "Turn full hero map to map which takes
+  shortname + key"
+  [full]
+  (->> (map hero-name-full-to-short)
+       (into [])))
+
 ; QUESTONS
 (defn questions-full []
   (get-in (*ctx-get-func*) [:questions :full]))
