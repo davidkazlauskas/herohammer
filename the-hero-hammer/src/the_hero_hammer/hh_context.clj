@@ -157,3 +157,18 @@
   (generic-traverse-nodes
     ((fn-matchup-question-count) matchup)
     (partial (fn-matchup-question-id) matchup)))
+
+(defn store-next-comment-matchup
+  "Store next question for matchup"
+  [matchup data]
+  (generic-store-next-item
+    ((fn-matchup-comment-count) matchup)
+    (partial (fn-matchup-comment-id) matchup)
+    data))
+
+(defn traverse-all-comments-matchup
+  "Traverse all questions for matchup."
+  [matchup]
+  (generic-traverse-nodes
+    ((fn-matchup-comment-count) matchup)
+    (partial (fn-matchup-comment-id) matchup)))
