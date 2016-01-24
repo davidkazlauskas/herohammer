@@ -30,6 +30,13 @@
   ["lol" "matchup-question-count"
    (clojure.string/join "-" (pair-vec matchup-pair))])
 
+(defn lol-generate-matchup-question-id
+  "Generate question id"
+  [matchup-pair id]
+  ["lol" "matchup-questions"
+   (clojure.string/join "-"
+     (flatten [(pair-vec matchup-pair) id]))])
+
 (defn lol-generate-question-first-time-key [the-id]
   ["lol" "question-first-time" the-id])
 
@@ -46,6 +53,7 @@
      :glob-question-id lol-generate-global-question-key
      :question-first-time lol-generate-question-first-time-key
      :matchup-question-count lol-generate-matchup-question-count
+     :matchup-question-id lol-generate-matchup-question-id
    }
   })
 
