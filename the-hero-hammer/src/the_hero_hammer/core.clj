@@ -10,7 +10,7 @@
   []
   (html [:h1 "Dazlow!"]))
 
-(def ^:dynamic *radio-set*
+(def ^:dynamic *radio-set-lol*
   (lol-ctx (into #{} (map #(:shortname %1)
        (questions-full)))))
 
@@ -78,9 +78,9 @@
 (defn lol-question-set-similarity
   "Return percentage of values picked from user"
   [request]
-  (let [cross (clojure.set/intersection *radio-set*
+  (let [cross (clojure.set/intersection *radio-set-lol*
                 (into #{} (keys request)))]
-    (* (/ (count cross) (count *radio-set*)) 100)))
+    (* (/ (count cross) (count *radio-set-lol*)) 100)))
 
 (defmacro min-questions [] 77)
 
