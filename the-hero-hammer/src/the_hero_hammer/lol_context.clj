@@ -17,7 +17,7 @@
        (ahead-of-range (:currid args)
                        (:curr-range args)) (drop-out)
        (end-of-range (:currid args)
-                     (:curr-range)) (count-in)))
+                     (:curr-range args)) (count-in)))
    :required-questions ["poking"]
    })
 
