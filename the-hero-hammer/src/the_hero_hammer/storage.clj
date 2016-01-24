@@ -9,15 +9,16 @@
 (defn get-key
   "Get data from storage with given key."
   [db-key]
-  (.get *db-imitation* db-key))
+  (.get *db-imitation* (key-merge db-key)))
 
 (defn set-key
   "Put data into storage with specified key."
   [db-key value]
-  (.put *db-imitation* db-key value))
+  (.put *db-imitation* (key-merge db-key) value))
 
 (defn set-if-not-exists
   "Put data into storage if it doesn't exist"
   [db-key value]
-  (if (nil? (get-key db-key))
-    (set-key db-key value)))
+  (let [merged (key-merge db-key)]
+    (if (nil? (get-key merged))
+      (set-key merged value))))
