@@ -44,16 +44,19 @@
    (:id (:filter q-and-filter-cross))])
 
 (defn get-all-filters-for-matchup
-  [matchup-pair]
+  [matchup-pair currmax]
   (->> (questions-filters-cross)
        (map #(assoc %1 :count
             (apply fetch-filter-new-or-empy
             matchup-pair (extract-ids-from-cross %1))))
+       (map #(assoc %1 :expected-rng
+            ((:expected (:filter %1))
+             currmax (:count %1))))
        (into [])))
 
 (defn process-single-pair [currmax to-process]
   (let [matchup-pair (vec-to-matchup to-process)
-        the-filters (get-all-filters-for-matchup matchup-pair)]
+        the-filters (get-all-filters-for-matchup matchup-pair currmax)]
     (let [paired (zip-counts-with-filters the-filters currmax)]
       ; paired -> [ [ <count> <metadata> <expected range> ] .. ]
       (let [freqs (filter-frequencies paired)]
