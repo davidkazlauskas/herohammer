@@ -286,13 +286,15 @@
 
 (defn get-matchup-filter-count
   [matchup-pair question-id filter-id]
-  (get-key ((fn-question-filter-count)
-             matchup-pair question-id filter-id)))
+  (let [tmp (get-key ((fn-question-filter-count)
+             matchup-pair question-id filter-id))]
+    (if (some? tmp) (nippy/thaw tmp) nil)))
 
 (defn set-matchup-filter-count
   [matchup-pair question-id filter-id data]
   (set-key ((fn-question-filter-count)
-             matchup-pair question-id filter-id) data))
+             matchup-pair question-id filter-id)
+           (nippy/freeze data)))
 
 (defn process-question
   "Process (save) question in form
