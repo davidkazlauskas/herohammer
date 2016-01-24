@@ -44,3 +44,8 @@
 (defn end-of-range [number the-range]
   (if (= (:to the-range) number) true nil))
 
+(defn pair-vec
+  "Turn this: {:user 7 :opponent 8}
+   to this: [7 8]"
+  [matchup]
+  [(:user matchup) (:opponent matchup)])
