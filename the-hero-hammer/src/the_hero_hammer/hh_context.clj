@@ -26,6 +26,10 @@
 (defn questions-full []
   (get-in (*ctx-get-func*) [:questions :full]))
 
+; HEROES
+(defn heroes-full []
+  (get-in (*ctx-get-func*) [:heroes :full]))
+
 ; FILTER FUNCS
 (defmacro count-in [] 1)
 (defmacro ignore [] 2)
