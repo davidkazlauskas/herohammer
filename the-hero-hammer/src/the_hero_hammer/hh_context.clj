@@ -1,4 +1,5 @@
-(ns the-hero-hammer.hh_context)
+(ns the-hero-hammer.hh_context
+  (:require [taoensso.nippy :as nippy]))
 
 (def ^:dynamic *hh-context* nil)
 (def ^:dynamic *ctx-get-func* nil)
@@ -136,6 +137,8 @@
   (get-in (*ctx-get-func*) [:queries :question-first-time]))
 
 ; SPEC OPS
+(defn gen-matchup [u o] {:user u :opponent o})
+
 (defn store-next-question-global [data]
   (generic-store-next-item
     ((fn-global-question-count))
@@ -188,3 +191,24 @@
   [question-id data]
   (set-if-not-exists
     ((fn-question-first-time-id) question-id) data))
+
+(defn curr-unix-timestamp []
+  (quot (System/currentTimeMillis) 1000))
+
+(defn process-question
+  "Process (save) question in form
+  {:hero-user :hero-opponent :comment :answers []}"
+  [data]
+  (let [glob-id (store-next-question-global 0)
+        frozen-questions (nippy/freeze
+         {:globid glob-id :date (curr-unix-timestamp) :answers (:answers data)})
+        matchup (gen-matchup (:hero-user data) (:hero-opponent data))
+        ]
+    (let [qid (store-next-question-matchup
+      matchup frozen-questions)]
+      (set-key ((fn-global-question-id) glob-id)
+               ((fn-matchup-question-id) matchup qid))
+      ((fn-matchup-comment-id) matchup
+         (nippy/freeze {:qid qid :comment (:comment data)}))
+      (doseq [i (:answers data)]
+        (set-question-first-time (get i 0) glob-id))))
