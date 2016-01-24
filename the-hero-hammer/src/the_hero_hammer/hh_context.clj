@@ -248,6 +248,11 @@
 (defn curr-unix-timestamp []
   (quot (System/currentTimeMillis) 1000))
 
+(defn get-matchup-filter-count
+  [matchup-pair question-id filter-id]
+  (get-key ((fn-question-filter-count)
+             matchup-pair question-id)))
+
 (defn process-question
   "Process (save) question in form
   {:hero-user :hero-opponent :comment :answers []}"
