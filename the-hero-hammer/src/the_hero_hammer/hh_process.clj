@@ -85,7 +85,9 @@
             (> to-process 0))
         ((recur (- to-process
           (process-frequency
-            (nth frequences i)))
+            (nth frequences i)
+            the-filters
+            to-process))
           (inc i)))))
     frequences
   )
