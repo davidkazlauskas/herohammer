@@ -52,6 +52,12 @@
 
 (defn gen-matchup [u o] {:user u :opponent o})
 
+(defn question-index
+  "Turn question shortname to index."
+  [shortname]
+  (get-in (*ctx-get-func*)
+    [:questions :short-to-index shortname]))
+
 (defn hero-index
   "Turn shortname to index"
   [shortname]
