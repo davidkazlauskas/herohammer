@@ -18,6 +18,12 @@
 (defn lol-filters []
   [(main-filter)])
 
+(defn lol-generate-global-question-key [the-id]
+  ["lol" "glob-question" the-id])
+
+(defn lol-generate-global-question-count []
+  ["lol" "glob-question-count" "count"])
+
 (def ^:dynamic *hh-context-lol*
   {
    :dbinfo {
@@ -26,5 +32,9 @@
      :set-if-not-exists the-hero-hammer.storage/set-if-not-exists
    }
    :filters (lol-filters)
+   :queries {
+     :glob-question-count lol-generate-global-question-count
+     :glob-question-id lol-generate-global-question-key
+   }
   })
 
