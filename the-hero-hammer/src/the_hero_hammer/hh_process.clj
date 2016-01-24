@@ -12,7 +12,7 @@
 
 (defn new-count-vector [num-answers]
   (->> (repeat 0)
-       (take 5)
+       (take num-answers)
        (into [])))
 
 (defn new-filter-count [questions answer-count]
