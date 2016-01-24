@@ -108,8 +108,9 @@
                            (aget ^longs (:traversed to-sum) )
                         )}
                     }
-                    filter-key (get-in i
-                      [:filter :process-question])])
+                    filter-key ((get-in i
+                      [:filter :process-question])
+                                filter-arg)])
                (do
                  (println "answer" my-key)
                  (println (vec (:counts to-sum))))
