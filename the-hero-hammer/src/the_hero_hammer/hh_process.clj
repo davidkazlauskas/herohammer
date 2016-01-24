@@ -91,11 +91,28 @@
     (doall
       (map-indexed #(
        (let [mapped (answer-vec-to-map (:answers %2))]
-         (doseq [i filtered]
-           (let [my-key (get mapped
-             (get mapped (get-in i [:question :id])))]
+         (doseq [iter (range (count filtered))]
+           (let [i (nth filtered iter)
+                 my-key (get mapped
+                 (get mapped (get-in i [:question :id])))]
              (if (some? my-key)
-               (println "answer" my-key)
+               (let [filter-arg {
+                      :answer-map mapped
+                      :date (:date %2)
+                      :globid (:globid %2)
+                      :currid (+ (:from range-to-get) %1)
+                      :curr-range
+                        {:from (get-in i [:count :from])
+                         :to (+
+                           (get-in i [:count :to])
+                           (aget ^longs (:traversed to-sum) )
+                        )}
+                    }
+                    filter-key (get-in i
+                      [:filter :process-question])])
+               (do
+                 (println "answer" my-key)
+                 (println (vec (:counts to-sum))))
              )
            )
          )
@@ -105,10 +122,10 @@
 
 (defn make-count-array [filters]
   (let [result (object-array (count filters))]
-    (map-indexed #(
-      (aset result %1 (count
-        (get-in %2 [:question :options])))
-    ) filters)
+    (doall (map-indexed #(aset
+       result %1 (make-array Long/TYPE
+        (count (get-in %2 [:question :options])))
+    ) filters))
     result))
 
 (defn process-frequency
