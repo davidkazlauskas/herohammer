@@ -218,9 +218,7 @@
   (all-questions-lol))
 
 (def ^:dynamic *shortname-to-index-question-lol*
-  (->> *all-questions-lol*
-       (map #(vector (:shortname %1) (:id %1)))
-       (into [])))
+  (question-index-shortnames *all-questions-lol*))
 
 (def ^:dynamic *hh-context-lol*
   {
