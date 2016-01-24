@@ -103,6 +103,14 @@
     ) questions))
   (- (:to range-to-get) (:from range-to-get))))
 
+(defn make-count-array [filters]
+  (let [result (object-array (count filters))]
+    (map-indexed #(
+      (aset result %1 (count
+        (get-in %2 [:question :options])))
+    ) filters)
+    result))
+
 (defn process-frequency
   "Process single frequency with filter"
   [freqency filters matchup-pair limit]
@@ -111,7 +119,7 @@
            #(= (:expected-rng %) (nth freqency 0))
            filters))
         victim-array
-          {:counts (make-array Long/TYPE (count filtered))
+          {:counts (make-count-array filtered)
            :traversed (make-array Long/TYPE (count filtered))}]
     (sum-up-filters
       filtered (nth freqency 0)
