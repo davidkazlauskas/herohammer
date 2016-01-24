@@ -92,8 +92,7 @@
         questions (get-n-questions-matchup-id
                     matchup-pair range-to-get)]
     (doall
-      (map-indexed #(
-       (let [mapped (answer-vec-to-map (:answers %2))]
+      (map-indexed #(let [mapped (answer-vec-to-map (:answers %2))]
          (doseq [iter (range (count filtered))]
            (let [i (nth filtered iter)
                  my-key (get mapped
@@ -122,7 +121,7 @@
                         (inc-arr-index-longs
                           (aget (:counts to-sum)
                              iter) my-key))
-                      ))))))))
+                      )))))))
          questions))
   (- (:to range-to-get) (:from range-to-get))))
 
