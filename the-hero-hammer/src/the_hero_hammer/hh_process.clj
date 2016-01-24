@@ -144,7 +144,8 @@
               :from (get-in %2 [:count :from])
               :to (+ (get-in %2 [:count :to])
                      (aget ^longs (:traversed summed) %1))
-             })))))
+             })))
+       (into [])))
 
 (defn save-post-proc [filters matchup-pair]
   (->> filters
@@ -152,9 +153,9 @@
          (set-matchup-filter-count
            matchup-pair
            (get-in %1 [:question :id])
-           (get-in %1 [:filter :id]))
+           (get-in %1 [:filter :id])
            curr-cnt)))
-       doall)
+       doall))
 
 (defn process-frequency
   "Process single frequency with filter"
@@ -169,10 +170,6 @@
     (let [res (sum-up-filters
       filtered (nth freqency 0)
       victim-array matchup-pair limit)]
-      (println
-        (->> (:counts victim-array)
-           (vec)
-           (map vec)))
       (save-post-proc
         (post-proc-results
           victim-array filters)
