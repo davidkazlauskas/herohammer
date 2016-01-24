@@ -2,6 +2,10 @@
 
 (def ^:dynamic *db-imitation* (java.util.concurrent.ConcurrentHashMap.))
 
+(defn key-merge [arg]
+  (cond (instance? String arg) arg
+        (vector? arg) (interpose "-" arg)))
+
 (defn get-key
   "Get data from storage with given key."
   [db-key]
