@@ -185,5 +185,6 @@
 
 (defn set-question-first-time
   "Set first question occourence if not exists."
-  [question-id]
-  (set-if-not-exists ((fn-question-first-time-id) question-id)))
+  [question-id data]
+  (set-if-not-exists
+    ((fn-question-first-time-id) question-id) data))
