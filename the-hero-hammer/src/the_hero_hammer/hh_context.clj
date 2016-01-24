@@ -47,6 +47,8 @@
          (hero-name-full-to-short %2) %1))
        (into {})))
 
+(defn gen-matchup [u o] {:user u :opponent o})
+
 (defn hero-index
   "Turn shortname to index"
   [shortname]
