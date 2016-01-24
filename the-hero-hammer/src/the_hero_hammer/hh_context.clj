@@ -182,3 +182,8 @@
   "Get first occourence of question asked"
   [question-id]
   (get-key ((fn-question-first-time-id) question-id)))
+
+(defn set-question-first-time
+  "Set first question occourence if not exists."
+  [question-id]
+  (set-if-not-exists ((fn-question-first-time-id) question-id)))
