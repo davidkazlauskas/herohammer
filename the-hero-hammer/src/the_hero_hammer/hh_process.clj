@@ -61,6 +61,15 @@
              currmax (:count %1))))
        (into [])))
 
+(defn process-frequency
+  "Process single frequency with filter"
+  [freqency filters matchup-pair]
+  (let [filtered
+         (filter
+           #(= (:expected-rng %) (nth freqency 0))
+           filters)]
+    (println filtered)))
+
 (defn process-according-to-frequences
   "Process according to frequences,
   first greatest, then the rest"
