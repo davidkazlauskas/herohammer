@@ -67,6 +67,8 @@
      :question-first-time lol-generate-question-first-time-key
      :matchup-question-count lol-generate-matchup-question-count
      :matchup-question-id lol-generate-matchup-question-id
+     :matchup-comment-count lol-generate-matchup-comment-count
+     :matchup-comment-id lol-generate-matchup-comment-id
    }
   })
 
