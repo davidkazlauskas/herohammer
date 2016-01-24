@@ -35,8 +35,9 @@
   "Turn full hero map to map which takes
   shortname + key"
   [full]
-  (->> (map hero-name-full-to-short)
-       (into [])))
+  (->> (map-indexed #(vector
+         (hero-name-full-to-short %2) %1))
+       (into {})))
 
 ; QUESTONS
 (defn questions-full []
