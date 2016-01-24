@@ -224,6 +224,8 @@
    }
    :heroes {
      :full (all-heroes-lol)
+     :short-to-index (heroes-full-to-short (all-heroes-lol))
+     :shortnames (heroes-shortnames (all-heroes-lol))
    }
   })
 

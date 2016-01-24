@@ -31,9 +31,16 @@
     (clojure.string/lower-case hname)
     #"[^a-z0-9]" ""))
 
+(defn heroes-shortnames
+  "Get shortname vector of heroes"
+  [full]
+  (->> full
+       (map hero-name-full-to-short)
+       (into [])))
+
 (defn heroes-full-to-short
   "Turn full hero map to map which takes
-  shortname + key"
+  shortname and retrieves key (index)"
   [full]
   (->> full
        (map-indexed #(vector
