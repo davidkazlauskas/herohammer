@@ -52,6 +52,13 @@
   [shortname]
   (get-in (*ctx-get-func*) [:heroes :short-to-index shortname]))
 
+(defn matchup-shortname-to-index
+  "Turn shortnames to indexes"
+  [hero-user-shortname hero-opponent-shortname]
+  (gen-matchup
+    (hero-index hero-user-shortname)
+    (hero-index hero-opponent-shortname)))
+
 ; QUESTONS
 (defn questions-full []
   (get-in (*ctx-get-func*) [:questions :full]))
