@@ -180,6 +180,11 @@
   []
   (get-in (*ctx-get-func*) [:queries :question-first-time]))
 
+(defn fn-question-filter-count
+  "Returns function (matchup-pair question-id filter-id)"
+  []
+  (get-in (*ctx-get-func*) [:queries :matchup-filter-count]))
+
 ; SPEC OPS
 (defn gen-matchup [u o] {:user u :opponent o})
 
