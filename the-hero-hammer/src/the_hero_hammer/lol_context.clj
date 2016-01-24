@@ -53,6 +53,15 @@
 (defn lol-generate-question-first-time-key [the-id]
   ["lol" "question-first-time" the-id])
 
+(defn lol-generate-filter-matchup-question-count
+  "Generate matchup question count for question
+  And filter."
+  [matchup-pair question-id filter-id]
+  ["lol" "question-matchup-filter-count"
+   (clojure.string/join "-"
+     (flatten [(pair-vec matchup-pair)
+               question-id filter-id]))])
+
 (defmacro all-questions-lol []
   (questions-m
     ("mtype" "Match solo queue or ranked?"
