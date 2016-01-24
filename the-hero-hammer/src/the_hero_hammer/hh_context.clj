@@ -97,3 +97,21 @@
     start-at (get-key count-key) id-gen-function))
   ([count-key id-gen-function]
    (generic-traverse-nodes 0 count-key id-gen-function)))
+
+; KEY GETTERS
+(defn fn-global-question-count
+  "Returns function."
+  []
+  (get-in *hh-context* [:queries :glob-question-count]))
+
+(defn fn-global-question-id
+  "Returns function."
+  []
+  (get-in *hh-context* [:queries :glob-question-id]))
+
+; SPEC OPS
+(defn store-next-question-global [data]
+  (generic-store-next-item
+    ((fn-global-question-count))
+    (fn-global-question-id)
+    data))
