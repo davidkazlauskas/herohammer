@@ -1,6 +1,5 @@
 (ns the-hero-hammer.lol_context
   (:require [the-hero-hammer.questions :refer :all]
-            [the-hero-hammer.questions_spec :refer :all]
             [the-hero-hammer.hh_context :refer :all]
             [taoensso.nippy :as nippy]))
 
@@ -53,6 +52,23 @@
 (defn lol-generate-question-first-time-key [the-id]
   ["lol" "question-first-time" the-id])
 
+(defmacro all-questions-lol []
+  (questions-m
+    ("mtype" "Match solo queue or ranked?"
+           "Solo" "Ranked")
+    ("ladder" "What is your ranking?"
+              "Bronze" "Silver" "Gold" "Platinum"
+              "Diamond" "Master" "Challenger")
+    ("poking" "I got poked a lot" "yes" "no")
+    ("poking-o" "I poked my opponent a lot" "yes" "no")
+    ("sustain" "I could not sustain well" "yes" "no")
+    ("sustain-o" "My opponent could not sustain me" "yes" "no")
+    ("first-blood" "I got first blood" "yes" "no")
+    ("cc" "I got a lot of cc (stuns/slows)" "yes" "no")
+    ("gank" "I was ganked quite often" "yes" "no")
+    ("last-hit" "I had trouble last hitting minions" "yes" "no")
+    ))
+
 (def ^:dynamic *hh-context-lol*
   {
    :dbinfo {
@@ -69,6 +85,9 @@
      :matchup-question-id lol-generate-matchup-question-id
      :matchup-comment-count lol-generate-matchup-comment-count
      :matchup-comment-id lol-generate-matchup-comment-id
+   }
+   :questions {
+     :full (all-questions-lol)
    }
   })
 
