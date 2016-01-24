@@ -217,6 +217,11 @@
 (def ^:dynamic *all-questions-lol*
   (all-questions-lol))
 
+(def ^:dynamic *shortname-to-index-question-lol*
+  (->> *all-questions-lol*
+       (map #(vector (:shortname %1) (:id %1)))
+       (into [])))
+
 (def ^:dynamic *hh-context-lol*
   {
    :dbinfo {
@@ -239,6 +244,7 @@
    }
    :questions {
      :full *all-questions-lol*
+     :shortname-to-index *shortname-to-index-question-lol*
      :cross-question-filter
        (cross-questions-and-filters
          *all-questions-lol* *all-filters-lol*)
