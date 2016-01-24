@@ -66,6 +66,12 @@
     {:from (:from old) :to (+ (:from old) limit)}
     {:from (:from old) :to (:to old)}))
 
+(defn answer-vec-to-map [ans-vec]
+  (->> ans-vec
+       (partition 2)
+       (map (partial apply vector))
+       (into {})))
+
 (defn sum-up-filters
   [filtered frequency to-sum matchup-pair limit]
   (let [range-to-get (shortened-range
@@ -73,6 +79,7 @@
         questions (get-n-questions-matchup-id
                     matchup-pair range-to-get)]
     (map-indexed #(
+       (let [partitioned (answer-vec-to-map (:answers %1))])
     ) filtered)
   (- (:to range-to-get) (:from range-to-get))))
 
