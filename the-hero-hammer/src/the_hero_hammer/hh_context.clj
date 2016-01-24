@@ -120,6 +120,16 @@
   []
   (get-in (*ctx-get-func*) [:queries :matchup-question-id]))
 
+(defn fn-matchup-comment-count
+  "Returns function."
+  []
+  (get-in (*ctx-get-func*) [:queries :matchup-comment-count]))
+
+(defn fn-matchup-comment-id
+  "Returns function."
+  []
+  (get-in (*ctx-get-func*) [:queries :matchup-comment-id]))
+
 ; SPEC OPS
 (defn store-next-question-global [data]
   (generic-store-next-item
