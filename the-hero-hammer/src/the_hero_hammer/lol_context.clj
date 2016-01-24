@@ -24,6 +24,9 @@
 (defn lol-generate-global-question-count []
   ["lol" "glob-question-count" "count"])
 
+(defn lol-generate-question-first-time-key [the-id]
+  ["lol" "question-first-time" the-id])
+
 (def ^:dynamic *hh-context-lol*
   {
    :dbinfo {
@@ -35,6 +38,7 @@
    :queries {
      :glob-question-count lol-generate-global-question-count
      :glob-question-id lol-generate-global-question-key
+     :question-first-time lol-generate-question-first-time-key
    }
   })
 
