@@ -204,9 +204,10 @@
 (defn traverse-all-questions-matchup
   "Traverse all questions for matchup."
   [matchup]
-  (generic-traverse-nodes
-    ((fn-matchup-question-count) matchup)
-    (partial (fn-matchup-question-id) matchup)))
+  (->> (generic-traverse-nodes
+         ((fn-matchup-question-count) matchup)
+         (partial (fn-matchup-question-id) matchup))
+       (map #(update-in %1 [:val] nippy/thaw))))
 
 (defn store-next-comment-matchup
   "Store next question for matchup"
@@ -219,9 +220,11 @@
 (defn traverse-all-comments-matchup
   "Traverse all questions for matchup."
   [matchup]
-  (generic-traverse-nodes
-    ((fn-matchup-comment-count) matchup)
-    (partial (fn-matchup-comment-id) matchup)))
+  (->>
+    (generic-traverse-nodes
+      ((fn-matchup-comment-count) matchup)
+      (partial (fn-matchup-comment-id) matchup))
+    (map #(update-in %1 [:val] nippy/thaw))))
 
 (defn get-question-first-time
   "Get first occourence of question asked"
