@@ -38,10 +38,11 @@
 
 (defn get-all-filters-for-matchup
   [matchup-pair]
-  (->> (range (count (all-filters)))
-       (map (partial
-            fetch-filter-new-or-empy
-            hero-user-id hero-opponent-id))
+  (->> (questions-filters-cross)
+       (map #(vector
+         (:id (:question %1)) (:id (:filter %1))))
+       (map #(apply fetch-filter-new-or-empy
+            matchup-pair %1))
        (into [])))
 
 (defn process-single-pair [currmax to-process]
