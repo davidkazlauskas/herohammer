@@ -61,14 +61,20 @@
              currmax (:count %1))))
        (into [])))
 
+(defn sum-up-filters)
+
 (defn process-frequency
   "Process single frequency with filter"
   [freqency filters matchup-pair limit]
   (let [filtered
-         (filter
+        (into [] (filter
            #(= (:expected-rng %) (nth freqency 0))
-           filters)]
-    (println filtered)))
+           filters))
+        victim-array
+          (make-array Long/TYPE (count filtered))]
+    (println "fret" freqency)
+    9
+    ))
 
 (defn proc-chunk-size [] 128)
 
