@@ -115,3 +115,9 @@
     ((fn-global-question-count))
     (fn-global-question-id)
     data))
+
+(defn traverse-all-questions-global []
+  "Make iterator to traverse all question keys (globally)"
+  (generic-traverse-nodes
+    ((fn-global-question-count))
+    (fn-global-question-id)))
