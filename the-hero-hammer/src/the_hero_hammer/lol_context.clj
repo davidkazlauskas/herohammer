@@ -1,6 +1,7 @@
 (ns the-hero-hammer.lol_context
   (:require [the-hero-hammer.questions :refer :all]
             [the-hero-hammer.hh_context :refer :all]
+            [the-hero-hammer.storage :as stor]
             [taoensso.nippy :as nippy]))
 
 (defn main-filter []
@@ -205,8 +206,8 @@
 (def ^:dynamic *hh-context-lol*
   {
    :dbinfo {
-     :get-key the-hero-hammer.storage/get-key
-     :set-key the-hero-hammer.storage/set-key
+     :get-key stor/get-key
+     :set-key stor/set-key
      :set-if-not-exists the-hero-hammer.storage/set-if-not-exists
    }
    :filters (lol-filters)
