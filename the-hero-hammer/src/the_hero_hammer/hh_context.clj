@@ -110,6 +110,16 @@
   []
   (get-in (*ctx-get-func*) [:queries :glob-question-id]))
 
+(defn fn-matchup-question-count
+  "Returns function."
+  []
+  (get-in (*ctx-get-func*) [:queries :matchup-question-count]))
+
+(defn fn-matchup-question-id
+  "Returns function."
+  []
+  (get-in (*ctx-get-func*) [:queries :matchup-question-id]))
+
 ; SPEC OPS
 (defn store-next-question-global [data]
   (generic-store-next-item
@@ -122,3 +132,18 @@
   (generic-traverse-nodes
     ((fn-global-question-count))
     (fn-global-question-id)))
+
+(defn store-next-question-matchup
+  "Store next question for matchup"
+  [matchup data]
+  (generic-store-next-item
+    ((fn-matchup-question-count) matchup)
+    (partial (fn-matchup-question-id) matchup)
+    data))
+
+(defn traverse-all-questions-matchup
+  "Traverse all questions for matchup."
+  [matchup]
+  (generic-traverse-nodes
+    ((fn-matchup-question-count) matchup)
+    (partial (fn-matchup-question-id) matchup)))
