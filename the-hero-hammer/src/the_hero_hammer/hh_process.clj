@@ -63,7 +63,7 @@
 
 (defn process-frequency
   "Process single frequency with filter"
-  [freqency filters matchup-pair]
+  [freqency filters matchup-pair limit]
   (let [filtered
          (filter
            #(= (:expected-rng %) (nth freqency 0))
@@ -79,15 +79,16 @@
   ;(for [x frequences]
       ;(process-n-questions (get x 0) the-filters
         ;(get to-process 0) (get to-process 1)))
-    (loop [to-process (proc-chunk-size) i 0]
+    (loop [to-process-lim (proc-chunk-size) i 0]
       (if (and
             (< i (count frequences))
-            (> to-process 0))
-        (recur (- to-process
+            (> to-process-lim 0))
+        (recur (- to-process-lim
           (process-frequency
             (nth frequences i)
             the-filters
-            to-process))
+            to-process
+            to-process-lim))
           (inc i))))
     frequences
   )
