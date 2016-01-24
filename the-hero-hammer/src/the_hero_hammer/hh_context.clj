@@ -256,7 +256,8 @@
     (let [qid (store-next-question-matchup
       matchup frozen-questions)]
       (set-key ((fn-global-question-id) glob-id)
-               ((fn-matchup-question-id) matchup qid))
+               (nippy/freeze
+                 ((fn-matchup-question-id) matchup qid)))
       (store-next-comment-matchup matchup
          (nippy/freeze {:qid qid :comment (:comment data)}))
       (doseq [i (:answers data)]
