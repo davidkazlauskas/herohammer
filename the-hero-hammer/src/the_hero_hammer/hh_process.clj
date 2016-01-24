@@ -30,7 +30,7 @@
         nil))))
 
 (defn get-filter-questions [filter-id]
-  (->> (all-filters)
+  (->> (filters-full)
        (filter #(= (:id %) filter-id))
        (map #(:required-questions %))
        (first)))
