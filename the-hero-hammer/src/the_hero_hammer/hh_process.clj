@@ -28,6 +28,13 @@
        (map #(:required-questions %))
        (first)))
 
+(defn filter-frequencies [filters-pending]
+  (->> filters-pending
+       (map :expected-rng)
+       frequencies
+       (sort-by #(get % 1) >)
+       (into [])))
+
 (defn fetch-filter-new-or-empy
   "Create filter record if not exists."
   [matchup-pair question-id filter-id]
@@ -56,11 +63,12 @@
 
 (defn process-single-pair [currmax to-process]
   (let [matchup-pair (vec-to-matchup to-process)
-        the-filters (get-all-filters-for-matchup matchup-pair currmax)]
-    (let [paired (zip-counts-with-filters the-filters currmax)]
-      ; paired -> [ [ <count> <metadata> <expected range> ] .. ]
-      (let [freqs (filter-frequencies paired)]
-        (process-according-to-frequences freqs paired matchup-pair)))))
+        the-filters (get-all-filters-for-matchup
+                      matchup-pair currmax)]
+  ; the-filters -> [ { :question :filter :expected-rng :count } .. ]
+      (let [freqs (filter-frequencies the-filters)]
+        (process-according-to-frequences
+          freqs the-filters matchup-pair))))
 
 (defn process-pairs [to-process]
   (let [currmax (global-question-count)]
