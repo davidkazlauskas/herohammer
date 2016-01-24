@@ -61,9 +61,18 @@
              currmax (:count %1))))
        (into [])))
 
+(defn shortened-range [old limit]
+  (if (> (- (:to old) (:from old)) limit)
+    {:from (:from old) :to (+ (:from old) limit)}
+    {:from (:from old) :to (:to old)}))
+
 (defn sum-up-filters
-  [frequency to-sum matchup-pair limit]
-  nil)
+  [filtered frequency to-sum matchup-pair limit]
+  (let [range-to-get (shortened-range
+                     frequency limit)
+        questions (get-n-questions-matchup-id
+                    matchup-pair range-to-get)]
+  (- (:to range-to-get) (:from range-to-get))))
 
 (defn process-frequency
   "Process single frequency with filter"
@@ -74,9 +83,10 @@
            filters))
         victim-array
           (make-array Long/TYPE (count filtered))]
-    (println "fret" freqency)
-    (process-frequency
-      filtered victim-array matchup-pair limit)))
+    (println "fret" freqency matchup-pair)
+    (sum-up-filters
+      filtered (nth freqency 0)
+      victim-array matchup-pair limit)))
 
 (defn proc-chunk-size [] 128)
 
