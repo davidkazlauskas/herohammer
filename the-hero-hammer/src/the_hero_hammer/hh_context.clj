@@ -1,14 +1,15 @@
 (ns the-hero-hammer.hh_context)
 
 (def ^:dynamic *hh-context* nil)
+(def ^:dynamic *ctx-get-func* nil)
 
 (defn get-key [& args]
   "Get key in db"
-  (apply (:get-key (:dbinfo *hh-context*)) args))
+  (apply (get-in (*ctx-get-func*) [:dbinfo :get-key]) args))
 
 (defn set-key [& args]
   "Set key in db"
-  (apply (:set-key (:dbinfo *hh-context*)) args))
+  (apply (get-in (*ctx-get-func*) [:dbinfo :set-key]) args))
 
 (defn set-if-not-exists
   "Put data into storage if it doesn't exist"
@@ -17,7 +18,7 @@
     (set-key db-key value)))
 
 (defn all-filters []
-  ((:filters *hh-context*))
+  ((:filters (*ctx-get-func*)))
   )
 
 
@@ -102,12 +103,12 @@
 (defn fn-global-question-count
   "Returns function."
   []
-  (get-in *hh-context* [:queries :glob-question-count]))
+  (get-in (*ctx-get-func*) [:queries :glob-question-count]))
 
 (defn fn-global-question-id
   "Returns function."
   []
-  (get-in *hh-context* [:queries :glob-question-id]))
+  (get-in (*ctx-get-func*) [:queries :glob-question-id]))
 
 ; SPEC OPS
 (defn store-next-question-global [data]
