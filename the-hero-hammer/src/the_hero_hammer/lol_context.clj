@@ -219,7 +219,9 @@
      :set-key stor/set-key
      :set-if-not-exists the-hero-hammer.storage/set-if-not-exists
    }
-   :filters (lol-filters)
+   :filters {
+     :full (lol-filters)
+   }
    :queries {
      :glob-question-count lol-generate-global-question-count
      :glob-question-id lol-generate-global-question-key
