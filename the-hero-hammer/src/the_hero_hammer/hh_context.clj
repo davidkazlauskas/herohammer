@@ -21,6 +21,10 @@
 (defn filters-full []
   (get-in (*ctx-get-func*) [:filters :full]))
 
+(defn questions-filters-cross []
+  (get-in (*ctx-get-func*)
+    [:filters :cross-question-filter]))
+
 ; CONTEXT UTIL
 (defn hero-name-full-to-short
   "Remove non alphanum chars from name.
