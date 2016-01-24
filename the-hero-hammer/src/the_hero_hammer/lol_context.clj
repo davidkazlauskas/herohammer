@@ -7,11 +7,17 @@
 (defn main-filter []
   {:id 0
    :expected max-available-range
-   :process-question (fn [curr-id rec]
+   :process-question (fn [args]
+     ; ARGS: {:answer-map
+     ;        :date :globid
+     ;        :curr-range}
      (cond
-       (in-range curr-id rec) (ignore)
-       (ahead-of-range curr-id rec) (drop-out)
-       (end-of-range curr-id rec) (count-in)))
+       (in-range (:currid args)
+                 (:curr-range args)) (ignore)
+       (ahead-of-range (:currid args)
+                       (:curr-range args)) (drop-out)
+       (end-of-range (:currid args)
+                     (:curr-range)) (count-in)))
    :required-questions ["poking"]
    })
 
