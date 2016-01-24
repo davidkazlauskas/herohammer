@@ -37,7 +37,7 @@
       curr)))
 
 (defn get-all-filters-for-matchup
-  [hero-user-id hero-opponent-id]
+  [matchup-pair]
   (->> (range (count (all-filters)))
        (map (partial
             fetch-filter-new-or-empy
@@ -45,11 +45,12 @@
        (into [])))
 
 (defn process-single-pair [currmax to-process]
-  (let [the-filters (apply get-all-filters-for-matchup to-process)]
+  (let [matchup-pair (vec-to-matchup to-process)
+        the-filters (get-all-filters-for-matchup matchup-pair)]
     (let [paired (zip-counts-with-filters the-filters currmax)]
       ; paired -> [ [ <count> <metadata> <expected range> ] .. ]
       (let [freqs (filter-frequencies paired)]
-        (process-according-to-frequences freqs paired to-process)))))
+        (process-according-to-frequences freqs paired matchup-pair)))))
 
 (defn process-pairs [to-process]
   (let [currmax (global-question-count)]
