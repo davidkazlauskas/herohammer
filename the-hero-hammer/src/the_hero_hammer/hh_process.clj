@@ -70,6 +70,8 @@
            filters)]
     (println filtered)))
 
+(defn proc-chunk-size [] 128)
+
 (defn process-according-to-frequences
   "Process according to frequences,
   first greatest, then the rest"
@@ -77,6 +79,14 @@
   ;(for [x frequences]
       ;(process-n-questions (get x 0) the-filters
         ;(get to-process 0) (get to-process 1)))
+    (loop [to-process (proc-chunk-size) i 0]
+      (if (and
+            (< i (count frequences))
+            (> to-process 0))
+        ((recur (- to-process
+          (process-frequency
+            (nth frequences i)))
+          (inc i)))))
     frequences
   )
 
