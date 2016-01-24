@@ -96,7 +96,7 @@
          (doseq [iter (range (count filtered))]
            (let [i (nth filtered iter)
                  my-key (get mapped
-                 (get mapped (get-in i [:question :id])))]
+                   (get-in i [:question :id]))]
              (if (some? my-key)
                (let [filter-arg {
                       :answer-map mapped
@@ -146,7 +146,10 @@
     (let [res (sum-up-filters
       filtered (nth freqency 0)
       victim-array matchup-pair limit)]
-      (println (vec (:counts victim-array)))
+      (println
+        (->> (:counts victim-array)
+           (vec)
+           (map vec)))
       res)))
 
 (defn proc-chunk-size [] 128)
