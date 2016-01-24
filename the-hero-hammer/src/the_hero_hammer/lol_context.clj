@@ -37,6 +37,19 @@
    (clojure.string/join "-"
      (flatten [(pair-vec matchup-pair) id]))])
 
+(defn lol-generate-matchup-comment-count
+  "Matchup pair - {:user 7 :opponent 7}"
+  [matchup-pair]
+  ["lol" "matchup-comment-count"
+   (clojure.string/join "-" (pair-vec matchup-pair))])
+
+(defn lol-generate-matchup-comment-id
+  "Generate question id"
+  [matchup-pair id]
+  ["lol" "matchup-comments"
+   (clojure.string/join "-"
+     (flatten [(pair-vec matchup-pair) id]))])
+
 (defn lol-generate-question-first-time-key [the-id]
   ["lol" "question-first-time" the-id])
 
