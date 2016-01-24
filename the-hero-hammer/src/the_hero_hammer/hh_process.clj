@@ -122,14 +122,8 @@
                         (inc-arr-index-longs
                           (aget (:counts to-sum)
                              iter) my-key))
-                      )
-                    )
-                 )
-             )
-           )
-         )
-       )
-    ) questions))
+                      ))))))))
+         questions))
   (- (:to range-to-get) (:from range-to-get))))
 
 (defn make-count-array [filters]
