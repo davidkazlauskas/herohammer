@@ -85,7 +85,7 @@
 (defmacro min-questions [] 77)
 
 (defn lol-post-questions [req]
-  (let [answered (lol-question-set-similarity req)]
+  (lol-ctx (let [answered (lol-question-set-similarity req)]
     (println "ans" answered)
     (if (> (min-questions) answered)
       (do
@@ -96,8 +96,7 @@
         (process-question (form-to-data req))
           (html [:p (map #(html [:p %1]) req)]))
       )
-    )
-  )
+    )))
 
 (defroutes myapp
   (GET "/" [] (index))
