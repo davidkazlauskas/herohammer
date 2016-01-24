@@ -82,6 +82,9 @@
        (map (partial apply vector))
        (into {})))
 
+(defn inc-arr-index-longs [arr idx]
+  (aset ^longs arr idx (inc (aget ^longs arr idx))))
+
 (defn sum-up-filters
   [filtered frequency to-sum matchup-pair limit]
   (let [range-to-get (shortened-range
@@ -105,15 +108,24 @@
                         {:from (get-in i [:count :from])
                          :to (+
                            (get-in i [:count :to])
-                           (aget ^longs (:traversed to-sum) )
+                           (aget ^longs (:traversed to-sum) iter)
                         )}
-                    }
-                    filter-key ((get-in i
-                      [:filter :process-question])
-                                filter-arg)])
-               (do
-                 (println "answer" my-key)
-                 (println (vec (:counts to-sum))))
+                    }]
+                  (if (= (get-in filter-arg [:curr-range :to])
+                         (:currid filter-arg))
+                    (let [filter-key
+                          ((get-in i
+                             [:filter :process-question])
+                           filter-arg)]
+                      (inc-arr-index-longs
+                        (:traversed to-sum) iter)
+                      (if (= filter-key (count-in))
+                        (inc-arr-index-longs
+                          (aget (:counts to-sum)
+                             iter) my-key))
+                      )
+                    )
+                 )
              )
            )
          )
