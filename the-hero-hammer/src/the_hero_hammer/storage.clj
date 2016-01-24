@@ -4,7 +4,8 @@
 
 (defn key-merge [arg]
   (cond (instance? String arg) arg
-        (seq? arg) (clojure.string/join "-" arg)))
+        (or (vector? arg) (list? arg) (seq arg))
+          (clojure.string/join "-" arg)))
 
 (defn get-key
   "Get data from storage with given key."
