@@ -35,7 +35,8 @@
   "Turn full hero map to map which takes
   shortname + key"
   [full]
-  (->> (map-indexed #(vector
+  (->> full
+       (map-indexed #(vector
          (hero-name-full-to-short %2) %1))
        (into {})))
 
