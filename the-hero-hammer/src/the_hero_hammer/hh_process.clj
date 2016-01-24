@@ -61,6 +61,16 @@
              currmax (:count %1))))
        (into [])))
 
+(defn process-according-to-frequences
+  "Process according to frequences,
+  first greatest, then the rest"
+  [frequences the-filters to-process]
+  ;(for [x frequences]
+      ;(process-n-questions (get x 0) the-filters
+        ;(get to-process 0) (get to-process 1)))
+    frequences
+  )
+
 (defn process-single-pair [currmax to-process]
   (let [matchup-pair (vec-to-matchup to-process)
         the-filters (get-all-filters-for-matchup
