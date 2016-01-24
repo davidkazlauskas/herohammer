@@ -47,6 +47,11 @@
          (hero-name-full-to-short %2) %1))
        (into {})))
 
+(defn hero-index
+  "Turn shortname to index"
+  [shortname]
+  (get-in (*ctx-get-func*) [:heroes :short-to-index shortname]))
+
 ; QUESTONS
 (defn questions-full []
   (get-in (*ctx-get-func*) [:questions :full]))
