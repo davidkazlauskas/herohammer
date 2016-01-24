@@ -52,6 +52,11 @@
 
 (defn gen-matchup [u o] {:user u :opponent o})
 
+(defn question-index-shortnames [questions]
+  (->> questions
+       (map #(vector (:shortname %1) (:id %1)))
+       (into {})))
+
 (defn question-index
   "Turn question shortname to index."
   [shortname]
