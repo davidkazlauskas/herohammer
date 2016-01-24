@@ -133,7 +133,7 @@
     ) filters))
     result))
 
-(defn post-proc-results [summed filters matchup-pair]
+(defn post-proc-results [summed filters]
   (->> filters
        (map-indexed #(let [curr-cnt
                            (get-in %2 [:count :count])]
