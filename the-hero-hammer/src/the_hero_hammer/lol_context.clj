@@ -15,8 +15,10 @@
    :required-questions ["poking"]
    })
 
-(defn lol-filters []
+(def ^:dynamic *all-filters-lol*
   [(main-filter)])
+
+(defn lol-filters [] *all-filters-lol*)
 
 (defn lol-generate-global-question-key [the-id]
   ["lol" "glob-question" the-id])
@@ -212,6 +214,9 @@
   ]
 )
 
+(def ^:dynamic *all-questions-lol*
+  (all-questions-lol))
+
 (def ^:dynamic *hh-context-lol*
   {
    :dbinfo {
@@ -220,7 +225,7 @@
      :set-if-not-exists the-hero-hammer.storage/set-if-not-exists
    }
    :filters {
-     :full (lol-filters)
+     :full *all-filters-lol*
    }
    :queries {
      :glob-question-count lol-generate-global-question-count
@@ -233,7 +238,10 @@
      :matchup-filter-count lol-generate-filter-matchup-question-count
    }
    :questions {
-     :full (all-questions-lol)
+     :full *all-questions-lol*
+     :cross-question-filter
+       (cross-questions-and-filters
+         *all-questions-lol* *all-filters-lol*)
    }
    :heroes {
      :full (all-heroes-lol)
