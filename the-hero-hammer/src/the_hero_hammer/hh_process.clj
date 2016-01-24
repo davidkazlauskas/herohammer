@@ -63,7 +63,9 @@
   (->> (questions-filters-cross)
        (map #(assoc %1 :count
             (apply fetch-filter-new-or-empty
-            matchup-pair (extract-ids-from-cross %1))))
+            (flatten
+              [matchup-pair (extract-ids-from-cross %1)
+              (count (get-in %1 [:question :options]))]))))
        (map #(assoc %1 :expected-rng
             ((:expected (:filter %1))
              currmax (:count %1))))
@@ -87,8 +89,17 @@
         questions (get-n-questions-matchup-id
                     matchup-pair range-to-get)]
     (map-indexed #(
-       (let [partitioned (answer-vec-to-map (:answers %1))])
-    ) filtered)
+       (let [mapped (answer-vec-to-map (:answers %1))]
+         (doseq [i filtered]
+           (let [my-key (get mapped
+             (get-in mapped [:question :id]))]
+             ;(if (some? my-key)
+               ;(println "answer" my-key)
+             ;)
+           )
+         )
+       )
+    ) questions)
   (- (:to range-to-get) (:from range-to-get))))
 
 (defn process-frequency
