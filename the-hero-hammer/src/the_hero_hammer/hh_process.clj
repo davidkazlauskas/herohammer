@@ -35,7 +35,7 @@
        (sort-by #(get % 1) >)
        (into [])))
 
-(defn fetch-filter-new-or-empy
+(defn fetch-filter-new-or-empty
   "Create filter record if not exists."
   [matchup-pair question-id filter-id]
   (let [curr (get-matchup-filter-count matchup-pair question-id filter-id)]
@@ -54,7 +54,7 @@
   [matchup-pair currmax]
   (->> (questions-filters-cross)
        (map #(assoc %1 :count
-            (apply fetch-filter-new-or-empy
+            (apply fetch-filter-new-or-empty
             matchup-pair (extract-ids-from-cross %1))))
        (map #(assoc %1 :expected-rng
             ((:expected (:filter %1))
