@@ -133,6 +133,19 @@
     ) filters))
     result))
 
+(defn post-proc-results [summed filters matchup-pair]
+  (->> filters
+       (map-indexed #(let [curr-cnt
+                           (get-in %2 [:count :count])]
+           (assoc-in %2 [:count]
+             {:count (into [] (for [i (range (count curr-cnt))]
+               (+ (nth curr-cnt i)
+                  (aget ^longs (aget (:counts summed) %1) i))))
+              :from (get-in %2 [:count :from])
+              :to (+ (get-in %2 [:count :to])
+                     (aget ^longs (:traversed summed) %1))
+             })))))
+
 (defn process-frequency
   "Process single frequency with filter"
   [freqency filters matchup-pair limit]
