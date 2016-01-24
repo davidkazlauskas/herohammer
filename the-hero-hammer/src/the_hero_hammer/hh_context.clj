@@ -185,13 +185,14 @@
   (generic-store-next-item
     ((fn-global-question-count))
     (fn-global-question-id)
-    data))
+    (nippy/freeze data)))
 
 (defn traverse-all-questions-global []
   "Make iterator to traverse all question keys (globally)"
-  (generic-traverse-nodes
-    ((fn-global-question-count))
-    (fn-global-question-id)))
+  (->> (generic-traverse-nodes
+         ((fn-global-question-count))
+         (fn-global-question-id))
+       (map #(update-in %1 [:val] nippy/thaw))))
 
 (defn store-next-question-matchup
   "Store next question for matchup"
