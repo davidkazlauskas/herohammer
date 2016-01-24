@@ -88,18 +88,19 @@
                      frequency limit)
         questions (get-n-questions-matchup-id
                     matchup-pair range-to-get)]
-    (map-indexed #(
-       (let [mapped (answer-vec-to-map (:answers %1))]
+    (doall
+      (map-indexed #(
+       (let [mapped (answer-vec-to-map (:answers %2))]
          (doseq [i filtered]
            (let [my-key (get mapped
-             (get-in mapped [:question :id]))]
-             ;(if (some? my-key)
-               ;(println "answer" my-key)
-             ;)
+             (get mapped (get-in i [:question :id])))]
+             (if (some? my-key)
+               (println "answer" my-key)
+             )
            )
          )
        )
-    ) questions)
+    ) questions))
   (- (:to range-to-get) (:from range-to-get))))
 
 (defn process-frequency
@@ -112,7 +113,6 @@
         victim-array
           {:counts (make-array Long/TYPE (count filtered))
            :traversed (make-array Long/TYPE (count filtered))}]
-    (println "fret" freqency matchup-pair)
     (sum-up-filters
       filtered (nth freqency 0)
       victim-array matchup-pair limit)))
