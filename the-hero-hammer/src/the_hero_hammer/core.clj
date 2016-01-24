@@ -1,7 +1,6 @@
 (ns the-hero-hammer.core
   (:require [compojure.core :refer :all]
-            [the-hero-hammer.client_req_process :refer :all]
-            [the-hero-hammer.questions_spec :refer :all]
+            [the-hero-hammer.hh_context :refer :all]
             [org.httpkit.server :refer [run-server]])
   (:use hiccup.core
         [ring.middleware.params :only [wrap-params]]))
@@ -12,8 +11,8 @@
   (html [:h1 "Dazlow!"]))
 
 (def ^:dynamic *radio-set*
-  (into #{} (map #(:shortname %1)
-       (all-questions-lol))))
+  (lol-ctx (into #{} (map #(:shortname %1)
+       (questions-full)))))
 
 (defn parse-int [s]
    (Integer. (re-find  #"\d+" s )))
@@ -23,7 +22,7 @@
    :hero-user (parse-int (get form "user-hero"))
    :hero-opponent (parse-int (get form "opponent-hero"))
    :comment (get form "user-comment")
-   :answers (->> (all-questions-lol)
+   :answers (->> (questions-full)
                  (map :shortname)
                  (map-indexed #(vector %1
                    (parse-int (get form %2))))
@@ -52,24 +51,29 @@
 
 (defmacro q-post-link [] "/questions-post")
 
+(defmacro lol-ctx [& args]
+  `(binding [*ctx-get-func* (fn [] the-hero-hammer.lol_context/*hh-context-lol*)]
+     ~@args
+   ))
+
 (defn lol-render-questions []
-  (wrap-html [:form {:id "questions-form"
+  (lol-ctx (wrap-html [:form {:id "questions-form"
                      :method "POST" :action (q-post-link)}
               [:select {:name "user-hero"}
                (map-indexed #(html
                    [:option {:value %1} %2]
-                   ) (all-heroes-lol))
+                   ) (heroes-full))
                ]
               [:select {:name "opponent-hero"}
                (map-indexed #(html
                    [:option {:value %1} %2]
-                   ) (all-heroes-lol))
+                   ) (heroes-full))
                ]
-              (map render-question (all-questions-lol))
+              (map render-question (questions-full))
               [:textarea {:name "user-comment"
                           :rows 4 :cols 50}]
               [:input {:type "submit"
-                       :value "Submit record"}]]))
+                       :value "Submit record"}]])))
 
 (defn lol-question-set-similarity
   "Return percentage of values picked from user"
@@ -89,7 +93,7 @@
       (str "Only " answered "% of questions were answered."
            " Minimum is " (min-questions) "%."))
       (do (println "Saving question!")
-        (lol-process-question (form-to-data req))
+        (process-question (form-to-data req))
           (html [:p (map #(html [:p %1]) req)]))
       )
     )
@@ -97,7 +101,7 @@
 
 (defroutes myapp
   (GET "/" [] (index))
-  (GET "/questions" [] (lol-render-questions))
+  (GET "/questions-lol" [] (lol-render-questions))
   (POST (q-post-link) {params :params} (lol-post-questions params)))
 
 (defn -main []
