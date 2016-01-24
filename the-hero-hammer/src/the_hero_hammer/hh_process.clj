@@ -10,16 +10,23 @@
        (map get-question-first-time)
        (into [])))
 
-(defn new-filter-count [questions]
+(defn new-count-vector [num-answers]
+  (->> (repeat 0)
+       (take 5)
+       (into [])))
+
+(defn new-filter-count [questions answer-count]
   (if (= nil questions)
-    {:from 0 :to 0 :count 0}
+    {:from 0 :to 0 :count
+     (new-count-vector answer-count)}
     (let [max-occourence
           (first (max
             (get-first-occourences-of-questions
                  questions)))]
       (if (some? max-occourence)
         {:from max-occourence
-         :to max-occourence :count 0}
+         :to max-occourence
+         :count (new-count-vector answer-count)}
         nil))))
 
 (defn get-filter-questions [filter-id]
@@ -37,11 +44,12 @@
 
 (defn fetch-filter-new-or-empty
   "Create filter record if not exists."
-  [matchup-pair question-id filter-id]
-  (let [curr (get-matchup-filter-count matchup-pair question-id filter-id)]
+  [matchup-pair question-id filter-id answer-count]
+  (let [curr (get-matchup-filter-count
+              matchup-pair question-id filter-id)]
     (if (= nil curr)
       (new-filter-count
-        (get-filter-questions filter-id))
+        (get-filter-questions filter-id) answer-count)
       curr)))
 
 (defn extract-ids-from-cross
