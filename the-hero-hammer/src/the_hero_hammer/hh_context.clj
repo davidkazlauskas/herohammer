@@ -19,8 +19,7 @@
     (set-key db-key value)))
 
 (defn all-filters []
-  ((:filters (*ctx-get-func*)))
-  )
+  (get-in (*ctx-get-func*) [:filters :full]))
 
 ; CONTEXT UTIL
 (defn hero-name-full-to-short
