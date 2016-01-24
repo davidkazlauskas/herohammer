@@ -173,6 +173,10 @@
         (->> (:counts victim-array)
            (vec)
            (map vec)))
+      (save-post-proc
+        (post-proc-results
+          victim-array filters)
+        matchup-pair)
       res)))
 
 (defn proc-chunk-size [] 128)
