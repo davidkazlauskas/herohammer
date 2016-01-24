@@ -24,6 +24,12 @@
 (defn lol-generate-global-question-count []
   ["lol" "glob-question-count" "count"])
 
+(defn lol-generate-matchup-question-count
+  "Matchup pair - {:user 7 :opponent 7}"
+  [matchup-pair]
+  ["lol" "matchup-question-count"
+   (clojure.string/join "-" (pair-vec matchup-pair))])
+
 (defn lol-generate-question-first-time-key [the-id]
   ["lol" "question-first-time" the-id])
 
