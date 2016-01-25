@@ -228,11 +228,15 @@
          (fn-global-question-id))
        (map #(update-in %1 [:val] nippy/thaw))))
 
-(defn get-n-global-questions [range-to-get]
+(defn get-n-global-questions
+  "Get specified range of global questions.
+  Example of range-to-get: {:from 0 :to 7}"
+  [range-to-get]
   (->> (generic-traverse-nodes-raw-count
          (:from range-to-get)
          (:to range-to-get)
          (fn-global-question-id))
+       (filter #(some? (:val %1)))
        (map #(nippy/thaw (:val %1)))
        (into [])))
 
