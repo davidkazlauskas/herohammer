@@ -231,21 +231,23 @@
   [range-to-get]
   (let [glob-cnt (or (global-question-count) 0)
         proc (or (global-question-proc) 0)
-        proc-diff (- glob-cnt proc)
-        other-proc (if (>
-                    (range-size range-to-get)
-                    (proc-chunk-size))
-                  ({:from (:from range-to-get)
-                    :to (+ (:from range-to-get)
-                           (proc-chunk-size))})
-                  range-to-get)
-        final-proc (if (>
-                        (range-size other-proc)
-                        proc-diff)
-                     {:from (:from other-proc)
-                      :to (+ (:from other-proc) proc-diff)}
-                     other-proc)
-        the-pairs (fetch-global-and-pair final-proc)
-        out-res (process-pairs the-pairs)]
-  (set-global-question-proc (:to final-proc))
-  out-res))
+        proc-diff (- glob-cnt proc)]
+    (if (> 0 proc-diff)
+      (let [other-proc (if (>
+                  (range-size range-to-get)
+                  (proc-chunk-size))
+                ({:from (:from range-to-get)
+                  :to (+ (:from range-to-get)
+                         (proc-chunk-size))})
+                range-to-get)
+            final-proc (if (>
+                      (range-size other-proc)
+                      proc-diff)
+                   {:from (:from other-proc)
+                    :to (+ (:from other-proc) proc-diff)}
+                   other-proc)
+            the-pairs (fetch-global-and-pair final-proc)
+                out-res (process-pairs the-pairs)]
+          (set-global-question-proc (:to final-proc))
+          out-res))
+      "NOTHING_TO_PROCESS"))
