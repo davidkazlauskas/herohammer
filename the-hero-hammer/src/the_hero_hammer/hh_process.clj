@@ -226,23 +226,23 @@
          (map matchup-pair-from-key the-keys))]
     matchups))
 
-(defn pairs-from-glob-range
-  "range-to-get: {:from x :to x}"
-  [range-to-get]
+(defn process-pending
+  "Process all pending questions in db"
+  []
   (let [glob-cnt (or (global-question-count) 0)
         proc (or (global-question-proc) 0)
         proc-diff (- glob-cnt proc)]
     (if (> 0 proc-diff)
       (let [range-to-get {:from proc :to glob-cnt}
             final-proc (if (>
-                  (range-size range-to-get)
-                  (proc-chunk-size))
-                ({:from (:from range-to-get)
-                  :to (+ (:from range-to-get)
-                         (proc-chunk-size))})
-                range-to-get)
+                            (range-size range-to-get)
+                            (proc-chunk-size))
+                         ({:from (:from range-to-get)
+                           :to (+ (:from range-to-get)
+                                  (proc-chunk-size))})
+                         range-to-get)
             the-pairs (fetch-global-and-pair final-proc)
-                out-res (process-pairs the-pairs)]
-          (set-global-question-proc (:to final-proc))
-          out-res))
-      "NOTHING_TO_PROCESS"))
+            out-res (process-pairs the-pairs)]
+        (set-global-question-proc (:to final-proc))
+        out-res))
+    "NOTHING_TO_PROCESS"))
