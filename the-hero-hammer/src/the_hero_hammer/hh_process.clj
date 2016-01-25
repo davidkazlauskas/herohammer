@@ -218,6 +218,13 @@
        (partial process-single-pair currmax)
        to-process))))
 
+(defn fetch-global-and-pair
+  [the-range]
+  (let [the-keys (get-n-global-questions the-range)
+        matchups (into []
+         (map matchup-pair-from-key the-keys))]
+    matchups))
+
 (defn pairs-from-glob-range
   "range-to-get: {:from x :to x}"
   [range-to-get]
