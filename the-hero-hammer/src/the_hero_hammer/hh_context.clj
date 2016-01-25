@@ -228,6 +228,13 @@
 (defn range-size [the-range]
   (- (:to the-range) (:from the-range)))
 
+(defn shorten-range [the-range max-len]
+  (let [size (range-size the-range)]
+    (if (> size max-len)
+      {:from (:from the-range)
+       :to (+ (:from the-range) max-len)}
+      the-range)))
+
 (defn short-gen-matchup [u o]
   {:user (hero-index u) :opponent (hero-index o)})
 
