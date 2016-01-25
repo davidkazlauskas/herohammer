@@ -226,6 +226,14 @@
          (fn-global-question-id))
        (map #(update-in %1 [:val] nippy/thaw))))
 
+(defn get-n-global-questions [range-to-get]
+  (->> (generic-traverse-nodes-raw-count
+         (:from range-to-get)
+         (:to range-to-get)
+         (fn-global-question-id))
+       (map #(nippy/thaw (:val %1)))
+       (into [])))
+
 (defn store-next-question-matchup
   "Store next question for matchup"
   [matchup data]
