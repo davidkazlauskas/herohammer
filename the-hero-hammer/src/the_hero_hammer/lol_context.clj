@@ -32,6 +32,9 @@
 (defn lol-generate-global-question-count []
   ["lol" "glob-question-count" "count"])
 
+(defn lol-generate-global-question-proc []
+  ["lol" "glob-question-count" "proc"])
+
 (defn lol-generate-matchup-question-count
   "Matchup pair - {:user 7 :opponent 7}"
   [matchup-pair]
@@ -238,6 +241,7 @@
    }
    :queries {
      :glob-question-count lol-generate-global-question-count
+     :glob-question-proc lol-generate-global-question-proc
      :glob-question-id lol-generate-global-question-key
      :question-first-time lol-generate-question-first-time-key
      :matchup-question-count lol-generate-matchup-question-count
