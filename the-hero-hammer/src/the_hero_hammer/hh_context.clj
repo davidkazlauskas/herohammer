@@ -174,6 +174,11 @@
   []
   (get-in (*ctx-get-func*) [:queries :glob-question-count]))
 
+(defn fn-global-question-proc
+  "Returns function."
+  []
+  (get-in (*ctx-get-func*) [:queries :glob-question-proc]))
+
 (defn fn-global-question-id
   "Returns function."
   []
