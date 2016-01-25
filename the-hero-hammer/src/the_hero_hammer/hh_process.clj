@@ -241,13 +241,9 @@
         proc-diff (- glob-cnt proc)]
     (if (> proc-diff 0)
       (let [range-to-get {:from proc :to glob-cnt}
-            final-proc (if (>
-                            (range-size range-to-get)
-                            (proc-chunk-size))
-                         ({:from (:from range-to-get)
-                           :to (+ (:from range-to-get)
-                                  (proc-chunk-size))})
-                         range-to-get)
+            final-proc (shorten-range
+                         range-to-get
+                         (proc-chunk-size))
             the-pairs (fetch-global-and-pair final-proc)
             out-res (process-pairs the-pairs)]
         (set-global-question-proc (:to final-proc))
