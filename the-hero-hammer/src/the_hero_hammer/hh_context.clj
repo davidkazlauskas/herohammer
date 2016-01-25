@@ -83,6 +83,11 @@
   (into [] (for [q questions f filters]
     {:question q :filter f})))
 
+(defn matchup-pair-from-key [the-key]
+  ((get-in (*ctx-get-func*)
+           [:util :matchup-pair-from-key])
+   the-key))
+
 ; QUESTONS
 (defn questions-full []
   (get-in (*ctx-get-func*) [:questions :full]))
