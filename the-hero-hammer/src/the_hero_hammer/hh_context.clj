@@ -97,7 +97,7 @@
   (get-in (*ctx-get-func*) [:heroes :full]))
 
 (defn heroes-count []
-  (count heroes-full))
+  (count (heroes-full)))
 
 ; FILTER FUNCS
 (defmacro count-in [] 1)
@@ -325,6 +325,18 @@
   (set-key ((fn-question-filter-count)
              matchup-pair question-id filter-id)
            (nippy/freeze data)))
+
+(defn random-question-data []
+  {
+   :hero-user (rand-int (heroes-count))
+   :hero-opponent (rand-int (heroes-count))
+   :comment "berkbreken"
+   :answers (->> (questions-full)
+                 (map :options)
+                 (map count)
+                 (map rand-int)
+                 (into []))
+  })
 
 (defn process-question
   "Process (save) question in form
