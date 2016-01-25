@@ -249,4 +249,5 @@
                      other-proc)
         the-pairs (fetch-global-and-pair final-proc)
         ]
-  the-pairs))
+  the-pairs
+  (set-global-question-proc (:to final-proc))))
