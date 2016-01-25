@@ -267,5 +267,8 @@
      :short-to-index (heroes-full-to-short (all-heroes-lol))
      :shortnames (heroes-shortnames (all-heroes-lol))
    }
+   :util {
+     :matchup-pair-from-key lol-matchup-pair-from-key
+   }
   })
 
