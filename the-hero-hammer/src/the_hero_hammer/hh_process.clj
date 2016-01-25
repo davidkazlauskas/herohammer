@@ -7,6 +7,9 @@
 (defn global-question-proc []
   (get-key ((fn-global-question-proc))))
 
+(defn set-global-question-proc [the-proc]
+  (set-key ((fn-global-question-proc)) the-proc))
+
 (defn get-first-occourences-of-questions [questions]
   (->> questions
        (map question-index)
