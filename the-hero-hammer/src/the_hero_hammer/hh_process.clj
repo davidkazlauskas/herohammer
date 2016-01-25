@@ -206,8 +206,12 @@
     frequences
   )
 
-(defn process-single-pair [currmax matchup-pair]
-  (let [the-filters (get-all-filters-for-matchup
+(defn matchup-question-count [matchup-pair]
+  ((fn-matchup-question-count) matchup-pair))
+
+(defn process-single-pair [matchup-pair]
+  (let [currmax (matchup-question-count matchup-pair)
+        the-filters (get-all-filters-for-matchup
                       matchup-pair currmax)]
   ; the-filters -> [ { :question :filter :expected-rng :count } .. ]
       (let [freqs (filter-frequencies the-filters)]
@@ -242,7 +246,7 @@
                                   (proc-chunk-size))})
                          range-to-get)
             the-pairs (fetch-global-and-pair final-proc)
-            out-res (process-pairs the-pairs)]
+            out-res (process-pairs the-pairs glob-cnt)]
         (set-global-question-proc (:to final-proc))
         out-res))
     "NOTHING_TO_PROCESS"))
