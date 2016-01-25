@@ -232,7 +232,7 @@
   (let [glob-cnt (or (global-question-count) 0)
         proc (or (global-question-proc) 0)
         proc-diff (- glob-cnt proc)]
-    (if (> 0 proc-diff)
+    (if (> proc-diff 0)
       (let [range-to-get {:from proc :to glob-cnt}
             final-proc (if (>
                             (range-size range-to-get)
