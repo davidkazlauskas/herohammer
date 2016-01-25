@@ -207,7 +207,9 @@
   )
 
 (defn matchup-question-count [matchup-pair]
-  ((fn-matchup-question-count) matchup-pair))
+  (or
+    (get-key ((fn-matchup-question-count) matchup-pair))
+    0))
 
 (defn process-single-pair [matchup-pair]
   (let [currmax (matchup-question-count matchup-pair)
