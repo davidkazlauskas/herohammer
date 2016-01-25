@@ -228,11 +228,22 @@
 (defn pairs-from-glob-range
   "range-to-get: {:from x :to x}"
   [range-to-get]
-  (let [proc (or (global-question-proc) 0)
-        fnproc (if (>
+  (let [glob-cnt (or (global-question-count) 0)
+        proc (or (global-question-proc) 0)
+        proc-diff (- glob-cnt proc)
+        other-proc (if (>
                     (range-size range-to-get)
                     (proc-chunk-size))
                   ({:from (:from range-to-get)
                     :to (+ (:from range-to-get)
-                           (proc-chunk-size))}))]
-  ))
+                           (proc-chunk-size))})
+                  range-to-get)
+        final-proc (if (>
+                        (range-size other-proc)
+                        proc-diff)
+                     {:from (:from other-proc)
+                      :to (+ (:from other-proc) proc-diff)}
+                     other-proc)
+        the-pairs (fetch-global-and-pair final-proc)
+        ]
+  the-pairs))
