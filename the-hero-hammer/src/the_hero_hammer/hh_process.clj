@@ -206,20 +206,18 @@
     frequences
   )
 
-(defn process-single-pair [currmax to-process]
-  (let [matchup-pair (vec-to-matchup to-process)
-        the-filters (get-all-filters-for-matchup
+(defn process-single-pair [currmax matchup-pair]
+  (let [the-filters (get-all-filters-for-matchup
                       matchup-pair currmax)]
   ; the-filters -> [ { :question :filter :expected-rng :count } .. ]
       (let [freqs (filter-frequencies the-filters)]
         (process-according-to-frequences
           freqs the-filters matchup-pair))))
 
-(defn process-pairs [to-process]
-  (let [currmax (global-question-count)]
-    (into [] (map
-       (partial process-single-pair currmax)
-       to-process))))
+(defn process-pairs [to-process glob-count]
+  (into [] (map
+     (partial process-single-pair glob-count)
+     to-process)))
 
 (defn fetch-global-and-pair
   [the-range]
