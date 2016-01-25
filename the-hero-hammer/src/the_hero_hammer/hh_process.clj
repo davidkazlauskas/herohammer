@@ -217,3 +217,15 @@
     (into [] (map
        (partial process-single-pair currmax)
        to-process))))
+
+(defn pairs-from-glob-range
+  "range-to-get: {:from x :to x}"
+  [range-to-get]
+  (let [proc (or (global-question-proc) 0)
+        fnproc (if (>
+                    (range-size range-to-get)
+                    (proc-chunk-size))
+                  ({:from (:from range-to-get)
+                    :to (+ (:from range-to-get)
+                           (proc-chunk-size))}))]
+  ))
