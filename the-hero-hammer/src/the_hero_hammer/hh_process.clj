@@ -218,9 +218,9 @@
         (process-according-to-frequences
           freqs the-filters matchup-pair))))
 
-(defn process-pairs [to-process glob-count]
+(defn process-pairs [to-process]
   (into [] (map
-     (partial process-single-pair glob-count)
+     (partial process-single-pair)
      to-process)))
 
 (defn fetch-global-and-pair
@@ -246,7 +246,7 @@
                                   (proc-chunk-size))})
                          range-to-get)
             the-pairs (fetch-global-and-pair final-proc)
-            out-res (process-pairs the-pairs glob-cnt)]
+            out-res (process-pairs the-pairs)]
         (set-global-question-proc (:to final-proc))
         out-res))
     "NOTHING_TO_PROCESS"))
