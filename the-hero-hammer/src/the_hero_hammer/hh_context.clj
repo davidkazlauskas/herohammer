@@ -217,6 +217,9 @@
 ; SPEC OPS
 (defn gen-matchup [u o] {:user u :opponent o})
 
+(defn range-size [the-range]
+  (- (:to the-range)) (:from the-range))
+
 (defn short-gen-matchup [u o]
   {:user (hero-index u) :opponent (hero-index o)})
 
