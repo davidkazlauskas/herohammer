@@ -4,6 +4,9 @@
 (defn global-question-count []
   (get-key ((fn-global-question-count))))
 
+(defn global-question-proc []
+  (get-key ((fn-global-question-proc))))
+
 (defn get-first-occourences-of-questions [questions]
   (->> questions
        (map question-index)
