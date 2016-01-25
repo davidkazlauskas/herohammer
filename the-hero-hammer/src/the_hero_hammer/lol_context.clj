@@ -48,6 +48,11 @@
    (clojure.string/join "-"
      (flatten [(pair-vec matchup-pair) id]))])
 
+(defn lol-matchup-pair-from-key [the-key]
+  (let [arr (re-find #"(\d+)-(\d+)-" (nth the-key 2))]
+    {:user (Integer. (nth arr 1))
+     :opponent (Integer. (nth arr 2))}))
+
 (defn lol-generate-matchup-comment-count
   "Matchup pair - {:user 7 :opponent 7}"
   [matchup-pair]
