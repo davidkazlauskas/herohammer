@@ -345,6 +345,18 @@
                  (into []))
   })
 
+(defn random-question-for-hero-range [heroes]
+  {
+   :hero-user (rand-nth heroes)
+   :hero-opponent (rand-nth heroes)
+   :comment "berkbreken"
+   :answers (->> (questions-full)
+                 (map :options)
+                 (map count)
+                 (map rand-int)
+                 (into []))
+  })
+
 (defn process-question
   "Process (save) question in form
   {:hero-user :hero-opponent :comment :answers []}"
