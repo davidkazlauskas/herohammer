@@ -100,11 +100,14 @@
 (defn ratio-percent [rat]
   (format "%.0f%%" (* 100 (float rat))))
 
+(defn bold-upper-text [the-text]
+  (html [:p {:style "font-weight: bold;"}
+         (clojure.string/upper-case the-text)]))
+
 (defn render-question-progress-bar [the-vec options]
-  (println "moo" the-vec)
   (let [the-sum (reduce + the-vec)
         div-by (if (= 0 the-sum) 1 the-sum)
-        prog-bars (map-indexed #(html
+        prog-bars (map #(html
                      [:div {:class (str
                                      "progress-bar "
                                      "progress-bar-striped "
@@ -115,8 +118,9 @@
                                      (ratio-percent (/ %2 div-by))
                                    ";")
                             }
-                      %3]
-                   ) the-vec options)
+                      (bold-upper-text %3)]
+                   ) (range (count the-vec))
+                       the-vec options)
         ]
     (html [:div {:class "progress"}
           prog-bars])))
