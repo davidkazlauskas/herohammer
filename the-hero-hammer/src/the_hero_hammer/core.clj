@@ -99,10 +99,11 @@
           (matchup-data-split id)
           rel-data (fetch-relevant-matchup-data
                     matchup filter-id)]
-        (wrap-html [:ul {:class "listgroup"}
+        (wrap-html [:ul {:class "list-group"}
           (->> rel-data
                (map render-single-question)
-               (map #(html [:li %1])))]))))
+               (map #(html [:li {:class "list-group-item"}
+                            %1])))]))))
 
 (defn lol-question-set-similarity
   "Return percentage of values picked from user"
