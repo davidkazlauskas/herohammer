@@ -97,8 +97,33 @@
       :opponent (Integer. (nth findings 2))}
       (Integer. (nth findings 3))]))
 
+(defn ratio-percent [rat]
+  (format "%.0f%%" (* 100 (float rat))))
+
+(defn render-question-progress-bar [the-vec]
+  (println "moo" the-vec)
+  (let [the-sum (reduce + the-vec)
+        div-by (if (= 0 the-sum) 1 the-sum)
+        prog-bars (map-indexed #(html
+                     [:div {:class (str
+                                     "progress-bar "
+                                     "progress-bar-striped "
+                                     (if (= (mod %1 2) 0)
+                                       "progress-bar-success"
+                                       "progress-bar-info"))
+                            :style (str "width: "
+                                     (ratio-percent (/ %2 div-by))
+                                   ";")
+                            }]
+                   ) the-vec)
+        ]
+    (html [:div {:class "progress"}
+          prog-bars])))
+
 (defn render-single-question [qdata]
-  (html [:p (:question qdata)]))
+  (html [:p (:question qdata)]
+        (render-question-progress-bar
+          (get-in qdata [:counts :count]))))
 
 (defn lol-render-matchup-data [id]
   (lol-ctx
