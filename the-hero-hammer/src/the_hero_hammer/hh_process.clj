@@ -71,18 +71,18 @@
             ((:expected (:filter flt-map))
              currmax (:count flt-map))))
 
-(defn count-for-filter [flt-map]
+(defn count-for-filter [matchup-pair flt-map]
   (assoc flt-map :count
     (apply fetch-filter-new-or-empty
     (flatten
       [matchup-pair (extract-ids-from-cross flt-map)
-      (count (get-in %1 [:question :options]))]))))
+      (count (get-in flt-map [:question :options]))]))))
 
 (defn get-all-filters-for-matchup
   [matchup-pair currmax]
   (->> (questions-filters-cross)
        (map (partial count-for-filter currmax))
-       (map expected-rng-for-filter)
+       (map (partial expected-rng-for-filter matchup-pair))
        (into [])))
 
 (defn shortened-range [old limit]
