@@ -66,7 +66,7 @@
   [(:id (:question q-and-filter-cross))
    (:id (:filter q-and-filter-cross))])
 
-(defn expected-rng-for-filter [flt-map]
+(defn expected-rng-for-filter [currmax flt-map]
   (assoc flt-map :expected-rng
             ((:expected (:filter flt-map))
              currmax (:count flt-map))))
@@ -81,7 +81,7 @@
 (defn get-all-filters-for-matchup
   [matchup-pair currmax]
   (->> (questions-filters-cross)
-       (map count-for-filter)
+       (map (partial count-for-filter currmax))
        (map expected-rng-for-filter)
        (into [])))
 
