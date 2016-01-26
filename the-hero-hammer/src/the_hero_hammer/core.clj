@@ -78,11 +78,13 @@
                        :value "Submit record"}]])))
 
 (defn matchup-data-split [the-str]
-  (let [findings (re-find #"(\d+)+-(\d+)-(\d+)-(\d+)" the-str)]
+  (let [findings (re-find #"(\d+)+-(\d+)-(\d+)" the-str)]
     [{:user (Integer. (nth findings 1))
       :opponent (Integer. (nth findings 2))}
-      (Integer. (nth findings 3))
-      (Integer. (nth findings 4))]))
+      (Integer. (nth findings 3))]))
+
+(defn render-single-question [qdata]
+  (html [:p (:question qdata)]))
 
 (defn lol-render-matchup-data [id]
   (lol-ctx
@@ -90,7 +92,10 @@
           (matchup-data-split id)
           rel-data (fetch-relevant-matchup-data
                     matchup filter-id)]
-        (wrap-html [:p "meow " rel-data]))))
+        (wrap-html [:ul
+          (map
+            render-single-question
+            rel-data)]))))
 
 (defn lol-question-set-similarity
   "Return percentage of values picked from user"
