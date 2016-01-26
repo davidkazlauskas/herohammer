@@ -9,4 +9,5 @@
                  [compojure "1.1.8"]
                  [http-kit "2.1.18"]
                  [debugger "0.1.7"]]
-  :main the-hero-hammer.core)
+  :main the-hero-hammer.core
+  :aot [the-hero-hammer.core])
