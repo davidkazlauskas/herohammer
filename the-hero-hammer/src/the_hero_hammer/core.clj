@@ -84,7 +84,10 @@
       (Integer. (nth findings 4))]))
 
 (defn lol-render-matchup-data [id]
-  (lol-ctx (wrap-html [:p "meow " id])))
+  (lol-ctx
+    (let [[matchup question id]
+      (matchup-data-split id)]
+        (wrap-html [:p "meow " matchup question id]))))
 
 (defn lol-question-set-similarity
   "Return percentage of values picked from user"
