@@ -66,9 +66,11 @@
          [:body
           [:div {:class "container"}
            [:div {:class "row"}
-            [:div {:class "col-md-7"} towrap]]]]
-         ])
-  )
+            [:div {:class "col-md-2"}]
+            [:div {:class "col-md-8"} towrap]
+            [:div {:class "col-md-2"}]
+            ]]]
+         ]))
 
 (defmacro q-post-link [] "/questions-post")
 
@@ -118,7 +120,7 @@
                                      (ratio-percent (/ %2 div-by))
                                    ";")
                             }
-                      (bold-upper-text (str %3 " (" %2 ")"))]
+                      (if (> %2 0) (bold-upper-text (str %3 " (" %2 ")")))]
                    ) (range (count the-vec))
                        the-vec options)
         ]
