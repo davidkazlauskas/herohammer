@@ -229,8 +229,10 @@
 (defn fetch-global-and-pair
   [the-range]
   (let [the-keys (get-n-global-questions the-range)
-        matchups (into []
-         (map matchup-pair-from-key the-keys))]
+        matchups (->> the-keys
+                      (map matchup-pair-from-key)
+                      (distinct)
+                      (into []))]
     matchups))
 
 (defn fetch-glob-to-proc-range []
