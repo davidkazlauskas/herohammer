@@ -25,10 +25,10 @@
   (if (= nil questions)
     {:from 0 :to 0 :count
      (new-count-vector answer-count)}
-    (let [max-occourence
-          (first (max
-            (get-first-occourences-of-questions
-                 questions)))]
+    (let [first-occ (get-first-occourences-of-questions
+                      questions)
+          max-occourence
+          (first (max first-occ))]
       (if (some? max-occourence)
         {:from max-occourence
          :to max-occourence
@@ -74,9 +74,9 @@
 (defn count-for-filter [matchup-pair flt-map]
   (assoc flt-map :count
     (apply fetch-filter-new-or-empty
-    (flatten
-      [matchup-pair (extract-ids-from-cross flt-map)
-      (count (get-in flt-map [:question :options]))]))))
+      (flatten
+        [matchup-pair (extract-ids-from-cross flt-map)
+        (count (get-in flt-map [:question :options]))]))))
 
 (defn get-all-filters-for-matchup
   [matchup-pair currmax]
