@@ -180,6 +180,6 @@
   (GET "/matchup-lol/:id" [id] (lol-render-matchup-data id))
   (POST (q-post-link) {params :params} (lol-post-questions params)))
 
-(defn -main []
+(defn -main [& args]
   (println "Muah runnin!")
   (run-server (wrap-params myapp) {:port 5000}))
