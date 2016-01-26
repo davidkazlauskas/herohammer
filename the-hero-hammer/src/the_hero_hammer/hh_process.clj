@@ -45,8 +45,7 @@
   (->> filters-pending
        (map :expected-rng)
        frequencies
-       (filter #(> 0 (- (:to (get %1 0))
-                        (:from (get %1 0)))))
+       (filter #(> (range-size (get %1 0)) 0))
        (sort-by #(get % 1) >)
        (into [])))
 
