@@ -333,28 +333,28 @@
              matchup-pair question-id filter-id)
            (nippy/freeze data)))
 
+(defn rnd-answers []
+  (->> (questions-full)
+       (map #(vector (:id %1)
+                     (rand-int
+                       (count (:options %1)))))
+       (into [])))
+
 (defn random-question-data []
   {
    :hero-user (rand-int (heroes-count))
    :hero-opponent (rand-int (heroes-count))
    :comment "berkbreken"
-   :answers (->> (questions-full)
-                 (map :options)
-                 (map count)
-                 (map rand-int)
-                 (into []))
+   :answers (rnd-answers)
   })
+
 
 (defn random-question-for-hero-range [heroes]
   {
    :hero-user (rand-nth heroes)
    :hero-opponent (rand-nth heroes)
    :comment "berkbreken"
-   :answers (->> (questions-full)
-                 (map :options)
-                 (map count)
-                 (map rand-int)
-                 (into []))
+   :answers (rnd-answers)
   })
 
 (defn process-question
