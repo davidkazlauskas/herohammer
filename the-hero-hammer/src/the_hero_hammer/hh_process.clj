@@ -233,9 +233,7 @@
          (map matchup-pair-from-key the-keys))]
     matchups))
 
-(defn process-pending
-  "Process all pending questions in db"
-  []
+(defn fetch-glob-to-proc-range []
   (let [glob-cnt (or (global-question-count) 0)
         proc (or (global-question-proc) 0)
         proc-diff (- glob-cnt proc)]
@@ -243,8 +241,16 @@
       (let [range-to-get {:from proc :to glob-cnt}
             final-proc (shorten-range
                          range-to-get
-                         (proc-chunk-size))
-            the-pairs (fetch-global-and-pair final-proc)
+                         (proc-chunk-size))]
+        final-proc))
+    nil))
+
+(defn process-pending
+  "Process all pending questions in db"
+  []
+  (let [final-proc (fetch-glob-to-proc-range)]
+    (if (some? final-proc)
+      (let [the-pairs (fetch-global-and-pair final-proc)
             out-res (process-pairs the-pairs)]
         (set-global-question-proc (:to final-proc))
         out-res))
