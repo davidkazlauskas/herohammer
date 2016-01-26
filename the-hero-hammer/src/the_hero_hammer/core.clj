@@ -1,5 +1,5 @@
 (ns the-hero-hammer.core
-  (:genclass)
+  (:gen-class)
   (:require [compojure.core :refer :all]
             [the-hero-hammer.hh_context :refer :all]
             [the-hero-hammer.hh_process :refer :all]
