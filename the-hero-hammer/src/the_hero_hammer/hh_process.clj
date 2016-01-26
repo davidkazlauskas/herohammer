@@ -66,17 +66,23 @@
   [(:id (:question q-and-filter-cross))
    (:id (:filter q-and-filter-cross))])
 
+(defn expected-rng-for-filter [flt-map]
+  (assoc flt-map :expected-rng
+            ((:expected (:filter flt-map))
+             currmax (:count flt-map))))
+
+(defn count-for-filter [flt-map]
+  (assoc flt-map :count
+    (apply fetch-filter-new-or-empty
+    (flatten
+      [matchup-pair (extract-ids-from-cross flt-map)
+      (count (get-in %1 [:question :options]))]))))
+
 (defn get-all-filters-for-matchup
   [matchup-pair currmax]
   (->> (questions-filters-cross)
-       (map #(assoc %1 :count
-            (apply fetch-filter-new-or-empty
-            (flatten
-              [matchup-pair (extract-ids-from-cross %1)
-              (count (get-in %1 [:question :options]))]))))
-       (map #(assoc %1 :expected-rng
-            ((:expected (:filter %1))
-             currmax (:count %1))))
+       (map count-for-filter)
+       (map expected-rng-for-filter)
        (into [])))
 
 (defn shortened-range [old limit]
