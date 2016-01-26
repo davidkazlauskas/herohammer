@@ -127,14 +127,15 @@
 
 (defn lol-render-matchup-data [id]
   (lol-ctx
-    (let [[matchup question filter-id]
+    (let [[matchup filter-id]
           (matchup-data-split id)
           rel-data (fetch-relevant-matchup-data
                     matchup filter-id)]
         (wrap-html [:ul {:class "list-group"}
           (->> rel-data
                (map render-single-question)
-               (map #(html [:li {:class "list-group-item"}
+               (map #(html
+                       [:li {:class "list-group-item"}
                             %1])))]))))
 
 (defn lol-question-set-similarity
