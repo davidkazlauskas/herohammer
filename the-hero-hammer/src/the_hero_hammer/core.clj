@@ -105,7 +105,7 @@
 (defroutes myapp
   (GET "/" [] (index))
   (GET "/questions-lol" [] (lol-render-questions))
-  (GET "/matchup-lol/:id" [] (lol-render-matchup-data))
+  (GET "/matchup-lol/:id" [id] (lol-render-matchup-data id))
   (POST (q-post-link) {params :params} (lol-post-questions params)))
 
 (defn -main []
