@@ -54,10 +54,10 @@
          [:head
           [:link {:rel "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
                   :integrity "sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
-                  :crossorigin "anonymous"}]]
+                  :crossorigin "anonymous"}]
           [:script {:src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
                     :integrity "sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-                    :crossorigin "anonymous"}]
+                    :crossorigin "anonymous"}]]
          [:body
           towrap]
          ])
@@ -99,10 +99,10 @@
           (matchup-data-split id)
           rel-data (fetch-relevant-matchup-data
                     matchup filter-id)]
-        (wrap-html [:ul
-          (map
-            render-single-question
-            rel-data)]))))
+        (wrap-html [:ul {:class "listgroup"}
+          (->> rel-data
+               (map render-single-question)
+               (map #(html [:li %1])))]))))
 
 (defn lol-question-set-similarity
   "Return percentage of values picked from user"
