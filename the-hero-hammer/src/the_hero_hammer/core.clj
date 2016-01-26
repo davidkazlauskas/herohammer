@@ -101,7 +101,7 @@
   (format "%.0f%%" (* 100 (float rat))))
 
 (defn bold-upper-text [the-text]
-  (html [:p {:style "font-weight: bold;"}
+  (html [:p {:style "color: black; font-weight: bold;"}
          (clojure.string/upper-case the-text)]))
 
 (defn render-question-progress-bar [the-vec options]
@@ -118,18 +118,23 @@
                                      (ratio-percent (/ %2 div-by))
                                    ";")
                             }
-                      (bold-upper-text %3)]
+                      (bold-upper-text (str %3 " (" %2 ")"))]
                    ) (range (count the-vec))
                        the-vec options)
         ]
     (html [:div {:class "progress"}
-          prog-bars])))
+          prog-bars
+          ])))
 
 (defn render-single-question [qdata]
-  (html [:p (:question qdata)]
+  (html [:p {:class "text-center"
+             :style "font-weight: bold"}
+            (:question qdata)]
         (render-question-progress-bar
           (get-in qdata [:counts :count])
-          (get-in qdata [:options]))))
+          (get-in qdata [:options]))
+        [:p {:class "text-center"}
+         (str (range-size (:counts qdata)) " samples.")]))
 
 (defn lol-render-matchup-data [id]
   (lol-ctx
