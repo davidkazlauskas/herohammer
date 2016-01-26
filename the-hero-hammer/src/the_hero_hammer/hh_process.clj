@@ -260,5 +260,5 @@
       (let [the-pairs (fetch-global-and-pair final-proc)
             out-res (process-pairs the-pairs)]
         (set-global-question-proc (:to final-proc))
-        out-res))
-    "NOTHING_TO_PROCESS"))
+        out-res)
+        "NOTHING_TO_PROCESS")))
