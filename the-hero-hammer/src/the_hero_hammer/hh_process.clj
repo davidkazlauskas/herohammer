@@ -68,7 +68,7 @@
 
 (defn expected-rng-for-filter [currmax flt-map]
   (assoc flt-map :expected-rng
-            ((:expected (:filter flt-map))
+            ((get-in flt-map [:filter :expected])
              currmax (:count flt-map))))
 
 (defn count-for-filter [matchup-pair flt-map]
@@ -82,7 +82,7 @@
   [matchup-pair currmax]
   (->> (questions-filters-cross)
        (map (partial count-for-filter currmax))
-       (map (partial expected-rng-for-filter matchup-pair))
+       (map (partial expected-rng-for-filter currmax))
        (into [])))
 
 (defn shortened-range [old limit]
