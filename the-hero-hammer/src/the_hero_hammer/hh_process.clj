@@ -242,8 +242,8 @@
             final-proc (shorten-range
                          range-to-get
                          (proc-chunk-size))]
-        final-proc))
-    nil))
+        final-proc)
+      nil)))
 
 (defn process-pending
   "Process all pending questions in db"
