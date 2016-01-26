@@ -1,6 +1,7 @@
 (ns the-hero-hammer.core
   (:require [compojure.core :refer :all]
             [the-hero-hammer.hh_context :refer :all]
+            [the-hero-hammer.hh_process :refer :all]
             [the-hero-hammer.lol_context :as lctx]
             [org.httpkit.server :refer [run-server]])
   (:use hiccup.core
