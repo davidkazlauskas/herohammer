@@ -76,6 +76,9 @@
               [:input {:type "submit"
                        :value "Submit record"}]])))
 
+(defn lol-render-matchup-data [id]
+  (lol-ctx (wrap-html [:p "meow " id])))
+
 (defn lol-question-set-similarity
   "Return percentage of values picked from user"
   [request]
@@ -102,6 +105,7 @@
 (defroutes myapp
   (GET "/" [] (index))
   (GET "/questions-lol" [] (lol-render-questions))
+  (GET "/matchup-lol/:id" [] (lol-render-matchup-data))
   (POST (q-post-link) {params :params} (lol-post-questions params)))
 
 (defn -main []
