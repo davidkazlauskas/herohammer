@@ -266,8 +266,10 @@
 (defn fetch-count-for-question
   [matchup filter-id question]
   (assoc question :counts
-     (get-matchup-filter-count
-       matchup (:id question) filter-id)))
+     (or (get-matchup-filter-count
+       matchup (:id question) filter-id)
+       (new-filter-count
+         nil (count (:options question))))))
 
 (defn fetch-relevant-matchup-data [matchup filter-id]
   (->> (questions-full)
