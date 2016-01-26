@@ -10,4 +10,5 @@
                  [http-kit "2.1.18"]
                  [debugger "0.1.7"]]
   :main the-hero-hammer.core
-  :aot [the-hero-hammer.core])
+  :aot [the-hero-hammer.core]
+  :uberjar {:aot :all})
