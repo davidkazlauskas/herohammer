@@ -262,3 +262,16 @@
         (set-global-question-proc (:to final-proc))
         out-res)
         "NOTHING_TO_PROCESS")))
+
+(defn fetch-count-for-question
+  [matchup filter-id question]
+  (assoc question :counts
+     (get-matchup-filter-count
+       matchup (:id question) filter-id)))
+
+(defn fetch-relevant-matchup-data [matchup filter-id]
+  (->> (questions-full)
+       (map (partial
+              fetch-count-for-question
+              matchup filter-id))
+       (into [])))
