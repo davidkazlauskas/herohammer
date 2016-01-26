@@ -76,6 +76,13 @@
               [:input {:type "submit"
                        :value "Submit record"}]])))
 
+(defn matchup-data-split [the-str]
+  (let [findings (re-find #"(\d+)+-(\d+)-(\d+)-(\d+)" the-str)]
+    [{:user (Integer. (nth findings 1))
+      :opponent (Integer. (nth findings 2))}
+      (Integer. (nth findings 3))
+      (Integer. (nth findings 4))]))
+
 (defn lol-render-matchup-data [id]
   (lol-ctx (wrap-html [:p "meow " id])))
 
