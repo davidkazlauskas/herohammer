@@ -144,7 +144,9 @@
 
 (defn hero-dropdown [select-id]
   (html [:select {:class "form-control"
-                  :id select-id}
+                  :id select-id
+                  :onchange "the_hero_hammer.js_client.updateHeroSquares();"
+                  }
          (map-indexed
            #(html [:option {:value %1} %2])
            (heroes-full))
