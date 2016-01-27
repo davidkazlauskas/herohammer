@@ -246,9 +246,12 @@
   (let [idx (hero-name-full-to-short hero-full-name)]
     (->> (hero-squares-lol)
          (map-indexed #(vector %1 (lowercase-replace %2) %2))
-         (map #(re-find (re-pattern idx) %1))
-         (filter some?)
-         (first))))
+         (map #(hash-map :idx (nth %1 0)
+                         :rgx (re-find (re-pattern idx) (nth %1 1))
+                         :full (nth %1 2)))
+         (filter #(some? (:rgx %1)))
+         (first)
+         (:full))))
 
 (defn all-heroes-lol []
   [
