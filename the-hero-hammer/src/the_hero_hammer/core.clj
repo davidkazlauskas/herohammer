@@ -10,6 +10,13 @@
   (:use hiccup.core
         [ring.middleware.params :only [wrap-params]]))
 
+(def ^:dynamic *html-context-lol*
+  (lol-ctx
+    {:matchup-link-start "/matchup-lol"
+     :registration-link "/questions-lol"
+     :squares-javascript (generate-javascript-hero-squares)
+     }))
+
 (defmacro lol-ctx [& args]
   `(binding [*ctx-get-func* (fn [] lctx/*hh-context-lol*)
              *html-context* *html-context-lol*]
@@ -17,19 +24,12 @@
    ))
 
 (defn generate-javascript-hero-squares []
-  (let [squares (get-in ((*ctx-get-func*)) [:heroes :squares])]
+  (let [squares (get-in (*ctx-get-func*) [:heroes :squares])]
     (->> squares
          (map #(str "'" %1 "'"))
          (interpose ",")
          (clojure.string/join)
          #(str "heroSquares = [" %1 "];"))))
-
-(def ^:dynamic *html-context-lol*
-  (lol-ctx
-    {:matchup-link-start "/matchup-lol"
-     :registration-link "/questions-lol"
-     :squares-javascript (generate-javascript-hero-squares)
-     }))
 
 (def ^:dynamic *html-context* nil)
 
