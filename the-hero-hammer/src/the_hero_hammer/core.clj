@@ -8,11 +8,6 @@
   (:use hiccup.core
         [ring.middleware.params :only [wrap-params]]))
 
-(defn index
-  "meow"
-  []
-  (html [:h1 "Dazlow!"]))
-
 (defmacro lol-ctx [& args]
   `(binding [*ctx-get-func* (fn [] lctx/*hh-context-lol*)]
      ~@args
@@ -72,6 +67,11 @@
             [:div {:class "col-md-2"}]
             ]]]
          ]))
+
+(defn index
+  "meow"
+  []
+  (wrap-html [:h1 "Dazlow!"]))
 
 (defmacro q-post-link [] "/questions-post")
 
