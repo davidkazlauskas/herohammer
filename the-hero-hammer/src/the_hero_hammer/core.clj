@@ -1,10 +1,12 @@
 (ns the-hero-hammer.core
   (:gen-class)
   (:require [compojure.core :refer :all]
+            [compojure.route :as route]
             [the-hero-hammer.hh_context :refer :all]
             [the-hero-hammer.hh_process :refer :all]
             [the-hero-hammer.lol_context :as lctx]
-            [org.httpkit.server :refer [run-server]])
+            [org.httpkit.server :refer [run-server]]
+            [cljs.build.api :as cljsbld])
   (:use hiccup.core
         [ring.middleware.params :only [wrap-params]]))
 
@@ -287,7 +289,8 @@
   (GET "/lol" [] (lol-page))
   (GET "/questions-lol" [] (lol-render-questions))
   (GET "/matchup-lol/:id" [id] (lol-render-matchup-data id))
-  (POST (q-post-link) {params :params} (lol-post-questions params)))
+  (POST (q-post-link) {params :params} (lol-post-questions params))
+  (route/resources "/war/"))
 
 (defn -main [& args]
   (println "Muah runnin!")
