@@ -162,10 +162,12 @@
            (filters-full))
          ]))
 
-(defn hero-icon [hero-id]
+(defn hero-icon [thumb-id]
   (html [:img {:width 120 :height 120
-               :src "http://vignette1.wikia.nocookie.net/leagueoflegends/images/1/18/AhriSquare.png"
+               ;:src "http://vignette1.wikia.nocookie.net/leagueoflegends/images/1/18/AhriSquare.png"
+               :src ""
                :style "margin-left: 10px; margin-right: 10px;"
+               :id thumb-id
                }])
   )
 
@@ -200,8 +202,8 @@
          ]
         [:div {:style "padding-top: 20px; padding-bottom: 20px;"
                :class "text-center"}
-         (hero-icon "meow")
-         (hero-icon "meow")]))
+         (hero-icon "thumb-user")
+         (hero-icon "thumb-opponent")]))
 
 (defn generic-registration-page []
   (html

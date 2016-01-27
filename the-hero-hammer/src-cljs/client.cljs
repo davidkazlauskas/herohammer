@@ -10,12 +10,18 @@
       (aget element "selectedIndex"))
     "value"))
 
+(defn set-attrib [element attr the-val]
+  (.setAttribute element attr the-val))
+
 (defn construct-link-to-results
   [hu-s ho-s flt-s]
   (str js/matchupLink "/"
        hu-s "-"
        ho-s "-"
        flt-s))
+
+(defn thumb-link [opt]
+  (aget js/heroSquares opt))
 
 ; hero-user hero-opponent user-filter
 (defn ^:export goToMatchup []
@@ -28,3 +34,15 @@
     (aset js/window "location"
           (construct-link-to-results hu-s ho-s flt-s))
     ))
+
+(defn ^:export updateHeroSquares []
+  (let [hu (by-id "hero-user")
+        ho (by-id "hero-opponent")
+        hu-s (sel-value hu)
+        ho-s (sel-value ho)
+        hu-l (thumb-link hu-s)
+        ho-l (thumb-link ho-s)
+        tu (by-id "thumb-user")
+        to (by-id "thumb-opponent")]
+    (set-attrib tu "src" hu-l)
+    (set-attrib to "src" ho-l)))
