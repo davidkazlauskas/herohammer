@@ -111,8 +111,28 @@
                 ]
                ]]))
 
+(defn hero-dropdown [select-id]
+  (html [:select {:class "form-control"
+                  :id select-id}
+         (map-indexed
+           #(html [:option {:value %1} %2])
+           (heroes-full))
+         ]))
+
 (defn generic-registration-page []
-  (html [:p "ballin"])
+  (html
+    [:div {:class "form-group"}
+        [:div {:class "text-center"}
+         [:label {:style "text-align: left; width: 130px;"
+                  :for "hero-user"}
+          "Your hero"]
+         [:label {:style "text-align: right; width: 130px;"
+                  :for "hero-opponent"}
+          "Opponent hero"]]
+     [:div {:class "form-inline text-center"}
+         (hero-dropdown "hero-user")
+         (hero-dropdown ":hero-opponent")
+         ]])
   )
 
 (defn dota2-page []
