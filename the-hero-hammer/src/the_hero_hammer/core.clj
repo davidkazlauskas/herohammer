@@ -16,9 +16,20 @@
      ~@args
    ))
 
+(defn generate-javascript-hero-squares []
+  (let [squares (get-in ((*ctx-get-func*)) [:heroes :squares])]
+    (->> squares
+         (map #(str "'" %1 "'"))
+         (interpose ",")
+         (clojure.string/join)
+         #(str "heroSquares = [" %1 "];"))))
+
 (def ^:dynamic *html-context-lol*
-  {:matchup-link-start "/matchup-lol"
-   :registration-link "/questions-lol"})
+  (lol-ctx
+    {:matchup-link-start "/matchup-lol"
+     :registration-link "/questions-lol"
+     :squares-javascript (generate-javascript-hero-squares)
+     }))
 
 (def ^:dynamic *html-context* nil)
 
