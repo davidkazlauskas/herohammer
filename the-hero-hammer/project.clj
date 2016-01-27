@@ -8,7 +8,8 @@
                  [com.taoensso/nippy "2.10.0"]
                  [compojure "1.1.8"]
                  [http-kit "2.1.18"]
-                 [debugger "0.1.7"]]
+                 [debugger "0.1.7"]
+                 [lein-cljsbuild "1.1.2"]]
   :main the-hero-hammer.core
   :aot [the-hero-hammer.core]
   :uberjar {:aot :all})
