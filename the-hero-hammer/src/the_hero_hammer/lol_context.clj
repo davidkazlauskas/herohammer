@@ -97,6 +97,7 @@
     ))
 
 (defn hero-squares-lol []
+  [
   "http://vignette3.wikia.nocookie.net/leagueoflegends/images/c/cc/AatroxSquare.png"
   "http://vignette1.wikia.nocookie.net/leagueoflegends/images/1/18/AhriSquare.png"
   "http://vignette2.wikia.nocookie.net/leagueoflegends/images/a/a5/AkaliSquare.png"
@@ -234,6 +235,7 @@
   "http://vignette3.wikia.nocookie.net/leagueoflegends/images/5/55/ZiggsSquare.png"
   "http://vignette2.wikia.nocookie.net/leagueoflegends/images/a/ac/ZileanSquare.png"
   "http://vignette3.wikia.nocookie.net/leagueoflegends/images/1/1a/ZyraSquare.png"
+]
 )
 
 (defn all-heroes-lol []
