@@ -49,7 +49,12 @@
   (html [:nav {:class "navbar navbar-default"}
          [:div {:class "container-fluid"}
           [:div {:class "navbar-header"}
-           [:a {:class "navbar-brand" :href "/"} "The Hero Hammer"]
+           [:a {:class "navbar-brand" :href "/"} "The Hero Hammer"]]
+          [:div {:class "collapse navbar-collapse"}
+           [:ul {:class "nav navbar-nav"}
+            [:li [:a {:href "/dota2"} "Dota 2"]]
+            [:li [:a {:href "/lol"} "League of Legends"]]
+            ]
            ]
           ]
          ]))
