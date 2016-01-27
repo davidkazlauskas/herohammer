@@ -167,26 +167,28 @@
          (:matchup-link-start (html-context))
          "';"]))
 
-(defn generic-registration-page []
-  (html
-    (context-js-variables)
-    [:div {:class "form-group"}
-        [:div {:class "text-center"}
+(defn generate-hero-selection [args]
+  (html [:div {:class "text-center"}
          [:label {:style "text-align: left; width: 130px;"
                   :for "hero-user"}
           "Your hero"]
          [:label {:style "text-align: right; width: 130px;"
                   :for "hero-opponent"}
           "Opponent hero"]]
-     [:div {:class "form-inline text-center"}
+        [:div {:class "form-inline text-center"}
          (hero-dropdown "hero-user")
          (hero-dropdown "hero-opponent")
          ]
-     [:div {:style "padding-top: 20px; padding-bottom: 20px;"
-            :class "text-center"}
-      (hero-icon "meow")
-      (hero-icon "meow")]
+        [:div {:style "padding-top: 20px; padding-bottom: 20px;"
+               :class "text-center"}
+         (hero-icon "meow")
+         (hero-icon "meow")]))
 
+(defn generic-registration-page []
+  (html
+    (context-js-variables)
+    [:div {:class "form-group"}
+     (generate-hero-selection {})
      [:div {:class "form-inline text-center"}
       [:label {:for "user-filter"} "Filter to use"]
       [:br]
