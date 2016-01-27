@@ -11,9 +11,19 @@
         [ring.middleware.params :only [wrap-params]]))
 
 (defmacro lol-ctx [& args]
-  `(binding [*ctx-get-func* (fn [] lctx/*hh-context-lol*)]
+  `(binding [*ctx-get-func* (fn [] lctx/*hh-context-lol*)
+             *html-context* *html-context-lol*]
      ~@args
    ))
+
+(def ^:dynamic *html-context-lol*
+  {:matchup-link-start "/matchup-lol"
+   :registration-link "/questions-lol"})
+
+(def ^:dynamic *html-context* nil)
+
+(defn html-context []
+  *html-context*)
 
 (def ^:dynamic *radio-set-lol*
   (lol-ctx (into #{} (map #(:shortname %1)
@@ -150,6 +160,13 @@
                 :style "width: 120px;"
                 :class "btn btn-default" } "Show results"]]]))
 
+(defn context-js-variables []
+  (html [:script "registrationLink = '"
+         (:registration-link (html-context))
+         "'; matchupLink = '"
+         (:matchup-link-start (html-context))
+         "';"]))
+
 (defn generic-registration-page []
   (html
     [:div {:class "form-group"}
@@ -162,7 +179,7 @@
           "Opponent hero"]]
      [:div {:class "form-inline text-center"}
          (hero-dropdown "hero-user")
-         (hero-dropdown ":hero-opponent")
+         (hero-dropdown "hero-opponent")
          ]
      [:div {:style "padding-top: 20px; padding-bottom: 20px;"
             :class "text-center"}
