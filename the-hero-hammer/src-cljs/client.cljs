@@ -1,5 +1,4 @@
 (ns the-hero-hammer.js_client)
 
-(enable-console-print!)
-
-(println "Hello werld!")
+(defn ^:export goToMatchup []
+  (js/alert "dazlow"))

@@ -146,7 +146,7 @@
          [:div {:class "btn-group"}
            [:a {:style "width: 120px;"
                 :class "btn btn-default" } "Add record"]
-           [:a {:onclick "go-to-matchup();"
+           [:a {:onclick "the_hero_hammer.js_client.goToMatchup();"
                 :style "width: 120px;"
                 :class "btn btn-default" } "Show results"]]]))
 
