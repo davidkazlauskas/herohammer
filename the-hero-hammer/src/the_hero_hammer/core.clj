@@ -25,7 +25,7 @@
          (map #(str "'" %1 "'"))
          (interpose ",")
          clojure.string/join)]
-      (str "heroSquares = [" the-arr "];"))))
+      (str "[" the-arr "]"))))
 
 (def ^:dynamic *html-context-lol*
   (lol-ctx
@@ -183,7 +183,8 @@
          (:registration-link (html-context))
          "'; matchupLink = '"
          (:matchup-link-start (html-context))
-         "';"]))
+         "'; heroSquares = "
+         (:squares-javascript (html-context))]))
 
 (defn generate-hero-selection [args]
   (html [:div {:class "text-center"}
