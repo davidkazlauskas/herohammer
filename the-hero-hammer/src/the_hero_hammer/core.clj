@@ -169,6 +169,7 @@
 
 (defn generic-registration-page []
   (html
+    (context-js-variables)
     [:div {:class "form-group"}
         [:div {:class "text-center"}
          [:label {:style "text-align: left; width: 130px;"
