@@ -119,6 +119,18 @@
            (heroes-full))
          ]))
 
+(defn filter-dropdown [select-id]
+  (html [:select {:class "form-control"
+                  :id select-id
+                  }
+         (map
+           #(html [:option
+                   {:value (:id %1)}
+                   (:full-name %1)
+                   ])
+           (filters-full))
+         ]))
+
 (defn hero-icon [hero-id]
   (html [:img {:width 120 :height 120
                :src "http://vignette1.wikia.nocookie.net/leagueoflegends/images/1/18/AhriSquare.png"
@@ -140,12 +152,15 @@
          (hero-dropdown "hero-user")
          (hero-dropdown ":hero-opponent")
          ]
-     [:div {:style "padding-top: 20px;" :class "text-center"}
+     [:div {:style "padding-top: 20px; padding-bottom: 20px;"
+            :class "text-center"}
       (hero-icon "meow")
-      (hero-icon "meow")
-      ]
-     ])
-  )
+      (hero-icon "meow")]
+
+     [:div {:class "form-inline text-center"}
+      [:label {:for "user-filter"} "Filter to use"]
+      [:br]
+      (filter-dropdown "user-filter")]]))
 
 (defn dota2-page []
   (wrap-html [:p "meow"]))
