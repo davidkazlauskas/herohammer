@@ -52,7 +52,7 @@
            [:a {:class "navbar-brand" :href "/"} "The Hero Hammer"]]
           [:div {:class "collapse navbar-collapse"}
            [:ul {:class "nav navbar-nav"}
-            [:li [:a {:href "/dota2"} "Dota 2"]]
+            [:li [:a {:href "/dota2"} "DotA 2"]]
             [:li [:a {:href "/lol"} "League of Legends"]]
             ]
            [:ul {:class "nav navbar-nav navbar-right"}
@@ -98,6 +98,16 @@
                 "they expressed what happened by answering questions "
                 "about particular match. Pick the moba you're interested "
                 "in, pick heroes and see how it is for particular matchup."
+                ]
+               [:div {:class "text-center"}
+                [:div {:class "btn-group"}
+                  [:a {:class "btn btn-default"
+                       :style "width: 160px;"
+                       :href "/dota2"} "DotA 2"]
+                  [:a {:class "btn btn-default"
+                       :style  "width: 160px;"
+                       :href "/lol"} "League of Legends"]
+                  ]
                 ]
                ]]))
 
