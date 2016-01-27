@@ -111,6 +111,12 @@
                 ]
                ]]))
 
+(defn dota2-page []
+  (wrap-html [:p "meow"]))
+
+(defn lol-page []
+  (wrap-html [:p "meowz"]))
+
 (defmacro q-post-link [] "/questions-post")
 
 (defn lol-render-questions []
@@ -215,6 +221,8 @@
 
 (defroutes myapp
   (GET "/" [] (index))
+  (GET "/dota2" [] (dota2-page))
+  (GET "/lol" [] (lol-page))
   (GET "/questions-lol" [] (lol-render-questions))
   (GET "/matchup-lol/:id" [id] (lol-render-matchup-data id))
   (POST (q-post-link) {params :params} (lol-post-questions params)))
