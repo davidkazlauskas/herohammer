@@ -19,6 +19,7 @@
        (end-of-range (:currid args)
                      (:curr-range args)) (count-in)))
    :required-questions ["poking"]
+   :full-name "All matches"
    })
 
 (def ^:dynamic *all-filters-lol*
