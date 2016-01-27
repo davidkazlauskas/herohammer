@@ -46,7 +46,13 @@
    [:br])))
 
 (defn navbar [args]
-  (html [:nav {:class "navbar navbar-default"}]))
+  (html [:nav {:class "navbar navbar-default"}
+         [:div {:class "container-fluid"}
+          [:div {:class "navbar-header"}
+           [:a {:class "navbar-brand" :href "/"} "The Hero Hammer"]
+           ]
+          ]
+         ]))
 
 (defn wrap-html [towrap]
   (html [:html
