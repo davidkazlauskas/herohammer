@@ -9,7 +9,8 @@
                  [compojure "1.1.8"]
                  [http-kit "2.1.18"]
                  [debugger "0.1.7"]
-                 [lein-cljsbuild "1.1.2"]]
+                 [org.clojure/clojurescript "1.7.228"]]
+  :plugins [[lein-cljsbuild "1.1.2"]]
   :main the-hero-hammer.core
   :aot [the-hero-hammer.core]
   :uberjar {:aot :all})
