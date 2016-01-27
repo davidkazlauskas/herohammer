@@ -96,7 +96,8 @@
                 "to experience in the cruel moba world. "
                 "Matchup data is collected from users where "
                 "they expressed what happened by answering questions "
-                "about particular match."
+                "about particular match. Pick the moba you're interested "
+                "in, pick heroes and see how it is for particular matchup."
                 ]
                ]]))
 
