@@ -47,7 +47,7 @@
 
 (defn navbar [args]
   (html [:nav {:class "navbar navbar-default"}
-         [:div {:class "container-fluid"}
+         [:div {:class "container"}
           [:div {:class "navbar-header"}
            [:a {:class "navbar-brand" :href "/"} "The Hero Hammer"]]
           [:div {:class "collapse navbar-collapse"}
@@ -88,7 +88,17 @@
 (defn index
   "meow"
   []
-  (wrap-html [:h1 "Dazlow!"]))
+  (wrap-html [:div {:class "panel"}
+              [:div {:class "panel-default"} [:h1 "Welcome!"
+              ]
+               [:p {:class "lead"} "This website aims to provide quick "
+                "and structured info about what you're about "
+                "to experience in the cruel moba world. "
+                "Matchup data is collected from users where "
+                "they expressed what happened by answering questions "
+                "about particular match."
+                ]
+               ]]))
 
 (defmacro q-post-link [] "/questions-post")
 
