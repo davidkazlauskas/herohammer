@@ -48,13 +48,17 @@
 
 (defn render-question [q]
   (let [shortname (:shortname q)] (html
-    [:p (:question q)]
-   (map-indexed #(identity
-         [:input {:type "radio" :value
-                  %1
+   [:div {:class "text-center"} [:p (:question q)]
+   [:div {:class "form-inline"}
+    (map-indexed #(identity
+          [:label
+                [:input
+                 {:style "margin-left: 7px; margin-right: 7px;"
+                  :type "radio"
+                  :value %1
                   :name shortname
-                  } %2])
-        (:options q))
+                  } %2]])
+        (:options q))]]
    [:br])))
 
 (defn navbar [args]
@@ -208,20 +212,13 @@
 (defn lol-render-questions []
   (lol-ctx (wrap-html [:form {:id "questions-form"
                      :method "POST" :action (q-post-link)}
-              [:select {:name "hero-user"}
-               (map-indexed #(html
-                   [:option {:value %1} %2]
-                   ) (heroes-full))
-               ]
-              [:select {:name "hero-opponent"}
-               (map-indexed #(html
-                   [:option {:value %1} %2]
-                   ) (heroes-full))
-               ]
-              (map render-question (questions-full))
+              (generate-hero-selection {})
+              [:div {:class "container-fluid input-group"}
+               (map render-question (questions-full))]
               [:textarea {:name "user-comment"
                           :rows 4 :cols 50}]
-              [:input {:type "submit"
+              [:input {:class "btn btn-success"
+                       :type "submit"
                        :value "Submit record"}]])))
 
 (defn matchup-data-split [the-str]
