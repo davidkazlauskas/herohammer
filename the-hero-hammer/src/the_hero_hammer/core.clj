@@ -45,6 +45,9 @@
         (:options q))
    [:br])))
 
+(defn navbar [args]
+  (html [:nav {:class "navbar navbar-default"}]))
+
 (defn wrap-html [towrap]
   (html [:html
          [:head
@@ -59,6 +62,7 @@
                     :integrity "sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
                     :crossorigin "anonymous"}]]
          [:body
+          (navbar {})
           [:div {:class "container"}
            [:div {:class "row"}
             [:div {:class "col-md-2"}]
