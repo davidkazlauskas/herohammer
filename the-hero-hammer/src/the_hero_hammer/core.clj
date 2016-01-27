@@ -111,11 +111,16 @@
                 ]
                ]]))
 
+(defn generic-registration-page []
+  (html [:p "ballin"])
+  )
+
 (defn dota2-page []
   (wrap-html [:p "meow"]))
 
 (defn lol-page []
-  (wrap-html [:p "meowz"]))
+  (lol-ctx
+    (wrap-html (generic-registration-page))))
 
 (defmacro q-post-link [] "/questions-post")
 
