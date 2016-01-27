@@ -284,13 +284,14 @@
     )))
 
 (defroutes myapp
+  (route/files "/resources/" {:root "resources/public/"})
   (GET "/" [] (index))
   (GET "/dota2" [] (dota2-page))
   (GET "/lol" [] (lol-page))
   (GET "/questions-lol" [] (lol-render-questions))
   (GET "/matchup-lol/:id" [id] (lol-render-matchup-data id))
-  (POST (q-post-link) {params :params} (lol-post-questions params))
-  (route/resources "/war/"))
+  (POST (q-post-link) {params :params} (lol-post-questions params)
+  (route/not-found "Page not found")))
 
 (defn -main [& args]
   (println "Muah runnin!")
