@@ -238,6 +238,18 @@
 ]
 )
 
+(defn lowercase-replace [the-link]
+  (clojure.string/replace (clojure.string/lower-case the-link)
+                          "%27" ""))
+
+(defn square-for-hero [hero-full-name]
+  (let [idx (hero-name-full-to-short hero-full-name)]
+    (->> (hero-squares-lol)
+         (map-indexed #(vector %1 (lowercase-replace %2) %2))
+         (map #(re-find (re-pattern idx) %1))
+         (filter some?)
+         (first))))
+
 (defn all-heroes-lol []
   [
   "Aatrox"
