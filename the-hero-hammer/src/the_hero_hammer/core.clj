@@ -76,7 +76,8 @@
                   :crossorigin "anonymous"}]
           [:script {:src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
                     :integrity "sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-                    :crossorigin "anonymous"}]]
+                    :crossorigin "anonymous"}]
+          [:script {:src "resources/js/main.js"}]]
          [:body
           (navbar {})
           [:div {:class "container"}
@@ -144,9 +145,10 @@
   (html [:div {:style "margin-top: 20px;" :class "text-center"}
          [:div {:class "btn-group"}
            [:a {:style "width: 120px;"
-                :class "btn btn-default" :href "/dazlow"} "Add record"]
-           [:a {:style "width: 120px;"
-                :class "btn btn-default" :href "/dazlow"} "Show results"]]]))
+                :class "btn btn-default" } "Add record"]
+           [:a {:onclick "go-to-matchup();"
+                :style "width: 120px;"
+                :class "btn btn-default" } "Show results"]]]))
 
 (defn generic-registration-page []
   (html
