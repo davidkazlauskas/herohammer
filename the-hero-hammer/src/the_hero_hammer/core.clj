@@ -215,11 +215,16 @@
               (generate-hero-selection {})
               [:div {:class "container-fluid input-group"}
                (map render-question (questions-full))]
-              [:textarea {:name "user-comment"
-                          :rows 4 :cols 50}]
-              [:input {:class "btn btn-success"
-                       :type "submit"
-                       :value "Submit record"}]])))
+              [:div {:classs "container"}
+               [:div {:class "row text-center"}
+                [:p "Your comment"]
+                [:textarea {:name "user-comment"
+                          :rows 4 :cols 50}]]
+               [:div {:class "row text-center"
+                      :style "margin-top: 10px;"}
+                [:input {:class "btn btn-success"
+                         :type "submit"
+                         :value "Submit record"}]]]])))
 
 (defn matchup-data-split [the-str]
   (let [findings (re-find #"(\d+)+-(\d+)-(\d+)" the-str)]
