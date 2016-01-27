@@ -142,11 +142,16 @@
                 ]
                ]]))
 
+(defn update-hero-squares-js-func []
+  "the_hero_hammer.js_client.updateHeroSquares();")
+
+(defn update-hero-squares-script []
+  (html [:script (update-hero-squares-js-func)]))
+
 (defn hero-dropdown [select-id]
   (html [:select {:class "form-control"
                   :id select-id
-                  :onchange "the_hero_hammer.js_client.updateHeroSquares();"
-                  }
+                  :onchange (update-hero-squares-js-func)}
          (map-indexed
            #(html [:option {:value %1} %2])
            (heroes-full))
@@ -177,7 +182,9 @@
   (html [:div {:style "margin-top: 20px;" :class "text-center"}
          [:div {:class "btn-group"}
            [:a {:style "width: 120px;"
-                :class "btn btn-default" } "Add record"]
+                :class "btn btn-default"
+                :href (:registration-link (html-context))
+                } "Add record"]
            [:a {:onclick "the_hero_hammer.js_client.goToMatchup();"
                 :style "width: 120px;"
                 :class "btn btn-default" } "Show results"]]]))
@@ -188,7 +195,8 @@
          "'; matchupLink = '"
          (:matchup-link-start (html-context))
          "'; heroSquares = "
-         (:squares-javascript (html-context))]))
+         (:squares-javascript (html-context))
+         ";"]))
 
 (defn generate-hero-selection [args]
   (html [:div {:class "text-center"}
@@ -205,7 +213,8 @@
         [:div {:style "padding-top: 20px; padding-bottom: 20px;"
                :class "text-center"}
          (hero-icon "thumb-user")
-         (hero-icon "thumb-opponent")]))
+         (hero-icon "thumb-opponent")]
+        (update-hero-squares-script)))
 
 (defn generic-registration-page []
   (html
@@ -229,7 +238,10 @@
 (defmacro q-post-link [] "/questions-post")
 
 (defn lol-render-questions []
-  (lol-ctx (wrap-html [:form {:id "questions-form"
+  (lol-ctx (wrap-html
+             (html
+               (context-js-variables)
+               [:form {:id "questions-form"
                      :method "POST" :action (q-post-link)}
               (generate-hero-selection {})
               [:div {:class "container-fluid input-group"}
@@ -243,7 +255,7 @@
                       :style "margin-top: 10px;"}
                 [:input {:class "btn btn-success"
                          :type "submit"
-                         :value "Submit record"}]]]])))
+                         :value "Submit record"}]]]]))))
 
 (defn matchup-data-split [the-str]
   (let [findings (re-find #"(\d+)+-(\d+)-(\d+)" the-str)]
