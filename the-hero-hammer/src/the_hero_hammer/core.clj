@@ -21,11 +21,11 @@
 
 (defn generate-javascript-hero-squares []
   (let [squares (get-in (*ctx-get-func*) [:heroes :squares])]
-    (->> squares
+    (let [the-arr (->> squares
          (map #(str "'" %1 "'"))
          (interpose ",")
-         (clojure.string/join)
-         #(str "heroSquares = [" %1 "];"))))
+         clojure.string/join)]
+      (str "heroSquares = [" the-arr "];"))))
 
 (def ^:dynamic *html-context-lol*
   (lol-ctx
