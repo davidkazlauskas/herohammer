@@ -55,6 +55,9 @@
             [:li [:a {:href "/dota2"} "Dota 2"]]
             [:li [:a {:href "/lol"} "League of Legends"]]
             ]
+           [:ul {:class "nav navbar-nav navbar-right"}
+            [:li [:h4 "Find out if you're about to get whooped... In seconds!"]]
+            ]
            ]
           ]
          ]))
