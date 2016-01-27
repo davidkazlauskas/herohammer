@@ -11,7 +11,7 @@
         [ring.middleware.params :only [wrap-params]]))
 
 
-(def ^:dynamic *html-context-lol* nil)
+(def ^:dynamic *html-context* nil)
 
 (defmacro lol-ctx [& args]
   `(binding [*ctx-get-func* (fn [] lctx/*hh-context-lol*)
