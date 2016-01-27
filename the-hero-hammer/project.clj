@@ -13,4 +13,15 @@
   :plugins [[lein-cljsbuild "1.1.2"]]
   :main the-hero-hammer.core
   :aot [the-hero-hammer.core]
-  :uberjar {:aot :all})
+  :uberjar {:aot :all}
+  :cljsbuild {
+    :builds [{
+      :source-paths "src-cljs"
+      :compiler {
+         :output-to "war/javascripts/main.js"
+         :optimizations :whitespace
+         :pretty-print true
+         }
+      }]
+    }
+  )
