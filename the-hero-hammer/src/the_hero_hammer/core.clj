@@ -119,6 +119,13 @@
            (heroes-full))
          ]))
 
+(defn hero-icon [hero-id]
+  (html [:img {:width 120 :height 120
+               :src "http://vignette1.wikia.nocookie.net/leagueoflegends/images/1/18/AhriSquare.png"
+               :style "margin-left: 10px; margin-right: 10px;"
+               }])
+  )
+
 (defn generic-registration-page []
   (html
     [:div {:class "form-group"}
@@ -132,7 +139,12 @@
      [:div {:class "form-inline text-center"}
          (hero-dropdown "hero-user")
          (hero-dropdown ":hero-opponent")
-         ]])
+         ]
+     [:div {:style "padding-top: 20px;" :class "text-center"}
+      (hero-icon "meow")
+      (hero-icon "meow")
+      ]
+     ])
   )
 
 (defn dota2-page []
