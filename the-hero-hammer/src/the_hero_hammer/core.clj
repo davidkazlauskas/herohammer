@@ -34,8 +34,8 @@
 
 (defn form-to-data [form]
   {
-   :hero-user (parse-int (get form "user-hero"))
-   :hero-opponent (parse-int (get form "opponent-hero"))
+   :hero-user (parse-int (get form "hero-user"))
+   :hero-opponent (parse-int (get form "hero-opponent"))
    :comment (get form "user-comment")
    :answers (->> (questions-full)
                  (map :shortname)
@@ -208,12 +208,12 @@
 (defn lol-render-questions []
   (lol-ctx (wrap-html [:form {:id "questions-form"
                      :method "POST" :action (q-post-link)}
-              [:select {:name "user-hero"}
+              [:select {:name "hero-user"}
                (map-indexed #(html
                    [:option {:value %1} %2]
                    ) (heroes-full))
                ]
-              [:select {:name "opponent-hero"}
+              [:select {:name "hero-opponent"}
                (map-indexed #(html
                    [:option {:value %1} %2]
                    ) (heroes-full))
