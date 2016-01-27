@@ -16,7 +16,7 @@
   :uberjar {:aot :all}
   :cljsbuild {
     :builds [{
-      :source-paths "src-cljs"
+      :source-paths ["src-cljs"]
       :compiler {
          :output-to "war/javascripts/main.js"
          :optimizations :whitespace
