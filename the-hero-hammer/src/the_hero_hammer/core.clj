@@ -138,6 +138,14 @@
                }])
   )
 
+(defn reg-and-show-buttons []
+  (html [:div {:style "margin-top: 20px;" :class "text-center"}
+         [:div {:class "btn-group"}
+           [:a {:style "width: 120px;"
+                :class "btn btn-default" :href "/dazlow"} "Add record"]
+           [:a {:style "width: 120px;"
+                :class "btn btn-default" :href "/dazlow"} "Show results"]]]))
+
 (defn generic-registration-page []
   (html
     [:div {:class "form-group"}
@@ -160,7 +168,9 @@
      [:div {:class "form-inline text-center"}
       [:label {:for "user-filter"} "Filter to use"]
       [:br]
-      (filter-dropdown "user-filter")]]))
+      (filter-dropdown "user-filter")]
+     (reg-and-show-buttons)
+     ]))
 
 (defn dota2-page []
   (wrap-html [:p "meow"]))
