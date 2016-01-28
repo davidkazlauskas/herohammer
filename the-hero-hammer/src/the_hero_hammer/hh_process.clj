@@ -374,6 +374,11 @@
     (aset red-array i outres))
   (aset red-array i (func (aget red-array i) data)))
 
+(defn assemble-final-reduce [red-array trav-array task i]
+  {:from (get-in task [:current-range :from])
+   :to (+ (get-in task [:current-range :to]) (aget trav-array i))
+   :val ((:final-reduce task identity) (aget red-array i))})
+
 (defn map-reduce-single-frequency
   [the-context the-range the-limit full-ranges data]
     (let [the-tasks (tasks-for-range full-ranges the-range)
@@ -396,6 +401,14 @@
            (if (< i to-rng)
              (recur (inc i)))
         )
+      ; save results
+      (dotimes [t (count the-tasks)]
+        (let [curr-t (nth the-tasks t)
+              final-res (assemble-final-reduce
+                          red-array trav-array curr-t t)
+              zipped (nippy/freeze final-res)
+              save-key (:save-key-func curr-t)]
+          (set-key save-key zipped)))
       (range-size the-range)))
 
 (defn perform-map-reduce
