@@ -277,3 +277,9 @@
               fetch-count-for-question
               matchup filter-id))
        (into [])))
+
+; GENRIC MAP REDUCE
+(defn generic-map-reduce-context [the-range id-func tasks]
+  {:range the-range
+   :id-key-function id-func
+   :tasks tasks})
