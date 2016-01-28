@@ -295,3 +295,13 @@
    :reduce-function reduce-function
    :initial-reduce initial-reduce
    :final-reduce final-reduce})
+
+(defn generic-fetch-records [key-func the-range]
+  (->> (generic-traverse-nodes-raw-count
+       (:from the-range) (:to the-range) key-func)
+       (filter #(some? (:val %1)))
+       (into [])))
+
+(defn process-map-reduce-context [the-context]
+  ()
+  )
