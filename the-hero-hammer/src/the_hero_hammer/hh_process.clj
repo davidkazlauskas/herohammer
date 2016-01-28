@@ -283,3 +283,15 @@
   {:range the-range
    :id-key-function id-func
    :tasks tasks})
+
+(defn map-reduce-task [
+   save-key-func
+   map-func
+   reduce-function
+   initial-reduce
+   final-reduce]
+  {:save-key-func save-key-func
+   :map-func map-func
+   :reduce-function reduce-function
+   :initial-reduce initial-reduce
+   :final-reduce final-reduce})
