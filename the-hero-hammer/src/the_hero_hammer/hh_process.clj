@@ -298,6 +298,15 @@
    :initial-reduce initial-reduce
    :final-reduce final-reduce})
 
+(defn map-single-task-range [the-task]
+  )
+
+(defn map-task-ranges [task-vec]
+  (->> task-vec
+       (map map-single-task-range)
+       (into []))
+  )
+
 (defn generic-fetch-records [key-func the-range use-nippy]
   (->> (generic-traverse-nodes-raw-count
        (:from the-range) (:to the-range) key-func)
