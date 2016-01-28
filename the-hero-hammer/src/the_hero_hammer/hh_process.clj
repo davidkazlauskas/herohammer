@@ -312,8 +312,6 @@
   (->> task-vec
        (map map-single-task-range)
        (map #(let [rng (:current-range %1)]
-               (println rng)
-               (println proc-range)
                (if (<= (:to rng) (:to proc-range))
                  (assoc %1 :expected-range
                         (max-available-range
@@ -359,7 +357,7 @@
       (map-indexed #(do
          (aset res-reduce %1
            ((:initial-reduce %2 identity)
-            (get-in %2 [:expected-range :val])))
+            (get-in %2 [:current-range :val])))
          (aset res-traverse %1 0))
          the-tasks))
 
