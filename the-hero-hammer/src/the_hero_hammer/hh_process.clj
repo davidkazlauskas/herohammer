@@ -299,7 +299,12 @@
    :final-reduce final-reduce})
 
 (defn map-single-task-range [the-task]
-  )
+  (let [db-query (get-key (:save-key-func the-task))
+        fn-query (or db-query
+                     (:initial-range
+                       the-task {:from 0 :to 0 :val nil}))
+        ]
+    fn-query))
 
 (defn map-task-ranges [task-vec]
   (->> task-vec
