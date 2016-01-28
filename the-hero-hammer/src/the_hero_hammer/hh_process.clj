@@ -369,15 +369,28 @@
         curr-count (aget trav-array current)]
     (= (+ curr-task-to curr-count) irange)))
 
+(defn reduce-in-place [red-array i func data]
+  (aset red-array i (func (aget red-array i) data)))
+
 (defn map-reduce-single-frequency
   [the-context the-range the-limit full-ranges data]
     (let [the-tasks (tasks-for-range full-ranges the-range)
-          victim-array (make-map-reduce-array the-tasks)]
+          victim-array (make-map-reduce-array the-tasks)
+          trav-array (:arr-traversed victim-array)
+          red-array (:arr-traversed victim-array)
+          from-rng (:from the-range)
+          ]
       (println the-tasks)
-      (loop [i (:from the-range)
+      (loop [i from-rng
              ]
            (dotimes [t (count the-tasks)]
-             (if ())
+             (if (appropriate-to-process
+                   trav-array the-tasks t i)
+               (let [red-func (:reduce-function (nth the-tasks t))
+                     the-q [nth data (- i from-rng)]]
+                 (reduce-in-place red-array t red-func the-q)
+                 (inc-arr-index-longs trav-array t))
+               )
              )
         )
       0
