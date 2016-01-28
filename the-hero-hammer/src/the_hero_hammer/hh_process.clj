@@ -379,10 +379,9 @@
           trav-array (:arr-traversed victim-array)
           red-array (:arr-traversed victim-array)
           from-rng (:from the-range)
-          ]
+          to-rng (dec (:to the-range))]
       (println the-tasks)
-      (loop [i from-rng
-             ]
+      (loop [i from-rng]
            (dotimes [t (count the-tasks)]
              (if (appropriate-to-process
                    trav-array the-tasks t i)
@@ -390,8 +389,9 @@
                      the-q [nth data (- i from-rng)]]
                  (reduce-in-place red-array t red-func the-q)
                  (inc-arr-index-longs trav-array t))
-               )
-             )
+               ))
+           (if (< i to-rng)
+             (recur (inc i)))
         )
       0
       ))
