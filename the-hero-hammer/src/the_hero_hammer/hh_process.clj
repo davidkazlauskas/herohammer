@@ -412,7 +412,8 @@
       (range-size the-range)))
 
 (defn query-reduction-db [task]
-   (get-key (:save-key-func task)))
+   (let [rec (get-key (:save-key-func task))]
+     (if (some? rec) (:val (nippy/thaw rec)))))
 
 (defn perform-map-reduce
   [the-context data full-ranges distilled-ranges]
