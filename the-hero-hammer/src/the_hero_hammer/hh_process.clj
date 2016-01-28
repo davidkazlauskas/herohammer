@@ -326,7 +326,6 @@
        (into [])))
 
 (defn range-sorter [left right]
-  (println left right)
   (let [lfreq (get left 1)
         rfreq (get right 1)]
      (if (not (= lfreq rfreq))
