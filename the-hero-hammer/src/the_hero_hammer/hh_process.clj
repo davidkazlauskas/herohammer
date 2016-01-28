@@ -318,7 +318,6 @@
 (defn generic-fetch-records [key-func the-range use-nippy]
   (->> (generic-traverse-nodes-raw-count
        (:from the-range) (:to the-range) key-func)
-       (filter #(some? (:val %1)))
        (map #(if use-nippy
                (assoc %1 :val (nippy/thaw (:val %1))) %1))
        (into [])))
@@ -341,6 +340,23 @@
        (sort-by identity range-sorter)
        (into [])))
 
+(defn map-reduce-single-frequency
+  [the-context the-range the-limit data])
+
+(defn perform-map-reduce [the-context data distilled-ranges]
+  (loop [to-process-lim (range-size
+                         (:range the-context)) i 0]
+    (if (and
+          (< i (count distilled-ranges))
+          (> to-process-lim 0))
+      (recur (- to-process-lim
+        (process-frequency
+          the-context
+          (nth (nth distilled-ranges i) 0)
+          to-process-lim
+          data))
+        (inc i)))))
+
 (defn process-map-reduce-context [the-context]
   (let [data (generic-fetch-records
                (:id-key-function the-context)
@@ -348,5 +364,6 @@
                (:nippy-record the-context))
         task-ranges (map-task-ranges (:tasks the-context)
                                      (:range the-context))
-        ]
-    task-ranges))
+        distilled-ranges (distill-ranges task-ranges)]
+    (perform-map-reduce the-context data distilled-ranges)
+    distilled-ranges))
