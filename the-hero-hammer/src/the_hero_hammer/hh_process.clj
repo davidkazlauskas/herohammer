@@ -310,10 +310,11 @@
   (->> task-vec
        (map map-single-task-range)
        (map #(let [rng (:current-range %1)]
-               (assert (>= (:from rng) (:from proc-range)))
+               (if (>= (:from rng) (:from proc-range))
                  (assoc %1 :expected-range
                         (max-available-range
-                          (:to proc-range) rng))))
+                          (:to proc-range) rng)))))
+       (filter some?)
        (into [])))
 
 (defn generic-fetch-records [key-func the-range use-nippy]
