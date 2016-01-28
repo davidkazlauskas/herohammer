@@ -323,6 +323,16 @@
                (assoc %1 :val (nippy/thaw (:val %1))) %1))
        (into [])))
 
+(defn range-sorter [left right]
+  (> left right))
+
+(defn distill-ranges [task-ranges]
+  (->> task-ranges
+       frequencies
+       (filter #(> (range-size (get %1 0)) 0))
+       (sort-by #(get % 1) range-sorter)
+       (into [])))
+
 (defn process-map-reduce-context [the-context]
   (let [data (generic-fetch-records
                (:id-key-function the-context)
