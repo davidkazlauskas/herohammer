@@ -411,6 +411,9 @@
           (set-key save-key zipped)))
       (range-size the-range)))
 
+(defn query-reduction-db [task]
+   (get-key (:save-key-func task)))
+
 (defn perform-map-reduce
   [the-context data full-ranges distilled-ranges]
   (loop [to-process-lim (range-size
