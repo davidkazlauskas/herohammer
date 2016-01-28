@@ -372,8 +372,7 @@
 
 (defn reduce-in-place [red-array i func data]
   (let [outres (func (aget red-array i) data)]
-    (aset red-array i outres))
-  (aset red-array i (func (aget red-array i) data)))
+    (aset red-array i outres)))
 
 (defn assemble-final-reduce [red-array trav-array task i]
   {:from (get-in task [:current-range :from])
