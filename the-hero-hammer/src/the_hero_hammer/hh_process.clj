@@ -363,11 +363,23 @@
     {:arr-reduce res-reduce
      :arr-traversed res-traverse}))
 
+(defn appropriate-to-process [trav-array task-vec current irange]
+  (let [curr-task (nth task-vec current)
+        curr-task-to (get-in curr-task [:range :to])
+        curr-count (aget trav-array current)]
+    (= (+ curr-task-to curr-count) irange)))
+
 (defn map-reduce-single-frequency
   [the-context the-range the-limit full-ranges data]
     (let [the-tasks (tasks-for-range full-ranges the-range)
           victim-array (make-map-reduce-array the-tasks)]
       (println the-tasks)
+      (loop [i (:from the-range)
+             ]
+           (dotimes [t (count the-tasks)]
+             (if ())
+             )
+        )
       0
       ))
 
