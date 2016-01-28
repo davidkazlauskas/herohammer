@@ -293,7 +293,7 @@
    final-reduce]
   {:save-key-func save-key-func
    :nippy-record true
-   :map-func map-func
+   :map-function map-func
    :reduce-function reduce-function
    :initial-reduce initial-reduce
    :final-reduce final-reduce})
@@ -304,15 +304,16 @@
                      (:initial-range
                        the-task {:from 0 :to 0 :val nil}))
         ]
-    fn-query))
-
-(defn )
+    (assoc the-task :current-range fn-query)))
 
 (defn map-task-ranges [task-vec proc-range]
   (->> task-vec
        (map map-single-task-range)
-       (map #(do (assert (>= (:from %1) (:from proc-range)))
-                 (max-available-range (:to proc-range) %1)))
+       (map #(let [rng (:current-range %1)]
+               (assert (>= (:from rng) (:from proc-range)))
+                 (assoc %1 :expected-range
+                        (max-available-range
+                          (:to proc-range) rng))))
        (into [])))
 
 (defn generic-fetch-records [key-func the-range use-nippy]
@@ -335,15 +336,24 @@
 
 (defn distill-ranges [task-ranges]
   (->> task-ranges
+       (map :expected-range)
        frequencies
        (filter #(> (range-size (get %1 0)) 0))
        (sort-by identity range-sorter)
        (into [])))
 
-(defn map-reduce-single-frequency
-  [the-context the-range the-limit data])
+(defn tasks-for-range [tasks the-range]
+  (->> tasks
+       (filter #(= (:expected-range %1) the-range))
+       (into [])))
 
-(defn perform-map-reduce [the-context data distilled-ranges]
+(defn map-reduce-single-frequency
+  [the-context the-range the-limit data]
+    (let [the-tasks ])
+  )
+
+(defn perform-map-reduce
+  [the-context data full-ranges distilled-ranges]
   (loop [to-process-lim (range-size
                          (:range the-context)) i 0]
     (if (and
@@ -365,5 +375,6 @@
         task-ranges (map-task-ranges (:tasks the-context)
                                      (:range the-context))
         distilled-ranges (distill-ranges task-ranges)]
-    (perform-map-reduce the-context data distilled-ranges)
+    (perform-map-reduce
+      the-context data task-ranges distilled-ranges)
     distilled-ranges))
