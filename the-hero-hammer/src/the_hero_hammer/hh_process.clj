@@ -365,36 +365,38 @@
 
 (defn appropriate-to-process [trav-array task-vec current irange]
   (let [curr-task (nth task-vec current)
-        curr-task-to (get-in curr-task [:range :to])
+        curr-task-to (get-in curr-task [:current-range :to])
         curr-count (aget trav-array current)]
     (= (+ curr-task-to curr-count) irange)))
 
 (defn reduce-in-place [red-array i func data]
+  (let [outres (func (aget red-array i) data)]
+    (aset red-array i outres))
   (aset red-array i (func (aget red-array i) data)))
 
 (defn map-reduce-single-frequency
   [the-context the-range the-limit full-ranges data]
     (let [the-tasks (tasks-for-range full-ranges the-range)
-          victim-array (make-map-reduce-array the-tasks)
+          victim-array (make-map-reduce-arrays the-tasks)
           trav-array (:arr-traversed victim-array)
-          red-array (:arr-traversed victim-array)
+          red-array (:arr-reduce victim-array)
           from-rng (:from the-range)
           to-rng (dec (:to the-range))]
-      (println the-tasks)
       (loop [i from-rng]
            (dotimes [t (count the-tasks)]
              (if (appropriate-to-process
                    trav-array the-tasks t i)
-               (let [red-func (:reduce-function (nth the-tasks t))
-                     the-q [nth data (- i from-rng)]]
-                 (reduce-in-place red-array t red-func the-q)
+               (let [map-func (:map-function (nth the-tasks t))
+                     red-func (:reduce-function (nth the-tasks t))
+                     the-q (nth data (- i from-rng))
+                     mapped (map-func (:val the-q))]
+                 (reduce-in-place red-array t red-func mapped)
                  (inc-arr-index-longs trav-array t))
                ))
            (if (< i to-rng)
              (recur (inc i)))
         )
-      0
-      ))
+      (range-size the-range)))
 
 (defn perform-map-reduce
   [the-context data full-ranges distilled-ranges]
