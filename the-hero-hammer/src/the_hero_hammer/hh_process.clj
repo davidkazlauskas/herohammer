@@ -327,8 +327,8 @@
   (let [data (generic-fetch-records
                (:id-key-function the-context)
                (:range the-context)
-               (:nippy-record the-context)
-               )
-        task-ranges
-        ])
-  )
+               (:nippy-record the-context))
+        task-ranges (map-task-ranges (:tasks the-context)
+                                     (:range the-context))
+        ]
+    task-ranges))
