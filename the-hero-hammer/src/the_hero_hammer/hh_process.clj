@@ -324,13 +324,21 @@
        (into [])))
 
 (defn range-sorter [left right]
-  (> left right))
+  (println left right)
+  (let [lfreq (get left 1)
+        rfreq (get right 1)]
+     (if (not (= lfreq rfreq))
+       (> lfreq rfreq)
+       (< (range-size (get left 0))
+          (range-size (get right 0)))
+       ; prefer smaller ranges
+       )))
 
 (defn distill-ranges [task-ranges]
   (->> task-ranges
        frequencies
        (filter #(> (range-size (get %1 0)) 0))
-       (sort-by #(get % 1) range-sorter)
+       (sort-by identity range-sorter)
        (into [])))
 
 (defn process-map-reduce-context [the-context]
