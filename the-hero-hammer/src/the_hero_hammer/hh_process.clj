@@ -1,5 +1,6 @@
 (ns the-hero-hammer.hh_process
-  (:require [the-hero-hammer.hh_context :refer :all]))
+  (:require [the-hero-hammer.hh_context :refer :all])
+  (:require [taoensso.nippy :as nippy]))
 
 (defn global-question-count []
   (get-key ((fn-global-question-count))))
@@ -291,15 +292,18 @@
    initial-reduce
    final-reduce]
   {:save-key-func save-key-func
+   :nippy-key true
    :map-func map-func
    :reduce-function reduce-function
    :initial-reduce initial-reduce
    :final-reduce final-reduce})
 
-(defn generic-fetch-records [key-func the-range]
+(defn generic-fetch-records [key-func the-range use-nippy]
   (->> (generic-traverse-nodes-raw-count
        (:from the-range) (:to the-range) key-func)
        (filter #(some? (:val %1)))
+       (map #(if use-nippy
+               (assoc %1 :val (nippy/thaw (:val %1))) %1))
        (into [])))
 
 (defn process-map-reduce-context [the-context]
