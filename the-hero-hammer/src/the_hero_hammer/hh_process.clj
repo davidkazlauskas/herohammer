@@ -280,10 +280,11 @@
        (into [])))
 
 ; GENRIC MAP REDUCE
-(defn generic-map-reduce-context [the-range id-func tasks]
+(defn generic-map-reduce-context [the-range id-func nipped tasks]
   {:range the-range
    :id-key-function id-func
-   :tasks tasks})
+   :tasks tasks
+   :nippy-record nipped})
 
 (defn map-reduce-task [
    save-key-func
@@ -311,7 +312,9 @@
   (->> task-vec
        (map map-single-task-range)
        (map #(let [rng (:current-range %1)]
-               (if (>= (:from rng) (:from proc-range))
+               (println rng)
+               (println proc-range)
+               (if (<= (:to rng) (:to proc-range))
                  (assoc %1 :expected-range
                         (max-available-range
                           (:to proc-range) rng)))))
