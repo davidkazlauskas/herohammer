@@ -348,9 +348,9 @@
        (into [])))
 
 (defn map-reduce-single-frequency
-  [the-context the-range the-limit data]
-    (let [the-tasks ])
-  )
+  [the-context the-range the-limit full-ranges data]
+    (let [the-tasks (tasks-for-range full-ranges the-range)]
+      (println the-tasks)))
 
 (defn perform-map-reduce
   [the-context data full-ranges distilled-ranges]
@@ -360,10 +360,11 @@
           (< i (count distilled-ranges))
           (> to-process-lim 0))
       (recur (- to-process-lim
-        (process-frequency
+        (map-reduce-single-frequency
           the-context
           (nth (nth distilled-ranges i) 0)
           to-process-lim
+          full-ranges
           data))
         (inc i)))))
 
