@@ -300,7 +300,8 @@
 
 (defn map-single-task-range [the-task]
   (let [db-query (get-key (:save-key-func the-task))
-        fn-query (or db-query
+        nipped (if (some? db-query) (nippy/thaw db-query))
+        fn-query (or nipped
                      (:initial-range
                        the-task {:from 0 :to 0 :val nil}))
         ]
