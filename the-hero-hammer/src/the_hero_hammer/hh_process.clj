@@ -306,11 +306,14 @@
         ]
     fn-query))
 
-(defn map-task-ranges [task-vec]
+(defn )
+
+(defn map-task-ranges [task-vec proc-range]
   (->> task-vec
        (map map-single-task-range)
-       (into []))
-  )
+       (map #(do (assert (>= (:from %1) (:from proc-range)))
+                 (max-available-range (:to proc-range) %1)))
+       (into [])))
 
 (defn generic-fetch-records [key-func the-range use-nippy]
   (->> (generic-traverse-nodes-raw-count
@@ -325,5 +328,7 @@
                (:id-key-function the-context)
                (:range the-context)
                (:nippy-record the-context)
-               )])
+               )
+        task-ranges
+        ])
   )
