@@ -292,7 +292,7 @@
    initial-reduce
    final-reduce]
   {:save-key-func save-key-func
-   :nippy-key true
+   :nippy-record true
    :map-func map-func
    :reduce-function reduce-function
    :initial-reduce initial-reduce
@@ -307,5 +307,9 @@
        (into [])))
 
 (defn process-map-reduce-context [the-context]
-  ()
+  (let [data (generic-fetch-records
+               (:id-key-function the-context)
+               (:range the-context)
+               (:nippy-record the-context)
+               )])
   )
