@@ -348,10 +348,28 @@
        (filter #(= (:expected-range %1) the-range))
        (into [])))
 
+(defn make-map-reduce-arrays [the-tasks]
+  (let [res-reduce (object-array (count the-tasks))
+        res-traverse (long-array (count the-tasks))]
+
+    (doall
+      (map-indexed #(do
+         (aset res-reduce %1
+           ((:initial-reduce %2 identity)
+            (get-in %2 [:expected-range :val])))
+         (aset res-traverse %1 0))
+         the-tasks))
+
+    {:arr-reduce res-reduce
+     :arr-traversed res-traverse}))
+
 (defn map-reduce-single-frequency
   [the-context the-range the-limit full-ranges data]
-    (let [the-tasks (tasks-for-range full-ranges the-range)]
-      (println the-tasks)))
+    (let [the-tasks (tasks-for-range full-ranges the-range)
+          victim-array (make-map-reduce-array the-tasks)]
+      (println the-tasks)
+      0
+      ))
 
 (defn perform-map-reduce
   [the-context data full-ranges distilled-ranges]
