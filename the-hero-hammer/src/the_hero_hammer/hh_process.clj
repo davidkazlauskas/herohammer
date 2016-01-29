@@ -312,7 +312,8 @@
   (->> task-vec
        (map map-single-task-range)
        (map #(let [rng (:current-range %1)]
-               (if (<= (:to rng) (:to proc-range))
+               (if (and (>= (:to rng) (:from proc-range))
+                        (<= (:to rng) (:to proc-range)))
                  (assoc %1 :expected-range
                         (max-available-range
                           (:to proc-range) rng)))))
