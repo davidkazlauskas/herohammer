@@ -443,3 +443,9 @@
     (perform-map-reduce
       the-context data task-ranges distilled-ranges)
     distilled-ranges))
+
+(defn map-reduce-job [the-key id-gen-function is-nipped tasks]
+  {:count-key the-key
+   :id-key-function id-gen-function
+   :is-nipped is-nipped
+   :tasks tasks})
