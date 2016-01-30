@@ -239,7 +239,8 @@
   (get-in (*ctx-get-func*) [:queries :matchup-most-popular-global]))
 
 (defn get-most-popular-matchups-global []
-  (get-key ((fn-macthup-most-popular-global))))
+  (let [the-data (get-key ((fn-macthup-most-popular-global)))]
+    (if the-data (:val (nippy/thaw the-data)) nil)))
 
 ; SPEC OPS
 (defn gen-matchup [u o] {:user u :opponent o})
