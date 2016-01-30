@@ -34,8 +34,8 @@
   (let [sum (apply + the-vec)
         divisor (if (= 0 sum) 1 sum)]
     (->> the-vec
-         (map #(round-percent-ratio (/ %1 divisor)))
-         (apply max))))
+         first
+         (#(round-percent-ratio (/ %1 divisor))))))
 
 (def ^:dynamic *html-context-lol*
   (lol-ctx
@@ -338,12 +338,12 @@
   (lol-ctx
     (let [[matchup filter-id]
           (matchup-data-split id)
+          sort-func (:question-sort-function (html-context))
           rel-data (fetch-relevant-matchup-data
                     matchup filter-id)
-          sort-func (:question-sort-function (html-context))]
+          sorted-data (into [] (sort-by sort-func > rel-data))]
         (wrap-html [:ul {:class "list-group"}
-          (->> rel-data
-               (sort-by sort-func >)
+          (->> sorted-data
                (map render-single-question)
                (map #(html
                        [:li {:class "list-group-item"}
