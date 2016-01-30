@@ -18,8 +18,20 @@
    :full-name "All matches"
    })
 
+; run jerb every 5 minutes
+(defn proc-delay-ms [] (* 1000 * 60 * 5))
+
+(defn process-questions [])
+
+(defn schedule-question-processing []
+  (pulsar/spawn-fiber process-questions))
+
+(defn main-job []
+  (while true
+    (pulsar/sleep (proc-delay-ms))))
+
 (defn gen-jobs []
-  (fn [] (pulsar/spawn-fiber (fn [] (println "Hello werld!")))))
+  (fn [] (pulsar/spawn-fiber main-job)))
 
 (defn main-map-func [stuff]
   (:answers stuff))
