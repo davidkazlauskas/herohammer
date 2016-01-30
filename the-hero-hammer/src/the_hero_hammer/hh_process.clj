@@ -248,6 +248,7 @@
       (let [ctx (map-reduce-task-context
                   i
                   (:id-key-function the-job)
-                  (:is-nipped the-job false))]
-        (process-map-reduce-task-context ctx task-ranges)))))
+                  (:is-nipped the-job false))
+            task-range-todo (map-task-ranges (:tasks the-job) i)]
+        (process-map-reduce-task-context ctx task-range-todo)))))
 
