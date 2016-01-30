@@ -348,6 +348,12 @@
   (POST (q-post-link) {params :params} (lol-post-questions params)
   (route/not-found "Page not found")))
 
+(defn run-jobs []
+  (lol-ctx
+    (doseq [i (get-ctx-jobs)]
+      (i))))
+
 (defn -main [& args]
   (println "Muah runnin!")
+  (run-jobs)
   (run-server (wrap-params myapp) {:port 5000}))
