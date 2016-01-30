@@ -130,38 +130,41 @@
 
 (defn generate-matchup-tasks [the-pair]
   (into []
-    (for [question (questions-full)
-          flt (filters-full)]
-      {:save-key-func
-         (lol-generate-filter-matchup-question-count
-           the-pair
-           (:id question)
-           (:id flt))
-       :map-function (fn [the-val]
-                       (let [the-map
-                             (->> (:answers the-val)
-                                  (partition 2)
-                                  (map #(into [] %1))
-                                  (into {}))
-                             our-val (get the-map (:id question))
-                             ]
-                         our-val))
-       :initial-reduce (fn [the-val]
-                         (let [the-victim
-                           (long-array
-                            (count
-                              (:options question)))]
-                         (if the-val
-                           (dotimes [i (count the-val)]
-                             (aset the-victim i (nth the-val i))))
-                         the-victim))
-       :final-reduce (fn [the-val] (vec the-val))
-       :reduce-function (fn [old-val curr]
-                          (if (some? curr)
-                            (inc-arr-index-longs
-                              old-val curr))
-                          old-val)
-       })))
+    (filter some?
+      (for [question (questions-full)
+            flt (filters-full)]
+        (let [first-occ (get-question-first-time (:id question))]
+          (if first-occ {:save-key-func
+             (lol-generate-filter-matchup-question-count
+               the-pair
+               (:id question)
+               (:id flt))
+           :map-function (fn [the-val]
+                           (let [the-map
+                                 (->> (:answers the-val)
+                                      (partition 2)
+                                      (map #(into [] %1))
+                                      (into {}))
+                                 our-val (get the-map (:id question))
+                                 ]
+                             our-val))
+           :initial-reduce (fn [the-val]
+                             (let [the-victim
+                               (long-array
+                                (count
+                                  (:options question)))]
+                             (if the-val
+                               (dotimes [i (count the-val)]
+                                 (aset the-victim i (nth the-val i))))
+                             the-victim))
+           :final-reduce (fn [the-val] (vec the-val))
+           :reduce-function (fn [old-val curr]
+                              (if (some? curr)
+                                (inc-arr-index-longs
+                                  old-val curr))
+                              old-val)
+           :initial-range {:from first-occ :to first-occ}
+         }))))))
 
 (defn matchup-pair-map-reduce-job [the-pair]
   {:count-key (lol-generate-matchup-question-count the-pair)
