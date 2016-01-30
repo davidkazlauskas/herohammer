@@ -171,7 +171,7 @@
                          (if the-val
                            (do
                              (dotimes [i (count the-val)]
-                               (aset the-arr i (nth the-val)))
+                               (aset the-arr i (nth the-val i)))
                              (most-popular-question-sort the-arr)
                              ))
                          the-arr))
