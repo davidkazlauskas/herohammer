@@ -129,15 +129,17 @@
                question-id filter-id]))])
 
 (defn process-matchup-pair [pair]
-  (println pair))
+  (println "ze outsack!" pair))
 
 (defn gen-map-reduce-tasks-global []
   [{:save-key-func (lol-generate-global-question-proc)
     :map-function lol-matchup-pair-from-key
     :initial-reduce (fn [the-val]
                       (java.util.ArrayList.))
-    :final-reduce (fn [the-val] (doseq [x (distinct the-val)]
-                                  (process-matchup-pair x)))
+    :final-reduce (fn [the-val] (let [dist (distinct the-val)]
+                                  (doseq [i dist]
+                                    (process-matchup-pair i)))
+                    nil)
     :reduce-function (fn [the-val mapped]
                        (.add the-val mapped)
                        the-val)
