@@ -465,8 +465,9 @@
        (map #(shorten-range %1 max-size))
        (into [])))
 
-(defn advance-map-reduce-job [the-job]
-  (let [curr-key (get-key (:count-key the-job))
+(defn advance-map-reduce-job [the-job max-interval]
+  (let [max-int (or max-interval 128)
+        curr-key (get-key (:count-key the-job))
         total-range {:from 0 :to curr-key}
         task-ranges (map-task-ranges (:tasks the-job)
                                      total-range)
