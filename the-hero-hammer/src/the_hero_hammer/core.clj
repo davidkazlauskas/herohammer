@@ -263,16 +263,33 @@
       :opponent (Integer. (nth findings 2))}
       (Integer. (nth findings 3))]))
 
-(defn ratio-percent [rat]
-  (format "%.0f%%" (* 100 (float rat))))
+(defn round-percent-ratio [rat]
+  (Math/round (* 100 (float rat))))
 
 (defn bold-upper-text [the-text]
   (html [:p {:style "color: black; font-weight: bold;"}
          (clojure.string/upper-case the-text)]))
 
+(defn divide-100 [the-vec]
+  (let [sum (apply + the-vec)
+        sz (count the-vec)
+        res (int-array sz)
+        until (dec sz)]
+    (loop [i 0 remainder 100]
+      (let [islast (>= i until)
+            curr (nth the-vec i)
+            prelim (round-percent-ratio (/ curr sum))
+            to-save (if (or islast (> prelim remainder))
+                      remainder prelim)]
+        (aset res i to-save)
+        (if (not islast)
+          (recur (inc i) (- remainder prelim)))))
+    (vec res)))
+
 (defn render-question-progress-bar [the-vec options]
   (let [the-sum (reduce + the-vec)
         div-by (if (= 0 the-sum) 1 the-sum)
+        percent-wise (divide-100 the-vec)
         prog-bars (map #(html
                      [:div {:class (str
                                      "progress-bar "
@@ -281,8 +298,8 @@
                                        "progress-bar-success"
                                        "progress-bar-info"))
                             :style (str "width: "
-                                     (ratio-percent (/ %2 div-by))
-                                   ";")
+                                     (nth percent-wise %1)
+                                   "%;")
                             }
                       (if (> %2 0) (bold-upper-text (str %3 " (" %2 ")")))]
                    ) (range (count the-vec))
