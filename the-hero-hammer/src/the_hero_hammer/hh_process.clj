@@ -455,13 +455,14 @@
   (rest (reductions #(
     hash-map :from (:to %1 %1) :to %2) the-vec)))
 
-(defn job-splits [task-ranges]
+(defn job-splits [task-ranges max-size]
   (->> task-ranges
        (map #(vector (:from %1) (:to %1)))
        flatten
        distinct
        sort
        interleave-ranges
+       (map #(shorten-range %1 max-size))
        (into [])))
 
 (defn advance-map-reduce-job [the-job]
