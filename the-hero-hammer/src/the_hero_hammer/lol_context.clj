@@ -18,10 +18,15 @@
    :full-name "All matches"
    })
 
+(defn get-map-reduce-job [])
+
 ; run jerb every 5 minutes
 (defn proc-delay-ms [] (* 1000 * 60 * 5))
 
-(defn process-questions [])
+(defn process-questions []
+  (let [job (get-map-reduce-job)
+        max-units 128]
+    (advance-map-reduce-job job max-units)))
 
 (defn schedule-question-processing []
   (pulsar/spawn-fiber process-questions))
