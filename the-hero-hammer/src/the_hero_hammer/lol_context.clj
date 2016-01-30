@@ -128,11 +128,20 @@
      (flatten [(pair-vec matchup-pair)
                question-id filter-id]))])
 
+(defn process-matchup-pair [pair]
+  (println pair))
+
 (defn gen-map-reduce-tasks-global []
-  [])
+  [{:save-key-func (lol-generate-global-question-proc)
+    :map-function lol-matchup-pair-from-key
+    :initial-reduce (fn [the-val] (java.util.ArrayList.))
+    :final-reduce (fn [the-val] (doseq [x (distinct the-val)]
+                                  (process-matchup-pair x)))
+    :reduce-function (fn [the-val mapped] (.add the-val mapped))
+    }])
 
 (defn get-map-reduce-job []
-  {:count-key (lol-generate-global-question-proc)
+  {:count-key (lol-generate-global-question-count)
    :id-key-function lol-generate-global-question-key
    :is-nipped true
    :tasks (gen-map-reduce-tasks-global)})
