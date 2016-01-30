@@ -50,6 +50,9 @@
 (defn lol-generate-global-question-proc []
   ["lol" "glob-question-count" "proc"])
 
+(defn lol-generate-most-popular-matchups []
+  ["lol" "glob-question-count" "most-popular"])
+
 (defn lol-generate-matchup-question-count
   "Matchup pair - {:user 7 :opponent 7}"
   [matchup-pair]
@@ -141,6 +144,9 @@
   (let [the-job (matchup-pair-map-reduce-job pair)]
     (advance-map-reduce-job the-job max-chunk)))
 
+(defn most-popular-question-sort [the-arr]
+  (sort-by #(if %1 (:count %1) 0) > the-arr))
+
 (defn gen-map-reduce-tasks-global [max-proc]
   [{:save-key-func (lol-generate-global-question-proc)
     :map-function lol-matchup-pair-from-key
@@ -153,7 +159,29 @@
     :reduce-function (fn [the-val mapped]
                        (.add the-val mapped)
                        the-val)
-    }])
+    }
+    {:save-key-func (lol-generate-most-popular-matchups)
+     :map-function (fn [the-val]
+                     (let [matchup (matchup-pair-from-key the-val)
+                           qcount (get-matchup-question-count matchup)]
+                     {:count qcount
+                      :key (nth the-val 2)}))
+     :initial-reduce (fn [the-val]
+                       (let [the-arr (object-array 11)]
+                         (if the-val
+                           (do
+                             (dotimes [i (count the-val)]
+                               (aset the-arr i (nth the-val)))
+                             (most-popular-question-sort the-arr)
+                             ))
+                         the-arr))
+     :final-reduce (fn [the-arr] (vec the-arr))
+     :reduce-function (fn [the-arr mapped]
+                        (aset the-arr 10 mapped)
+                           (most-popular-question-sort the-arr)
+                        the-arr)
+    }
+   ])
 
 (defn get-map-reduce-job [max-proc]
   {:count-key (lol-generate-global-question-count)
