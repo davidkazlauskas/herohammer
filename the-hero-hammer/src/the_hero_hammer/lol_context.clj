@@ -161,7 +161,7 @@
 )
 
 (defn matchup-pair-map-reduce-job [the-pair]
-  {:count-key (lol-generate-filter-matchup-question-count)
+  {:count-key (lol-generate-matchup-question-count the-pair)
    :id-key-function (partial lol-generate-matchup-question-id the-pair)
    :is-nipped true
    :tasks (generate-matchup-tasks the-pair)})
