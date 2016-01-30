@@ -39,38 +39,6 @@
 (defn gen-jobs []
   (fn [] (pulsar/spawn-fiber main-job)))
 
-(defn main-map-func [stuff]
-  (:answers stuff))
-
-(defn main-reduce-func [the-vec answers]
-  (doseq [i (range (count answers))]
-    (aset the-vec (nth answers i)
-      (inc (aget the-vec (nth answers i)))))
-  the-vec)
-
-(defn make-count-array-meow [size]
-  (let [result (long-array size)] result))
-
-(defn initial-reduce [prev]
-  (if (some? prev) (into-array prev)
-    (make-count-array-meow 2)))
-
-(defn final-reduce [prev]
-  (vec prev))
-
-;(defn map-reduce-for-matchup-pair [matchup-pair]
-  ;[
-   ;{:save-key-func (lol-generate-filter-matchup-question-count
-                     ;(gen-matchup 0 0) 0 0)
-    ;:nippy-record true
-    ;:map-function main-map-func
-    ;:reduce-function main-reduce-func
-    ;:initial-reduce initial-reduce
-    ;:final-reduce final-reduce
-    ;}
-   ;]
-  ;)
-
 (def ^:dynamic *all-filters-lol*
   [(main-filter)])
 
