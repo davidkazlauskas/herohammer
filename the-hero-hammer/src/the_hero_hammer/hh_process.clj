@@ -448,9 +448,11 @@
    :is-nipped is-nipped
    :tasks tasks})
 
+(defn expected-ranges [task-ranges]
+  (map :expected-range task-ranges))
+
 (defn job-splits [task-ranges]
   (->> task-ranges
-       (map :expected-range)
        (map #(vector (:from %1) (:to %1)))
        flatten
        distinct
@@ -461,4 +463,7 @@
   (let [curr-key (get-key (:count-key the-job))
         total-range {:from 0 :to curr-key}
         task-ranges (map-task-ranges (:tasks the-job)
-                                     total-range)]))
+                                     total-range)
+        expected (expected-ranges task-ranges)
+        splits (job-splits expected)]
+    ))
