@@ -345,7 +345,8 @@
 
 (defn tasks-for-range [tasks the-range]
   (->> tasks
-       (filter #(= (:expected-range %1) the-range))
+       (filter #(ranges-overlap
+          (:expected-range %1) the-range))
        (into [])))
 
 (defn make-map-reduce-arrays [the-tasks]
@@ -416,18 +417,13 @@
 
 (defn perform-map-reduce
   [the-range data full-ranges distilled-ranges]
-  (loop [to-process-lim (range-size
-                         the-range) i 0]
-    (if (and
-          (< i (count distilled-ranges))
-          (> to-process-lim 0))
-      (recur (- to-process-lim
-        (map-reduce-single-frequency
-          (nth (nth distilled-ranges i) 0)
-          to-process-lim
-          full-ranges
-          data))
-        (inc i)))))
+  (let [to-process-lim (range-size
+                         the-range)]
+    (map-reduce-single-frequency
+      the-range
+      to-process-lim
+      full-ranges
+      data)))
 
 (defn process-map-reduce-task-context [the-context task-ranges]
   (let [the-range (:range the-context)
