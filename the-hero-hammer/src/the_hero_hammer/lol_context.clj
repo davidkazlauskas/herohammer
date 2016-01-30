@@ -140,6 +140,7 @@
        :map-function (fn [the-val]
                        (let [the-map
                              (->> (:answers the-val)
+                                  (partition 2)
                                   (map #(into [] %1))
                                   (into {}))
                              our-val (get the-map (:id question))
@@ -154,7 +155,7 @@
        :reduce-function (fn [old-val curr]
                           (if (some? curr)
                             (inc-arr-index-longs
-                              old-val (:id question)))
+                              old-val curr))
                           old-val)
        }
     ))
