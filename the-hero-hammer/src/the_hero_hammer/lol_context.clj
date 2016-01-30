@@ -10,9 +10,6 @@
   {:id 0
    :expected max-available-range
    :process-question (fn [args]
-     ; ARGS: {:answer-map
-     ;        :date :globid
-     ;        :curr-range}
      (count-in))
    :required-questions ["poking"]
    :full-name "All matches"
