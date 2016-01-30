@@ -432,13 +432,11 @@
           data))
         (inc i)))))
 
-(defn process-map-reduce-task-context [the-context]
+(defn process-map-reduce-task-context [the-context task-ranges]
   (let [data (generic-fetch-records
                (:id-key-function the-context)
                (:range the-context)
                (:nippy-record the-context))
-        task-ranges (map-task-ranges (:tasks the-context)
-                                     (:range the-context))
         distilled-ranges (distill-ranges task-ranges)]
     (perform-map-reduce
       the-context data task-ranges distilled-ranges)
@@ -449,3 +447,9 @@
    :id-key-function id-gen-function
    :is-nipped is-nipped
    :tasks tasks})
+
+(defn advance-map-reduce-job [the-job]
+  (let [curr-key (get-key (:count-key the-job))
+        total-range {:from 0 :to curr-key}
+        task-ranges (map-task-ranges (:tasks the-job)
+                                     total-range)]))
