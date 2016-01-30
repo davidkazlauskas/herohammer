@@ -1,6 +1,7 @@
 (ns the-hero-hammer.lol_context
   (:require [the-hero-hammer.questions :refer :all]
             [the-hero-hammer.hh_context :refer :all]
+            [the-hero-hammer.hh_process :refer :all]
             [the-hero-hammer.storage :as stor]
             [taoensso.nippy :as nippy]))
 
@@ -11,16 +12,42 @@
      ; ARGS: {:answer-map
      ;        :date :globid
      ;        :curr-range}
-     (cond
-       (in-range (:currid args)
-                 (:curr-range args)) (ignore)
-       (ahead-of-range (:currid args)
-                       (:curr-range args)) (drop-out)
-       (end-of-range (:currid args)
-                     (:curr-range args)) (count-in)))
+     (count-in))
    :required-questions ["poking"]
    :full-name "All matches"
    })
+
+(defn main-map-func [stuff]
+  (:answers stuff))
+
+(defn main-reduce-func [the-vec answers]
+  (doseq [i (range (count answers))]
+    (aset the-vec (nth answers i)
+      (inc (aget the-vec (nth answers i)))))
+  the-vec)
+
+(defn make-count-array [size]
+  (let [result (long-array size)] result))
+
+(defn initial-reduce [prev]
+  (if (some? prev) (into-array prev)
+    (make-count-array 2)))
+
+(def final-reduce [prev]
+  (vec prev))
+
+(defn map-reduce-for-matchup-pair [matchup-pair]
+  [
+   {:save-key-func (lol-generate-filter-matchup-question-count
+                     {gen-matchup 0 0} 0 0)
+    :nippy-record true
+    :map-function main-map-func
+    :reduce-function main-reduce-func
+    :initial-reduce initial-reduce
+    :final-reduce final-reduce
+    }
+   ]
+  )
 
 (def ^:dynamic *all-filters-lol*
   [(main-filter)])
