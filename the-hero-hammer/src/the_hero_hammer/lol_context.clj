@@ -138,11 +138,13 @@
            (:id question)
            (:id flt))
        :map-function (fn [the-val]
-                       (let [the-map (into {}
-                             (partition 2
-                                (:answers the-val)))
-                             our-val (get the-map )
-                             ]))
+                       (let [the-map
+                             (->> (:answers the-val)
+                                  (map #(into [] %1))
+                                  (into {}))
+                             our-val (get the-map (:id question))
+                             ]
+                         our-val))
        :initial-reduce (fn [the-val]
                          (or the-val
                           (long-array
