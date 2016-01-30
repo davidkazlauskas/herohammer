@@ -350,8 +350,7 @@
 
 (defn run-jobs []
   (lol-ctx
-    (doseq [i (get-ctx-jobs)]
-      (i))))
+    ((get-ctx-jobs))))
 
 (defn -main [& args]
   (println "Muah runnin!")
