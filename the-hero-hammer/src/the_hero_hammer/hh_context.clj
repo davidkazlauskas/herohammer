@@ -123,6 +123,13 @@
 (defn end-of-range [number the-range]
   (if (= (:to the-range) number) true nil))
 
+(defn ranges-overlap [range-a range-b]
+  (if (and
+        (> (:to range-a) (:from range-b))
+        (< (:from range-a) (:to range-b)))
+    true
+    false))
+
 (defn pair-vec
   "Turn this: {:user 7 :opponent 8}
    to this: [7 8]"
