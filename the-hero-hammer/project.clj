@@ -9,7 +9,9 @@
                  [compojure "1.1.8"]
                  [http-kit "2.1.18"]
                  [debugger "0.1.7"]
-                 [org.clojure/clojurescript "1.7.228"]]
+                 [org.clojure/clojurescript "1.7.228"]
+                 [co.paralleluniverse/pulsar "0.7.4"]]
+  :java-agents [[co.paralleluniverse/quasar-core "0.7.4"]]
   :plugins [[lein-cljsbuild "1.1.2"]]
   :main the-hero-hammer.core
   :aot [the-hero-hammer.core]
