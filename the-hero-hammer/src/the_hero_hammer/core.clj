@@ -27,11 +27,28 @@
          clojure.string/join)]
       (str "[" the-arr "]"))))
 
+(defn round-percent-ratio [rat]
+  (Math/round (* 100 (float rat))))
+
+(defn highest-percent-part [the-vec]
+  (let [sum (apply + the-vec)
+        divisor (if (= 0 sum) 1 sum)]
+    (->> the-vec
+         (map #(round-percent-ratio (/ %1 divisor)))
+         (apply max))))
+
 (def ^:dynamic *html-context-lol*
   (lol-ctx
     {:matchup-link-start "/matchup-lol"
      :registration-link "/questions-lol"
      :squares-javascript (generate-javascript-hero-squares)
+     :question-sort-function
+       (fn [the-q]
+         (let [sname (:shortname the-q)
+               opt-vec (get-in the-q [:counts :val])]
+         (cond (= "mtype" sname) 200
+               (= "ladder" sname) 199
+               :else (highest-percent-part opt-vec))))
      }))
 
 (def ^:dynamic *html-context* nil)
@@ -263,9 +280,6 @@
       :opponent (Integer. (nth findings 2))}
       (Integer. (nth findings 3))]))
 
-(defn round-percent-ratio [rat]
-  (Math/round (* 100 (float rat))))
-
 (defn bold-upper-text [the-text]
   (html [:p {:style "color: black; font-weight: bold;"}
          (clojure.string/upper-case the-text)]))
@@ -275,15 +289,16 @@
         sz (count the-vec)
         res (int-array sz)
         until (dec sz)]
-    (loop [i 0 remainder 100]
-      (let [islast (>= i until)
-            curr (nth the-vec i)
-            prelim (round-percent-ratio (/ curr sum))
-            to-save (if (or islast (> prelim remainder))
-                      remainder prelim)]
-        (aset res i to-save)
-        (if (not islast)
-          (recur (inc i) (- remainder prelim)))))
+    (if (> sum 0)
+      (loop [i 0 remainder 100]
+        (let [islast (>= i until)
+              curr (nth the-vec i)
+              prelim (round-percent-ratio (/ curr sum))
+              to-save (if (or islast (> prelim remainder))
+                        remainder prelim)]
+          (aset res i to-save)
+          (if (not islast)
+            (recur (inc i) (- remainder prelim))))))
     (vec res)))
 
 (defn render-question-progress-bar [the-vec options]
@@ -324,9 +339,11 @@
     (let [[matchup filter-id]
           (matchup-data-split id)
           rel-data (fetch-relevant-matchup-data
-                    matchup filter-id)]
+                    matchup filter-id)
+          sort-func (:question-sort-function (html-context))]
         (wrap-html [:ul {:class "list-group"}
           (->> rel-data
+               (sort-by sort-func >)
                (map render-single-question)
                (map #(html
                        [:li {:class "list-group-item"}
