@@ -451,13 +451,18 @@
 (defn expected-ranges [task-ranges]
   (map :expected-range task-ranges))
 
+(defn interleave-ranges [the-vec]
+  (rest (reductions #(
+    hash-map :from (:to %1 %1) :to %2) the-vec)))
+
 (defn job-splits [task-ranges]
   (->> task-ranges
        (map #(vector (:from %1) (:to %1)))
        flatten
        distinct
-       (into []))
-)
+       sort
+       interleave-ranges
+       (into [])))
 
 (defn advance-map-reduce-job [the-job]
   (let [curr-key (get-key (:count-key the-job))
