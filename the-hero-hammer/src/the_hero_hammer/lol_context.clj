@@ -3,7 +3,8 @@
             [the-hero-hammer.hh_context :refer :all]
             [the-hero-hammer.hh_process :refer :all]
             [the-hero-hammer.storage :as stor]
-            [taoensso.nippy :as nippy]))
+            [taoensso.nippy :as nippy]
+            [co.paralleluniverse.pulsar.core :as pulsar]))
 
 (defn main-filter []
   {:id 0
@@ -17,6 +18,9 @@
    :full-name "All matches"
    })
 
+(defn gen-jobs []
+  (fn [] (pulsar/fiber (fn [] (println "Hello werld!")))))
+
 (defn main-map-func [stuff]
   (:answers stuff))
 
@@ -26,28 +30,28 @@
       (inc (aget the-vec (nth answers i)))))
   the-vec)
 
-(defn make-count-array [size]
+(defn make-count-array-meow [size]
   (let [result (long-array size)] result))
 
 (defn initial-reduce [prev]
   (if (some? prev) (into-array prev)
-    (make-count-array 2)))
+    (make-count-array-meow 2)))
 
 (defn final-reduce [prev]
   (vec prev))
 
-(defn map-reduce-for-matchup-pair [matchup-pair]
-  [
-   {:save-key-func (lol-generate-filter-matchup-question-count
-                     (gen-matchup 0 0) 0 0)
-    :nippy-record true
-    :map-function main-map-func
-    :reduce-function main-reduce-func
-    :initial-reduce initial-reduce
-    :final-reduce final-reduce
-    }
-   ]
-  )
+;(defn map-reduce-for-matchup-pair [matchup-pair]
+  ;[
+   ;{:save-key-func (lol-generate-filter-matchup-question-count
+                     ;(gen-matchup 0 0) 0 0)
+    ;:nippy-record true
+    ;:map-function main-map-func
+    ;:reduce-function main-reduce-func
+    ;:initial-reduce initial-reduce
+    ;:final-reduce final-reduce
+    ;}
+   ;]
+  ;)
 
 (def ^:dynamic *all-filters-lol*
   [(main-filter)])
@@ -459,8 +463,6 @@
    :util {
      :matchup-pair-from-key lol-matchup-pair-from-key
    }
-   :map-reduce {
-      :jobs-machup-pair map-reduce-for-matchup-pair
-   }
+   :jobs (gen-jobs)
   })
 

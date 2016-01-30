@@ -18,6 +18,9 @@
   (if (nil? (get-key db-key))
     (set-key db-key value)))
 
+(defn get-ctx-jobs []
+  (get-in (*ctx-get-func*) [:jobs]))
+
 (defn filters-full []
   (get-in (*ctx-get-func*) [:filters :full]))
 
