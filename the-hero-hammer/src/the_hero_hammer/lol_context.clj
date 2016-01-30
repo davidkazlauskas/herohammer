@@ -19,7 +19,7 @@
    })
 
 (defn gen-jobs []
-  (fn [] (pulsar/fiber (fn [] (println "Hello werld!")))))
+  (fn [] (pulsar/spawn-fiber (fn [] (println "Hello werld!")))))
 
 (defn main-map-func [stuff]
   (:answers stuff))

@@ -380,3 +380,4 @@
          (nippy/freeze {:qid qid :comment (:comment data)}))
       (doseq [i (:answers data)]
         (set-question-first-time (get i 0) glob-id)))))
+

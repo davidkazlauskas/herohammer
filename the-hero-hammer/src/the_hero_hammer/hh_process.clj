@@ -480,3 +480,4 @@
                   (:id-key-function the-job)
                   (:is-nipped the-job false))]
         (process-map-reduce-task-context ctx task-ranges)))))
+
