@@ -448,6 +448,15 @@
    :is-nipped is-nipped
    :tasks tasks})
 
+(defn job-splits [task-ranges]
+  (->> task-ranges
+       (map :expected-range)
+       (map #(vector (:from %1) (:to %1)))
+       flatten
+       distinct
+       (into []))
+)
+
 (defn advance-map-reduce-job [the-job]
   (let [curr-key (get-key (:count-key the-job))
         total-range {:from 0 :to curr-key}
