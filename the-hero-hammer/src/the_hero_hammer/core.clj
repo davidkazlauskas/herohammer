@@ -297,7 +297,7 @@
              :style "font-weight: bold"}
             (:question qdata)]
         (render-question-progress-bar
-          (get-in qdata [:counts :count])
+          (get-in qdata [:counts :val])
           (get-in qdata [:options]))
         [:p {:class "text-center"}
          (str (range-size (:counts qdata)) " samples.")]))
@@ -326,13 +326,11 @@
 
 (defn lol-post-questions [req]
   (lol-ctx (let [answered (lol-question-set-similarity req)]
-    (println "ans" answered)
     (if (> (min-questions) answered)
       (do
-        (println req)
       (str "Only " answered "% of questions were answered."
            " Minimum is " (min-questions) "%."))
-      (do (println "Saving question!")
+      (do
         (process-question (form-to-data req))
           (html [:p (map #(html [:p %1]) req)]))
       )
