@@ -280,7 +280,7 @@
        (into [])))
 
 ; GENRIC MAP REDUCE
-(defn generic-map-reduce-context [the-range id-func nipped tasks]
+(defn map-reduce-task-context [the-range id-func nipped tasks]
   {:range the-range
    :id-key-function id-func
    :tasks tasks
@@ -432,7 +432,7 @@
           data))
         (inc i)))))
 
-(defn process-map-reduce-context [the-context]
+(defn process-map-reduce-task-context [the-context]
   (let [data (generic-fetch-records
                (:id-key-function the-context)
                (:range the-context)
