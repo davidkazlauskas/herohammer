@@ -292,7 +292,6 @@
    initial-reduce
    final-reduce]
   {:save-key-func save-key-func
-   :nippy-record true
    :map-function map-func
    :reduce-function reduce-function
    :initial-reduce initial-reduce
@@ -468,12 +467,12 @@
 
 (defn advance-map-reduce-job [the-job max-interval]
   (let [max-int (or max-interval 128)
-        curr-key (get-key (:count-key the-job))
+        curr-key (or (get-key (:count-key the-job)) 0)
         total-range {:from 0 :to curr-key}
         task-ranges (map-task-ranges (:tasks the-job)
                                      total-range)
         expected (expected-ranges task-ranges)
-        splits (job-splits expected)]
+        splits (job-splits expected max-interval)]
     (doseq [i splits]
       (let [ctx (map-reduce-task-context
                   i
