@@ -152,7 +152,7 @@
                             (count
                               (:options question)))]
                          (if the-val
-                           (doseq [i (count the-val)]
+                           (dotimes [i (count the-val)]
                              (aset the-victim i (nth the-val i))))
                          the-victim))
        :final-reduce (fn [the-val] (vec the-val))
