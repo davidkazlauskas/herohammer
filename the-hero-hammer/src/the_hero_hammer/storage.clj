@@ -23,3 +23,10 @@
   (let [merged (key-merge db-key)]
     (if (nil? (get-key merged))
       (set-key merged value))))
+
+(defn get-key-batch
+  "Get keys in batch."
+  [db-keys]
+  (->> db-keys
+       (map get-key)
+       (into [])))
