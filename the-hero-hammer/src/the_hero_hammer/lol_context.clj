@@ -128,28 +128,65 @@
      (flatten [(pair-vec matchup-pair)
                question-id filter-id]))])
 
-(defn process-matchup-pair [pair]
-  (println "ze outsack!" pair))
+(defn generate-matchup-tasks [the-pair]
+  (into []
+    (for [question (questions-full)
+          flt (filters-full)]
+      {:save-key-func
+         (lol-generate-filter-matchup-question-count
+           the-pair
+           (:id question)
+           (:id flt))
+       :map-function (fn [the-val]
+                       (let [the-map (into {}
+                             (partition 2
+                                (:answers the-val)))
+                             our-val (get the-map )
+                             ]))
+       :initial-reduce (fn [the-val]
+                         (or the-val
+                          (long-array
+                            (count
+                              (:options question)))))
+       :final-reduce (fn [the-val] (vec the-val))
+       :reduce-function (fn [old-val curr]
+                          (if (some? curr)
+                            (inc-arr-index-longs
+                              old-val (:id question)))
+                          old-val)
+       }
+    ))
+)
 
-(defn gen-map-reduce-tasks-global []
+(defn matchup-pair-map-reduce-job [the-pair]
+  {:count-key (lol-generate-filter-matchup-question-count)
+   :id-key-function (partial lol-generate-matchup-question-id the-pair)
+   :is-nipped true
+   :tasks (generate-matchup-tasks the-pair)})
+
+(defn process-matchup-pair [pair max-chunk]
+  (let [the-job (matchup-pair-map-reduce-job pair)]
+    (advance-map-reduce-job the-job max-chunk)))
+
+(defn gen-map-reduce-tasks-global [max-proc]
   [{:save-key-func (lol-generate-global-question-proc)
     :map-function lol-matchup-pair-from-key
     :initial-reduce (fn [the-val]
                       (java.util.ArrayList.))
     :final-reduce (fn [the-val] (let [dist (distinct the-val)]
                                   (doseq [i dist]
-                                    (process-matchup-pair i)))
+                                    (process-matchup-pair i max-proc)))
                     nil)
     :reduce-function (fn [the-val mapped]
                        (.add the-val mapped)
                        the-val)
     }])
 
-(defn get-map-reduce-job []
+(defn get-map-reduce-job [max-proc]
   {:count-key (lol-generate-global-question-count)
    :id-key-function lol-generate-global-question-key
    :is-nipped true
-   :tasks (gen-map-reduce-tasks-global)})
+   :tasks (gen-map-reduce-tasks-global max-proc)})
 
 (defmacro all-questions-lol []
   (questions-m
