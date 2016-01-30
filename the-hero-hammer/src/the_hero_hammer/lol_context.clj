@@ -24,8 +24,8 @@
 (declare get-map-reduce-job)
 
 (defn process-questions []
-  (let [job (get-map-reduce-job)
-        max-units 128]
+  (let [max-units 128
+        job (get-map-reduce-job max-units)]
     (advance-map-reduce-job job max-units)))
 
 (defn schedule-question-processing []
