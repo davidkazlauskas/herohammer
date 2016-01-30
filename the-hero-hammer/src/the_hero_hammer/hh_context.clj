@@ -290,6 +290,10 @@
          (partial (fn-matchup-question-id) matchup))
        (map #(update-in %1 [:val] nippy/thaw))))
 
+(defn get-matchup-question-count [matchup]
+  (let [res ((fn-matchup-question-count) matchup)]
+    (or res 0)))
+
 (defn store-next-comment-matchup
   "Store next question for matchup"
   [matchup data]
