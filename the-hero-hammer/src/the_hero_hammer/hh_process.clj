@@ -280,10 +280,9 @@
        (into [])))
 
 ; GENRIC MAP REDUCE
-(defn map-reduce-task-context [the-range id-func nipped tasks]
+(defn map-reduce-task-context [the-range id-func nipped]
   {:range the-range
    :id-key-function id-func
-   :tasks tasks
    :nippy-record nipped})
 
 (defn map-reduce-task [
@@ -381,7 +380,7 @@
    :val ((:final-reduce task identity) (aget red-array i))})
 
 (defn map-reduce-single-frequency
-  [the-context the-range the-limit full-ranges data]
+  [the-range the-limit full-ranges data]
     (let [the-tasks (tasks-for-range full-ranges the-range)
           victim-array (make-map-reduce-arrays the-tasks)
           trav-array (:arr-traversed victim-array)
@@ -417,15 +416,14 @@
      (if (some? rec) (:val (nippy/thaw rec)))))
 
 (defn perform-map-reduce
-  [the-context data full-ranges distilled-ranges]
+  [the-range data full-ranges distilled-ranges]
   (loop [to-process-lim (range-size
-                         (:range the-context)) i 0]
+                         the-range) i 0]
     (if (and
           (< i (count distilled-ranges))
           (> to-process-lim 0))
       (recur (- to-process-lim
         (map-reduce-single-frequency
-          the-context
           (nth (nth distilled-ranges i) 0)
           to-process-lim
           full-ranges
@@ -433,14 +431,17 @@
         (inc i)))))
 
 (defn process-map-reduce-task-context [the-context task-ranges]
-  (let [data (generic-fetch-records
+  (let [the-range (:range the-context)
+        data (generic-fetch-records
                (:id-key-function the-context)
-               (:range the-context)
+               the-range
                (:nippy-record the-context))
         distilled-ranges (distill-ranges task-ranges)]
     (perform-map-reduce
-      the-context data task-ranges distilled-ranges)
+      the-range data task-ranges distilled-ranges)
     distilled-ranges))
+
+; THE JOB
 
 (defn map-reduce-job [the-key id-gen-function is-nipped tasks]
   {:count-key the-key
@@ -473,4 +474,10 @@
                                      total-range)
         expected (expected-ranges task-ranges)
         splits (job-splits expected)]
+    (doseq [i splits]
+      (let [ctx (map-reduce-task-context
+                  i
+                  (:id-key-function the-job)
+                  (:is-nipped the-job false))])
+      )
     ))
