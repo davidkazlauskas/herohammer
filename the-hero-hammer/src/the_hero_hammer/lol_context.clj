@@ -18,10 +18,10 @@
    :full-name "All matches"
    })
 
-(defn get-map-reduce-job [])
-
 ; run jerb every 5 minutes
 (defn proc-delay-ms [] (* 1000 * 60 * 5))
+
+(declare get-map-reduce-job)
 
 (defn process-questions []
   (let [job (get-map-reduce-job)
@@ -33,6 +33,7 @@
 
 (defn main-job []
   (while true
+    (schedule-question-processing)
     (pulsar/sleep (proc-delay-ms))))
 
 (defn gen-jobs []
@@ -126,6 +127,15 @@
    (clojure.string/join "-"
      (flatten [(pair-vec matchup-pair)
                question-id filter-id]))])
+
+(defn gen-map-reduce-tasks-global []
+  [])
+
+(defn get-map-reduce-job []
+  {:count-key (lol-generate-global-question-proc)
+   :id-key-function lol-generate-global-question-key
+   :is-nipped true
+   :tasks (gen-map-reduce-tasks-global)})
 
 (defmacro all-questions-lol []
   (questions-m
