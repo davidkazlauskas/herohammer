@@ -33,13 +33,13 @@
   (if (some? prev) (into-array prev)
     (make-count-array 2)))
 
-(def final-reduce [prev]
+(defn final-reduce [prev]
   (vec prev))
 
 (defn map-reduce-for-matchup-pair [matchup-pair]
   [
    {:save-key-func (lol-generate-filter-matchup-question-count
-                     {gen-matchup 0 0} 0 0)
+                     (gen-matchup 0 0) 0 0)
     :nippy-record true
     :map-function main-map-func
     :reduce-function main-reduce-func
@@ -458,6 +458,9 @@
    }
    :util {
      :matchup-pair-from-key lol-matchup-pair-from-key
+   }
+   :map-reduce {
+      :jobs-machup-pair map-reduce-for-matchup-pair
    }
   })
 
