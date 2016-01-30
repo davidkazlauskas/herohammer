@@ -161,9 +161,7 @@
                             (inc-arr-index-longs
                               old-val curr))
                           old-val)
-       }
-    ))
-)
+       })))
 
 (defn matchup-pair-map-reduce-job [the-pair]
   {:count-key (lol-generate-matchup-question-count the-pair)
