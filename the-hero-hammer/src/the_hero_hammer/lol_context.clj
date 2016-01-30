@@ -175,7 +175,8 @@
                              (most-popular-question-sort the-arr)
                              ))
                          the-arr))
-     :final-reduce (fn [the-arr] (vec the-arr))
+     :final-reduce (fn [the-arr]
+                     (vec the-arr))
      :reduce-function (fn [the-arr mapped]
                         (aset the-arr 10 mapped)
                            (most-popular-question-sort the-arr)
