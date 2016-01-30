@@ -147,10 +147,14 @@
                              ]
                          our-val))
        :initial-reduce (fn [the-val]
-                         (or the-val
-                          (long-array
+                         (let [the-victim
+                           (long-array
                             (count
-                              (:options question)))))
+                              (:options question)))]
+                         (if the-val
+                           (doseq [i (count the-val)]
+                             (aset the-victim i (nth the-val i))))
+                         the-victim))
        :final-reduce (fn [the-val] (vec the-val))
        :reduce-function (fn [old-val curr]
                           (if (some? curr)
