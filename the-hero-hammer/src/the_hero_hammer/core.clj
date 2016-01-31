@@ -514,13 +514,27 @@
           sort-func (:question-sort-function (html-context))
           rel-data (fetch-relevant-matchup-data
                     matchup filter-id)
-          sorted-data (into [] (sort-by sort-func > rel-data))]
-        (wrap-html [:ul {:class "list-group"}
-          (->> sorted-data
-               (map render-single-question)
-               (map #(html
-                       [:li {:class "list-group-item"}
-                            %1])))]))))
+          sorted-data (into [] (sort-by sort-func > rel-data))
+          squares (get-hero-squares)
+          heroes (heroes-full)
+          hu (:user matchup)
+          ho (:opponent matchup)
+          hn-hu (nth heroes hu)
+          hn-ho (nth heroes ho)
+          sq-hu (nth squares hu)
+          sq-ho (nth squares ho)]
+        (wrap-html
+          (html
+            [:div {:class "col-md-12 text-center"}
+             [:h2 hn-hu " vs. " hn-ho]]
+            (render-hero-pair
+              {:src-user sq-hu :src-opp sq-ho})
+                [:ul {:class "list-group"}
+            (->> sorted-data
+                 (map render-single-question)
+                 (map #(html
+                         [:li {:class "list-group-item"}
+                              %1])))])))))
 
 (defn lol-question-set-similarity
   "Return percentage of values picked from user"
