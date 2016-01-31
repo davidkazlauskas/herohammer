@@ -150,6 +150,15 @@
 (defn drop-tail-from-key [the-key]
   (clojure.string/replace the-key #"^(\d+)-(\d+)-.*$" "$1-$2"))
 
+(defn distinct-java-array [the-arr]
+  (let [dist (into [] (distinct (vec the-arr)))
+        dcount (count dist)
+        ]
+    (dotimes [n (count the-arr)]
+      (let [to-set (if (< n dcount)
+                     (nth dist n) nil)]
+        (aset the-arr n to-set)))))
+
 (defn gen-map-reduce-tasks-global [max-proc]
   [{:save-key-func (lol-generate-global-question-proc)
     :map-function lol-matchup-pair-from-key
@@ -182,7 +191,8 @@
                      (vec the-arr))
      :reduce-function (fn [the-arr mapped]
                         (aset the-arr 10 mapped)
-                           (most-popular-question-sort the-arr)
+                        (distinct-java-array the-arr)
+                        (most-popular-question-sort the-arr)
                         the-arr)
     }
    ])
