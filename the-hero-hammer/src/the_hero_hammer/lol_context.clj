@@ -152,12 +152,12 @@
 
 (defn distinct-java-array [the-arr]
   (let [dist (into [] (distinct (vec the-arr)))
-        dcount (count dist)
-        ]
+        dcount (count dist)]
     (dotimes [n (count the-arr)]
       (let [to-set (if (< n dcount)
                      (nth dist n) nil)]
-        (aset the-arr n to-set)))))
+        (aset the-arr n to-set))))
+  the-arr)
 
 (defn gen-map-reduce-tasks-global [max-proc]
   [{:save-key-func (lol-generate-global-question-proc)
