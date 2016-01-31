@@ -352,6 +352,14 @@
       (partial (fn-matchup-comment-id) matchup))
     (map #(update-in %1 [:val] nippy/thaw))))
 
+(defn get-comments-by-id
+  "Get comments for specific matchup"
+  [matchup idvec]
+  (let [initial-keys
+        (into [] (map #((fn-matchup-comment-id) matchup %1) idvec))
+        initial-query (get-key-batch initial-keys)]
+    (into [] (map #(if %1 (nippy/thaw %1))))))
+
 (defn get-question-first-time
   "Get first occourence of question asked"
   [question-id]
