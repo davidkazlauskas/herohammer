@@ -360,6 +360,11 @@
         initial-query (get-key-batch initial-keys)]
     (into [] (map #(if %1 (nippy/thaw %1))))))
 
+(defn get-comments-count
+  "Get comment count for matchup"
+  [matchup]
+  (or ((fn-matchup-comment-count) matchup) 0))
+
 (defn get-question-first-time
   "Get first occourence of question asked"
   [question-id]
