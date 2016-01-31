@@ -339,8 +339,10 @@
 (defn wrap-most-recent-data [most-rec]
   (if most-rec
     (let [h-full (heroes-full)
-          squares (get-hero-squares)]
-    (for [i most-rec]
+          squares (get-hero-squares)
+          revved (reverse most-rec)
+          ]
+    (for [i revved]
       (let [split (matchup-pair-from-key i)
             key-tail (nth i 2)
             hu (:user split)
@@ -400,6 +402,15 @@
     [{:user (Integer. (nth findings 1))
       :opponent (Integer. (nth findings 2))}
       (Integer. (nth findings 3))]))
+
+(defn lol-show-record [id]
+  (lol-ctx
+    (wrap-html
+      (let [split (matchup-data-split id)
+            matchup (nth split 0)
+            rec-id (nth split 1)
+            data-ans (get-answers-with-comment matchup rec-id)]
+        (html (str data-ans))))))
 
 (defn bold-upper-text [the-text]
   (html [:p {:style "color: black; font-weight: bold;"}
@@ -497,6 +508,7 @@
   (GET "/dota2" [] (dota2-page))
   (GET "/lol" [] (lol-page))
   (GET "/questions-lol" [] (lol-render-questions))
+  (GET "/show-record-lol/:id" [id] (lol-show-record id))
   (GET "/matchup-lol/:id" [id] (lol-render-matchup-data id))
   (POST (q-post-link) {params :params} (lol-post-questions params)
   (route/not-found "Page not found")))
