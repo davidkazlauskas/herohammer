@@ -256,8 +256,10 @@
             fn-bot-range (if (>= bot-range 0) bot-range 0)
             the-keys (->> (range fn-bot-range count-res)
                           (map glob-id-gen)
-                          (into []))]
-        (get-key-batch the-keys)))))
+                          (into []))
+            the-pull-res (get-key-batch the-keys)]
+        (if the-pull-res
+          (into [] (map nippy/thaw the-pull-res)))))))
 
 ; SPEC OPS
 (defn gen-matchup [u o] {:user u :opponent o})
