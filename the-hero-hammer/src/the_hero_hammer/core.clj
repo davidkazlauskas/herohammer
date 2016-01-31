@@ -195,13 +195,12 @@
            (filters-full))
          ]))
 
-(defn hero-icon [thumb-id]
+(defn hero-icon [thumb-id src]
   (html [:img {:width 120 :height 120
-               :src ""
+               :src src
                :style "margin-left: 10px; margin-right: 10px;"
                :id thumb-id
-               }])
-  )
+               }]))
 
 (defn reg-and-show-buttons []
   (html [:div {:style "margin-top: 20px;" :class "text-center"}
@@ -223,6 +222,12 @@
          (:squares-javascript (html-context))
          ";"]))
 
+(defn render-hero-pair [args]
+    (html [:div {:style "padding-top: 20px; padding-bottom: 20px;"
+                 :class "text-center"}
+           (hero-icon "thumb-user" (:src-user args ""))
+           (hero-icon "thumb-opponent" (:src-opp args ""))]))
+
 (defn generate-hero-selection [args]
   (html [:div {:class "text-center"}
          [:label {:style "text-align: left; width: 130px;"
@@ -235,10 +240,7 @@
          (hero-dropdown "hero-user")
          (hero-dropdown "hero-opponent")
          ]
-        [:div {:style "padding-top: 20px; padding-bottom: 20px;"
-               :class "text-center"}
-         (hero-icon "thumb-user")
-         (hero-icon "thumb-opponent")]
+        (render-hero-pair {})
         (update-hero-squares-script)))
 
 (defn single-matchup-listing [the-key index]
