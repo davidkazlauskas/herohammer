@@ -128,7 +128,7 @@
           [:script {:src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
                     :integrity "sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
                     :crossorigin "anonymous"}]
-          [:script {:src "resources/js/main.js"}]]
+          [:script {:src "/resources/js/main.js"}]]
          [:body
           (navbar {})
           [:div {:class "container"}
@@ -171,6 +171,9 @@
 
 (defn update-hero-squares-js-func []
   "the_hero_hammer.js_client.updateHeroSquares();")
+
+(defn show-10-random-comments-js-func []
+  "the_hero_hammer.js_client.show10RandomComments();")
 
 (defn update-hero-squares-script []
   (html [:script (update-hero-squares-js-func)]))
@@ -522,8 +525,24 @@
   (html [:script
          "heroUser = " user ";"
          "heroOpponent = " opp ";"
-         "randCommentsLink = " (:rand-comments-link (html-context)) ";"
+         "randCommentsLink = '" (:rand-comments-link (html-context)) "';"
          ]))
+
+(defn show-comments-button-group []
+  (html [:div {:class "row"}
+               [:div {:class "col-md-12 text-center"}
+                [:div {:class "btn-group"}
+                 [:button {:type "button"
+                           :class "btn btn-default"
+                           :onclick (show-10-random-comments-js-func)
+                           }
+                  "Show random comments"]
+                 ]]]))
+
+(defn comments-placeholder []
+  (html [:div {:class "row"}
+         [:div {:class "col-md-12 text-center"
+                :id "comments-placeholder"}]]))
 
 (defn lol-render-matchup-data [id]
   (lol-ctx
@@ -553,15 +572,8 @@
                  (map #(html
                          [:li {:class "list-group-item"}
                               %1])))]
-            [:div {:class "row"}
-             [:div {:class "col-md-12 text-center"}
-              [:div {:class "btn-group"}
-               [:button {:type "button"
-                         :class "btn btn-default"}
-                "Show random comments"]
-               ]
-              ]]
-            )))))
+            (show-comments-button-group)
+            (comments-placeholder))))))
 
 (defn random-range [to-make max-num]
   (loop [the-set #{}]
