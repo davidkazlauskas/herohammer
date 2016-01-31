@@ -19,8 +19,11 @@
      ~@args
    ))
 
+(defn get-hero-squares []
+  (get-in (*ctx-get-func*) [:heroes :squares]))
+
 (defn generate-javascript-hero-squares []
-  (let [squares (get-in (*ctx-get-func*) [:heroes :squares])]
+  (let [squares (get-hero-squares)]
     (let [the-arr (->> squares
          (map #(str "'" %1 "'"))
          (interpose ",")
@@ -233,13 +236,25 @@
          (hero-icon "thumb-opponent")]
         (update-hero-squares-script)))
 
-(defn single-matchup-listing [the-key]
-  (html nil))
+(defn single-matchup-listing [the-key index]
+  (let [sq-user (:sq-user the-key)
+        sq-opp (:sq-opp the-key)]
+   (html [:tr
+         [:td "#" index]
+         [:td
+          [:img {:height "32" :width "32" :src sq-user}]
+          [:span
+           {:style "margin-left: 10px; margin-right: 10px;"}
+           "vs."]
+          [:img {:height "32" :width "32" :src sq-opp}]
+         ]
+         ])))
 
 (defn render-most-popular [the-vec]
   (println the-vec)
-  (for [i the-vec]
-    (html [:p (:key i)])))
+  (for [i (range (count the-vec))]
+    (html [:table {:class "table table-hover table-striped"}
+           (single-matchup-listing (nth the-vec i) i)])))
 
 (defn game-stats-render [context-vars]
   (let [most-pop (:global-most-popular context-vars)]
@@ -273,18 +288,24 @@
     (gen-matchup hu ho)))
 
 (defn wrap-most-popular-data [most-pop]
-  (let [h-full (heroes-full)]
+  (let [h-full (heroes-full)
+        squares (get-hero-squares)]
    (for [i most-pop]
      (let [the-key (:key i)
            split (hero-pair-from-part-key the-key)
            hu (:user split)
            ho (:opponent split)
            hn-user (nth h-full hu)
-           hn-opp (nth h-full ho)]
+           hn-opp (nth h-full ho)
+           sq-user (nth squares hu)
+           sq-opp (nth squares ho)]
+       (println "squares" sq-user sq-opp)
        (-> i
          (assoc :matchup split)
          (assoc :hn-user hn-user)
-         (assoc :hn-opp hn-opp))))))
+         (assoc :hn-opp hn-opp)
+         (assoc :sq-user sq-user)
+         (assoc :sq-opp sq-opp))))))
 
 (defn dota2-page []
   (wrap-html [:p "meow"]))
@@ -292,7 +313,9 @@
 (defn lol-page []
   (lol-ctx
     (let [context-vars {
-          :global-most-popular (get-most-popular-matchups-global)
+          :global-most-popular
+            (wrap-most-popular-data
+              (get-most-popular-matchups-global))
           }]
       (wrap-html (generic-registration-page context-vars)))))
 
