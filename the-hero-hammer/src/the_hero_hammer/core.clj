@@ -248,7 +248,7 @@
                     )
                :style "cursor: pointer;"
                }
-         [:td "#" index]
+         [:td {:style "width: 30px;"} "#" index]
          [:td
           [:img {:height "32" :width "32" :src sq-user}]
           [:span
