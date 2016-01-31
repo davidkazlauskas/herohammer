@@ -237,7 +237,9 @@
         (update-hero-squares-script)))
 
 (defn single-matchup-listing [the-key index]
-  (let [sq-user (:sq-user the-key)
+  (let [hn-user (:hn-user the-key)
+        hn-opp (:hn-opp the-key)
+        sq-user (:sq-user the-key)
         sq-opp (:sq-opp the-key)]
    (html [:tr
          [:td "#" index]
@@ -246,8 +248,8 @@
           [:span
            {:style "margin-left: 10px; margin-right: 10px;"}
            "vs."]
-          [:img {:height "32" :width "32" :src sq-opp}]
-         ]
+          [:img {:height "32" :width "32" :src sq-opp}]]
+         [:td [:span hn-user " vs. " hn-opp]]
          ])))
 
 (defn render-most-popular [the-vec]
