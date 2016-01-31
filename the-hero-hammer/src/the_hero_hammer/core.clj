@@ -552,7 +552,16 @@
                  (map render-single-question)
                  (map #(html
                          [:li {:class "list-group-item"}
-                              %1])))])))))
+                              %1])))]
+            [:div {:class "row"}
+             [:div {:class "col-md-12 text-center"}
+              [:div {:class "btn-group"}
+               [:button {:type "button"
+                         :class "btn btn-default"}
+                "Show random comments"]
+               ]
+              ]]
+            )))))
 
 (defn random-range [to-make max-num]
   (loop [the-set #{}]
