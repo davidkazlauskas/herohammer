@@ -233,14 +233,15 @@
          (hero-icon "thumb-opponent")]
         (update-hero-squares-script)))
 
-(defn most-popular-render [most-pop]
-  (if most-pop
-    (html [:div {:style "margin-top: 20px;"
-                 :class "row text-center"}
-            [:div {:class "col-md-6"}
-             [:h4 "Most popular matchups"]]
-            [:div {:class "col-md-6"}
-             [:h4 "Most recent records"]]])))
+(defn game-stats-render [context-vars]
+  (let [most-pop (:global-most-popular context-vars)]
+    (if most-pop
+      (html [:div {:style "margin-top: 20px;"
+                   :class "row text-center"}
+              [:div {:class "col-md-6"}
+               [:h4 "Most popular matchups"]]
+              [:div {:class "col-md-6"}
+               [:h4 "Most recent records"]]]))))
 
 (defn generic-registration-page [context-vars]
   (html
@@ -253,7 +254,7 @@
       (filter-dropdown "user-filter")]
      (reg-and-show-buttons)
      ]
-     (most-popular-render (:global-most-popular context-vars))
+     (game-stats-render context-vars)
     ))
 
 (defn dota2-page []
