@@ -418,17 +418,28 @@
             ]))
        ])))
 
+(defn generic-show-record [id]
+  (wrap-html
+    (let [split (matchup-data-split id)
+          matchup (nth split 0)
+          rec-id (nth split 1)
+          data-ans (get-answers-with-comment matchup rec-id)
+          parted (partition 2 (:answers data-ans))
+          squares (get-hero-squares)
+          hu (:user matchup)
+          ho (:opponent matchup)
+          square-user (nth squares hu)
+          square-opp (nth squares ho)]
+      (html
+        (if data-ans
+          (do (render-hero-pair
+            {:src-user square-user :src-opp square-opp})
+          (render-answers parted))
+          [:h3 "No such question."]
+          )))))
+
 (defn lol-show-record [id]
-  (lol-ctx
-    (wrap-html
-      (let [split (matchup-data-split id)
-            matchup (nth split 0)
-            rec-id (nth split 1)
-            data-ans (get-answers-with-comment matchup rec-id)
-            parted (partition 2 (:answers data-ans))]
-        (html
-          [:p "meow"]
-          (render-answers parted))))))
+  (lol-ctx (generic-show-record id)))
 
 (defn bold-upper-text [the-text]
   (html [:p {:style "color: black; font-weight: bold;"}
