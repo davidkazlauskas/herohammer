@@ -267,7 +267,8 @@
            (single-matchup-listing (nth the-vec i) (inc i))])))
 
 (defn game-stats-render [context-vars]
-  (let [most-pop (:global-most-popular context-vars)]
+  (let [most-pop (:global-most-popular context-vars)
+        most-rec (:global-most-recent context-vars)]
     (if most-pop
       (html [:div {:style "margin-top: 20px;"
                    :class "row text-center"}
@@ -275,7 +276,9 @@
                [:h4 "Most popular matchups"]
                (render-most-popular most-pop)]
               [:div {:class "col-md-6"}
-               [:h4 "Most recent records"]]]))))
+               [:h4 "Most recent records"]
+               (render-most-popular most-rec)
+               ]]))))
 
 (defn generic-registration-page [context-vars]
   (html
@@ -328,7 +331,8 @@
             hn-opp (nth h-full ho)
             sq-user (nth squares hu)
             sq-opp (nth squares ho)]
-            (-> i
+            (-> {}
+             (assoc :key i)
              (assoc :matchup split)
              (assoc :hn-user hn-user)
              (assoc :hn-opp hn-opp)
