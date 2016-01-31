@@ -43,6 +43,7 @@
 (def ^:dynamic *html-context-lol*
   (lol-ctx
     {:matchup-link-start "/matchup-lol"
+     :record-link-start "/show-record-lol"
      :registration-link "/questions-lol"
      :squares-javascript (generate-javascript-hero-squares)
      :question-sort-function
@@ -244,15 +245,14 @@
         hn-user (:hn-user the-key)
         hn-opp (:hn-opp the-key)
         sq-user (:sq-user the-key)
-        sq-opp (:sq-opp the-key)]
+        sq-opp (:sq-opp the-key)
+        link (:link the-key)
+        ]
    (html [:tr {:onclick
-               (str "window.location = '"
-                    (:matchup-link-start (html-context))
-                    "/" mkey "-0';"
-                    )
+               (str "window.location = '" link "';")
                :style "cursor: pointer;"
                }
-         [:td {:style "width: 30px;"} "#" index]
+         (if index [:td {:style "width: 30px;"} "#" index])
          [:td
           [:img {:height "32" :width "32" :src sq-user}]
           [:span
@@ -263,12 +263,15 @@
                {:style "font-size: 12px;"} hn-user " vs. " hn-opp]]
          ])))
 
-(defn render-most-popular [the-vec]
-  (for [i (range (count the-vec))]
+(defn render-most-popular [the-vec args]
+  (let [draw-numbers (:numbers args true)]
+   (for [i (range (count the-vec))]
     (html [:table
            {:class
            "table table-hover table-striped table-condensed"}
-           (single-matchup-listing (nth the-vec i) (inc i))])))
+           (single-matchup-listing
+             (nth the-vec i)
+             (if draw-numbers (inc i)))]))))
 
 (defn game-stats-render [context-vars]
   (let [most-pop (:global-most-popular context-vars)
@@ -278,10 +281,10 @@
                    :class "row text-center"}
               [:div {:class "col-md-6"}
                [:h4 "Most popular matchups"]
-               (render-most-popular most-pop)]
+               (render-most-popular most-pop {})]
               [:div {:class "col-md-6"}
                [:h4 "Most recent records"]
-               (render-most-popular most-rec)
+               (render-most-popular most-rec {:numbers false})
                ]]))))
 
 (defn generic-registration-page [context-vars]
@@ -304,6 +307,14 @@
         ho (Integer. (nth findings 2))]
     (gen-matchup hu ho)))
 
+(defn gen-link-matchup-filter [matchup filter-id]
+  (str (:matchup-link-start (html-context))
+    "/" (:user matchup) "-" (:opponent matchup) "-0"))
+
+(defn gen-link-question [qid-tail]
+  (str (:record-link-start (html-context))
+    "/" qid-tail))
+
 (defn wrap-most-popular-data [most-pop]
   (let [h-full (heroes-full)
         squares (get-hero-squares)]
@@ -321,7 +332,9 @@
          (assoc :hn-user hn-user)
          (assoc :hn-opp hn-opp)
          (assoc :sq-user sq-user)
-         (assoc :sq-opp sq-opp))))))
+         (assoc :sq-opp sq-opp)
+         (assoc :link (gen-link-matchup-filter split 0))
+         )))))
 
 (defn wrap-most-recent-data [most-rec]
   (if most-rec
@@ -329,6 +342,7 @@
           squares (get-hero-squares)]
     (for [i most-rec]
       (let [split (matchup-pair-from-key i)
+            key-tail (nth i 2)
             hu (:user split)
             ho (:opponent split)
             hn-user (nth h-full hu)
@@ -341,7 +355,8 @@
              (assoc :hn-user hn-user)
              (assoc :hn-opp hn-opp)
              (assoc :sq-user sq-user)
-             (assoc :sq-opp sq-opp)))))))
+             (assoc :sq-opp sq-opp)
+             (assoc :link (gen-link-question key-tail))))))))
 
 (defn dota2-page []
   (wrap-html [:p "meow"]))
