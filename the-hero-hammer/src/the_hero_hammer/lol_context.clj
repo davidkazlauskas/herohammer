@@ -147,6 +147,9 @@
 (defn most-popular-question-sort [the-arr]
   (sort-by #(if %1 (:count %1) 0) > the-arr))
 
+(defn drop-tail-from-key [the-key]
+  (clojure.string/replace the-key #"^(\d+)-(\d+)-.*$" "$1-$2"))
+
 (defn gen-map-reduce-tasks-global [max-proc]
   [{:save-key-func (lol-generate-global-question-proc)
     :map-function lol-matchup-pair-from-key
@@ -165,7 +168,7 @@
                      (let [matchup (matchup-pair-from-key the-val)
                            qcount (get-matchup-question-count matchup)]
                      {:count qcount
-                      :key (nth the-val 2)}))
+                      :key (drop-tail-from-key (nth the-val 2))}))
      :initial-reduce (fn [the-val]
                        (let [the-arr (object-array 11)]
                          (if the-val
