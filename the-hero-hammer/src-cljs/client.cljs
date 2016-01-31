@@ -1,4 +1,5 @@
-(ns the-hero-hammer.js_client)
+(ns the-hero-hammer.js_client
+  (:require [ajax.core :as aj]))
 
 (defn by-id [the-id]
   (.getElementById js/document the-id))
@@ -19,6 +20,10 @@
        hu-s "-"
        ho-s "-"
        flt-s))
+
+(defn construct-link-to-10-random-comments []
+  (str js/randCommentsLink
+       "/" js/heroUser "-" js/heroOpponent))
 
 (defn thumb-link [opt]
   (aget js/heroSquares opt))
@@ -46,3 +51,8 @@
         to (by-id "thumb-opponent")]
     (set-attrib tu "src" hu-l)
     (set-attrib to "src" ho-l)))
+
+(defn ^:export show10RandomComments []
+  (let [to-get (construct-link-to-10-random-comments)]
+    (aj/GET to-get :handler
+            (fn [output] (js/alert output)))))
