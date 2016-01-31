@@ -20,7 +20,7 @@
 
 (defn get-key-batch [& args]
   "Get multiple keys from db (faster)"
-  (apply (get-in (*ctx-get-func*) [:dbinfo :get-key-batch] args)))
+  (apply (get-in (*ctx-get-func*) [:dbinfo :get-key-batch]) args))
 
 (defn get-ctx-jobs []
   (get-in (*ctx-get-func*) [:jobs]))
@@ -249,13 +249,15 @@
 (defn get-most-recent-questions [count-from-top]
   (let [count-key ((fn-global-question-count))
         count-res (get-key count-key)
+        glob-id-gen (fn-global-question-id)
         ]
     (if count-res
       (let [bot-range (- count-res (or count-from-top 10))
-            fn-bot-range (if (>= bot-range 0) bot-range 0)])
-      )
-    )
-  )
+            fn-bot-range (if (>= bot-range 0) bot-range 0)
+            the-keys (->> (range fn-bot-range count-res)
+                          (map glob-id-gen)
+                          (into []))]
+        (get-key-batch the-keys)))))
 
 ; SPEC OPS
 (defn gen-matchup [u o] {:user u :opponent o})
