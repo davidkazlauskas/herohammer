@@ -318,6 +318,19 @@
          (partial (fn-matchup-question-id) matchup))
        (map #(update-in %1 [:val] nippy/thaw))))
 
+(defn get-answers-with-comment [matchup id]
+  (let [ans-key ((fn-matchup-question-id) matchup id)
+        comm-key ((fn-matchup-comment-id) matchup id)
+        batch (get-key-batch [ans-key comm-key])
+        ans (nth batch 0)
+        comm (nth batch 1)]
+    (if ans
+      (let [ans-unzipped (nippy/thaw ans)]
+        (if comm
+          (assoc ans-unzipped :comment
+            (:comment (nippy/thaw comm)))
+          ans-unzipped)))))
+
 (defn get-matchup-question-count [matchup]
   (let [res (get-key ((fn-matchup-question-count) matchup))]
     (or res 0)))
