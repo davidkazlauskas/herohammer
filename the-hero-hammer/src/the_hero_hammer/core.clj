@@ -6,8 +6,7 @@
             [the-hero-hammer.hh_process :refer :all]
             [the-hero-hammer.lol_context :as lctx]
             [org.httpkit.server :refer [run-server]]
-            [cljs.build.api :as cljsbld]
-            [clj-time.core :as t])
+            [cljs.build.api :as cljsbld])
   (:use hiccup.core
         [ring.middleware.params :only [wrap-params]]))
 
@@ -418,6 +417,9 @@
             ]))
        ])))
 
+(defn date-from-unix [timestamp]
+  "123")
+
 (defn generic-show-record [id]
   (wrap-html
     (let [split (matchup-data-split id)
@@ -425,6 +427,7 @@
           rec-id (nth split 1)
           data-ans (get-answers-with-comment matchup rec-id)
           comm (:comment data-ans)
+          date (:date data-ans)
           parted (partition 2 (:answers data-ans))
           squares (get-hero-squares)
           hu (:user matchup)
@@ -435,6 +438,7 @@
         (if data-ans
           (html (render-hero-pair
             {:src-user square-user :src-opp square-opp})
+          (:p "Date: " (date-from-unix date))
           (render-answers parted)
           (if comm
             [:div {:class "row text-center"}
