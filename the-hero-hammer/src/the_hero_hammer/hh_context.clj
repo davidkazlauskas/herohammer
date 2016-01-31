@@ -404,19 +404,24 @@
   "Process (save) question in form
   {:hero-user :hero-opponent :comment :answers []}"
   [data]
-  (let [glob-id (store-next-question-global 0)
-        frozen-questions (nippy/freeze
-         {:globid glob-id :date (curr-unix-timestamp)
-          :answers (into [] (flatten (:answers data)))})
+  (let [comm-data (:comment data)
         matchup (gen-matchup (:hero-user data) (:hero-opponent data))
+        glob-id (store-next-question-global 0)
+        comm-id (if (not (clojure.string/blank? comm-data))
+                  (store-next-comment-matchup matchup 0))
+        main-block {:globid glob-id :date (curr-unix-timestamp)
+          :answers (into [] (flatten (:answers data)))}
+        with-comment (if comm-id
+                       (assoc main-block :commid comm-id) main-block)
+        frozen-questions (nippy/freeze with-comment)
         ]
     (let [qid (store-next-question-matchup
       matchup frozen-questions)]
       (set-key ((fn-global-question-id) glob-id)
                (nippy/freeze
                  ((fn-matchup-question-id) matchup qid)))
-      (store-next-comment-matchup matchup
-         (nippy/freeze {:qid qid :comment (:comment data)}))
+      (set-key ((fn-matchup-comment-id) matchup comm-id)
+         (nippy/freeze {:qid qid :comment comm-data}))
       (doseq [i (:answers data)]
         (set-question-first-time (get i 0) glob-id)))))
 
