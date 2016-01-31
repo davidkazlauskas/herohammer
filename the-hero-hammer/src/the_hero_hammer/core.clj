@@ -517,6 +517,11 @@
         [:p {:class "text-center"}
          (str (range-size (:counts qdata)) " samples.")]))
 
+(defn export-matchup-data-to-js [user opp]
+  (html [:script
+         "heroUser = " user ";"
+         "heroOpponent = " opp ";"]))
+
 (defn lol-render-matchup-data [id]
   (lol-ctx
     (let [[matchup filter-id]
@@ -535,6 +540,7 @@
           sq-ho (nth squares ho)]
         (wrap-html
           (html
+            (export-matchup-data-to-js hu ho)
             (render-vs-title hn-hu hn-ho)
             (render-hero-pair
               {:src-user sq-hu :src-opp sq-ho})
