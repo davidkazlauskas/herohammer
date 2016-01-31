@@ -191,7 +191,6 @@
 
 (defn hero-icon [thumb-id]
   (html [:img {:width 120 :height 120
-               ;:src "http://vignette1.wikia.nocookie.net/leagueoflegends/images/1/18/AhriSquare.png"
                :src ""
                :style "margin-left: 10px; margin-right: 10px;"
                :id thumb-id
