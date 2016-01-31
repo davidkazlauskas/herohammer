@@ -511,7 +511,7 @@
 )
 
 (defn squares-for-heroes []
-  (map square-for-hero (all-heroes-lol)))
+  (into [] (map square-for-hero (all-heroes-lol))))
 
 (def ^:dynamic *all-questions-lol*
   (all-questions-lol))
