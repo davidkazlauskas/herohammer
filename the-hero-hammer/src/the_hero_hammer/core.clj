@@ -133,7 +133,11 @@
             [:div {:class "col-md-2"}]
             [:div {:class "col-md-8"} towrap]
             [:div {:class "col-md-2"}]
-            ]]]
+            ]
+           [:div {:class "panel"}
+            [:div {:class "panel-footer text-center"}
+             [:span "The Hero Hammer 2016"]]]
+           ]]
          ]))
 
 (defn index
