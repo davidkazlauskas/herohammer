@@ -422,7 +422,9 @@
   {
    :hero-user (rand-nth heroes)
    :hero-opponent (rand-nth heroes)
-   :comment "berkbreken"
+   :comment (clojure.string/join
+              " " (shuffle
+                (clojure.string/split "its peanut butter jelly time" #" ")))
    :answers (rnd-answers)
   })
 
