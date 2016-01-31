@@ -265,7 +265,7 @@
     (html [:table
            {:class
            "table table-hover table-striped table-condensed"}
-           (single-matchup-listing (nth the-vec i) i)])))
+           (single-matchup-listing (nth the-vec i) (inc i))])))
 
 (defn game-stats-render [context-vars]
   (let [most-pop (:global-most-popular context-vars)]
