@@ -233,13 +233,19 @@
          (hero-icon "thumb-opponent")]
         (update-hero-squares-script)))
 
+(defn render-most-popular [the-vec]
+  (println the-vec)
+  (for [i the-vec]
+    (html [:p (:key i)])))
+
 (defn game-stats-render [context-vars]
   (let [most-pop (:global-most-popular context-vars)]
     (if most-pop
       (html [:div {:style "margin-top: 20px;"
                    :class "row text-center"}
               [:div {:class "col-md-6"}
-               [:h4 "Most popular matchups"]]
+               [:h4 "Most popular matchups"]
+               (render-most-popular most-pop)]
               [:div {:class "col-md-6"}
                [:h4 "Most recent records"]]]))))
 
