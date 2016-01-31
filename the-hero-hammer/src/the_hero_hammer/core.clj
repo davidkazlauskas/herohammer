@@ -309,13 +309,31 @@
            hn-opp (nth h-full ho)
            sq-user (nth squares hu)
            sq-opp (nth squares ho)]
-       (println "squares" sq-user sq-opp)
        (-> i
          (assoc :matchup split)
          (assoc :hn-user hn-user)
          (assoc :hn-opp hn-opp)
          (assoc :sq-user sq-user)
          (assoc :sq-opp sq-opp))))))
+
+(defn wrap-most-recent-data [most-rec]
+  (if most-rec
+    (let [h-full (heroes-full)
+          squares (get-hero-squares)]
+    (for [i most-rec]
+      (let [split (matchup-pair-from-key i)
+            hu (:user split)
+            ho (:opponent split)
+            hn-user (nth h-full hu)
+            hn-opp (nth h-full ho)
+            sq-user (nth squares hu)
+            sq-opp (nth squares ho)]
+            (-> i
+             (assoc :matchup split)
+             (assoc :hn-user hn-user)
+             (assoc :hn-opp hn-opp)
+             (assoc :sq-user sq-user)
+             (assoc :sq-opp sq-opp)))))))
 
 (defn dota2-page []
   (wrap-html [:p "meow"]))
@@ -326,7 +344,9 @@
           :global-most-popular
             (wrap-most-popular-data
               (get-most-popular-matchups-global))
-          :global-most-recent (get-most-recent-questions 10)
+          :global-most-recent
+            (wrap-most-recent-data
+               (get-most-recent-questions 10))
           }]
       (wrap-html (generic-registration-page context-vars)))))
 
