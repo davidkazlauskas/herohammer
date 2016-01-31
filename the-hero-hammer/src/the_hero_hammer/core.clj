@@ -6,7 +6,8 @@
             [the-hero-hammer.hh_process :refer :all]
             [the-hero-hammer.lol_context :as lctx]
             [org.httpkit.server :refer [run-server]]
-            [cljs.build.api :as cljsbld])
+            [cljs.build.api :as cljsbld]
+            [clojure.data.json :as json])
   (:use hiccup.core
         [ring.middleware.params :only [wrap-params]]))
 
@@ -544,6 +545,20 @@
                          [:li {:class "list-group-item"}
                               %1])))])))))
 
+(defn random-range [to-make max-num]
+  (loop [the-set #{}]
+    (if (or (>= (count the-set) to-make) (>= (count the-set) max-num))
+      the-set
+      (recur (conj the-set (rand-int max-num))))))
+
+(defn lol-matchup-random-comments [id]
+  (lol-ctx
+    (let [split (hero-pair-from-part-key id)
+          comm-count (get-comments-count split)
+          rnd-nums (into [] (random-range 10 comm-count))
+          data (get-comments-by-id split rnd-nums)]
+      (json/write-str data))))
+
 (defn lol-question-set-similarity
   "Return percentage of values picked from user"
   [request]
@@ -572,6 +587,7 @@
   (GET "/lol" [] (lol-page))
   (GET "/questions-lol" [] (lol-render-questions))
   (GET "/show-record-lol/:id" [id] (lol-show-record id))
+  (GET "/comments-lol/random/:matchup" [matchup] (lol-matchup-random-comments matchup))
   (GET "/matchup-lol/:id" [id] (lol-render-matchup-data id))
   (POST (q-post-link) {params :params} (lol-post-questions params)
   (route/not-found "Page not found")))
