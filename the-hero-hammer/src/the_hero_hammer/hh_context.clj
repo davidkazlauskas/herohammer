@@ -240,7 +240,7 @@
 
 (defn get-most-popular-matchups-global []
   (let [the-data (get-key ((fn-macthup-most-popular-global)))]
-    (if the-data (:val (nippy/thaw the-data)) nil)))
+    (if the-data (butlast (:val (nippy/thaw the-data))) nil)))
 
 ; SPEC OPS
 (defn gen-matchup [u o] {:user u :opponent o})

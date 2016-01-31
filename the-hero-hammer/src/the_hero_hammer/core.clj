@@ -233,6 +233,9 @@
          (hero-icon "thumb-opponent")]
         (update-hero-squares-script)))
 
+(defn single-matchup-listing [the-key]
+  (html nil))
+
 (defn render-most-popular [the-vec]
   (println the-vec)
   (for [i the-vec]
@@ -262,6 +265,26 @@
      ]
      (game-stats-render context-vars)
     ))
+
+(defn hero-pair-from-part-key [the-key]
+  (let [findings (re-find #"(\d+)-(\d+)" the-key)
+        hu (Integer. (nth findings 1))
+        ho (Integer. (nth findings 2))]
+    (gen-matchup hu ho)))
+
+(defn wrap-most-popular-data [most-pop]
+  (let [h-full (heroes-full)]
+   (for [i most-pop]
+     (let [the-key (:key i)
+           split (hero-pair-from-part-key the-key)
+           hu (:user split)
+           ho (:opponent split)
+           hn-user (nth h-full hu)
+           hn-opp (nth h-full ho)]
+       (-> i
+         (assoc :matchup split)
+         (assoc :hn-user hn-user)
+         (assoc :hn-opp hn-opp))))))
 
 (defn dota2-page []
   (wrap-html [:p "meow"]))
