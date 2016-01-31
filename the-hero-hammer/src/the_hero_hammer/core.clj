@@ -422,6 +422,10 @@
     (java.text.SimpleDateFormat. "dd-MM-yyyy HH:mm:ss")
     (java.util.Date. (* 1000 timestamp))))
 
+(defn render-vs-title [hero-user hero-opponent]
+  (html [:div {:class "col-md-12 text-center"}
+         [:h2 hero-user " vs. " hero-opponent]]))
+
 (defn generic-show-record [id]
   (wrap-html
     (let [split (matchup-data-split id)
@@ -432,13 +436,18 @@
           date (:date data-ans)
           parted (partition 2 (:answers data-ans))
           squares (get-hero-squares)
+          heroes (heroes-full)
           hu (:user matchup)
           ho (:opponent matchup)
+          name-user (nth heroes hu)
+          name-opp (nth heroes ho)
           square-user (nth squares hu)
           square-opp (nth squares ho)]
       (html
         (if data-ans
-          (html (render-hero-pair
+          (html
+            (render-vs-title name-user name-opp)
+            (render-hero-pair
             {:src-user square-user :src-opp square-opp})
           [:p "Date: " (date-from-unix date)]
           (render-answers parted)
@@ -525,8 +534,7 @@
           sq-ho (nth squares ho)]
         (wrap-html
           (html
-            [:div {:class "col-md-12 text-center"}
-             [:h2 hn-hu " vs. " hn-ho]]
+            (render-vs-title hn-hu hn-ho)
             (render-hero-pair
               {:src-user sq-hu :src-opp sq-ho})
                 [:ul {:class "list-group"}
