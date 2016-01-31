@@ -403,14 +403,28 @@
       :opponent (Integer. (nth findings 2))}
       (Integer. (nth findings 3))]))
 
+(defn render-answers [pairs]
+  (let [questions (questions-full)]
+    (println pairs questions)
+    (html [:table {:class "table table-condensed"}
+       (for [i pairs]
+         (let [question (nth questions (nth i 0))
+               options (:options question)]
+            [:tr
+              [:td (:question question)]
+              [:td (nth options (nth i 1))]
+            ]))
+       ])))
+
 (defn lol-show-record [id]
   (lol-ctx
     (wrap-html
       (let [split (matchup-data-split id)
             matchup (nth split 0)
             rec-id (nth split 1)
-            data-ans (get-answers-with-comment matchup rec-id)]
-        (html (str data-ans))))))
+            data-ans (get-answers-with-comment matchup rec-id)
+            parted (partition 2 (:answers data-ans))]
+        (render-answers parted)))))
 
 (defn bold-upper-text [the-text]
   (html [:p {:style "color: black; font-weight: bold;"}
