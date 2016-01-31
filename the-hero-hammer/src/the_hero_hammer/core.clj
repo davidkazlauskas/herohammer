@@ -233,7 +233,16 @@
          (hero-icon "thumb-opponent")]
         (update-hero-squares-script)))
 
-(defn generic-registration-page []
+(defn most-popular-render [most-pop]
+  (if most-pop
+    (html [:div {:style "margin-top: 20px;"
+                 :class "row text-center"}
+            [:div {:class "col-md-6"}
+             [:h4 "Most popular matchups"]]
+            [:div {:class "col-md-6"}
+             [:h4 "Most recent records"]]])))
+
+(defn generic-registration-page [context-vars]
   (html
     (context-js-variables)
     [:div {:class "form-group"}
@@ -243,14 +252,19 @@
       [:br]
       (filter-dropdown "user-filter")]
      (reg-and-show-buttons)
-     ]))
+     ]
+     (most-popular-render (:global-most-popular context-vars))
+    ))
 
 (defn dota2-page []
   (wrap-html [:p "meow"]))
 
 (defn lol-page []
   (lol-ctx
-    (wrap-html (generic-registration-page))))
+    (let [context-vars {
+          :global-most-popular (get-most-popular-matchups-global)
+          }]
+      (wrap-html (generic-registration-page context-vars)))))
 
 (defmacro q-post-link [] "/questions-post")
 
