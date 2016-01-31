@@ -424,6 +424,7 @@
           matchup (nth split 0)
           rec-id (nth split 1)
           data-ans (get-answers-with-comment matchup rec-id)
+          comm (:comment data-ans)
           parted (partition 2 (:answers data-ans))
           squares (get-hero-squares)
           hu (:user matchup)
@@ -432,11 +433,16 @@
           square-opp (nth squares ho)]
       (html
         (if data-ans
-          (do (render-hero-pair
+          (html (render-hero-pair
             {:src-user square-user :src-opp square-opp})
-          (render-answers parted))
-          [:h3 "No such question."]
-          )))))
+          (render-answers parted)
+          (if comm
+            [:div {:class "row text-center"}
+             [:div {:class "panel text-center col-md-12"}
+              [:h4 "User comment"]
+              [:p {:style "font-size: 17px;"} comm]
+              ]]))
+          [:h3 "No such question."])))))
 
 (defn lol-show-record [id]
   (lol-ctx (generic-show-record id)))
