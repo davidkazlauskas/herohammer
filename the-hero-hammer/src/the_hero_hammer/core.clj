@@ -326,6 +326,7 @@
           :global-most-popular
             (wrap-most-popular-data
               (get-most-popular-matchups-global))
+          :global-most-recent (get-most-recent-questions 10)
           }]
       (wrap-html (generic-registration-page context-vars)))))
 
