@@ -358,12 +358,12 @@
   (let [initial-keys
         (into [] (map #((fn-matchup-comment-id) matchup %1) idvec))
         initial-query (get-key-batch initial-keys)]
-    (into [] (map #(if %1 (nippy/thaw %1))))))
+    (into [] (map #(if %1 (nippy/thaw %1)) initial-query))))
 
 (defn get-comments-count
   "Get comment count for matchup"
   [matchup]
-  (or ((fn-matchup-comment-count) matchup) 0))
+  (or (get-key ((fn-matchup-comment-count) matchup)) 0))
 
 (defn get-question-first-time
   "Get first occourence of question asked"

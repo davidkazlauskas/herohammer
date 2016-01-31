@@ -46,6 +46,7 @@
     {:matchup-link-start "/matchup-lol"
      :record-link-start "/show-record-lol"
      :registration-link "/questions-lol"
+     :rand-comments-link "/comments-lol/random"
      :squares-javascript (generate-javascript-hero-squares)
      :question-sort-function
        (fn [the-q]
@@ -520,7 +521,9 @@
 (defn export-matchup-data-to-js [user opp]
   (html [:script
          "heroUser = " user ";"
-         "heroOpponent = " opp ";"]))
+         "heroOpponent = " opp ";"
+         "randCommentsLink = " (:rand-comments-link (html-context)) ";"
+         ]))
 
 (defn lol-render-matchup-data [id]
   (lol-ctx

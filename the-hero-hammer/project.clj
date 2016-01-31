@@ -11,7 +11,9 @@
                  [debugger "0.1.7"]
                  [org.clojure/clojurescript "1.7.228"]
                  [co.paralleluniverse/pulsar "0.7.4"]
-                 [clj-time "0.11.0"]]
+                 [clj-time "0.11.0"]
+                 [org.clojure/data.json "0.2.6"]
+                 [cljs-ajax "0.5.3"]]
   :java-agents [[co.paralleluniverse/quasar-core "0.7.4"]]
   :plugins [[lein-cljsbuild "1.1.2"]]
   :main the-hero-hammer.core
