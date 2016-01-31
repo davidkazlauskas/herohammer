@@ -418,7 +418,9 @@
        ])))
 
 (defn date-from-unix [timestamp]
-  "123")
+  (.format
+    (java.text.SimpleDateFormat. "dd-MM-yyyy HH:mm:ss")
+    (java.util.Date. timestamp)))
 
 (defn generic-show-record [id]
   (wrap-html
