@@ -420,7 +420,7 @@
 (defn date-from-unix [timestamp]
   (.format
     (java.text.SimpleDateFormat. "dd-MM-yyyy HH:mm:ss")
-    (java.util.Date. timestamp)))
+    (java.util.Date. (* 1000 timestamp))))
 
 (defn generic-show-record [id]
   (wrap-html
@@ -440,7 +440,7 @@
         (if data-ans
           (html (render-hero-pair
             {:src-user square-user :src-opp square-opp})
-          (:p "Date: " (date-from-unix date))
+          [:p "Date: " (date-from-unix date)]
           (render-answers parted)
           (if comm
             [:div {:class "row text-center"}
