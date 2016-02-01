@@ -153,8 +153,8 @@
           [:script {:src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
                     :integrity "sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
                     :crossorigin "anonymous"}]
-          [:script {:scr "https://www.google.com/recaptcha/api.js"}]
-          [:script {:src "/resources/js/main.js"}]]
+          [:script {:src "/resources/js/main.js"}]
+          [:script {:src "http://www.google.com/recaptcha/api.js"}]]
          [:body
           (navbar {})
           [:div {:class "container"}
@@ -466,13 +466,17 @@
                         [:p "Your comment"]
                         [:textarea {:name "user-comment"
                                   :rows 4 :cols 50}
-                         comm-data
-                         ]]
+                         comm-data]]
+                       [:div {:class "col-md-12"
+                              :style (str "margin-left: 28%; margin-right: 28%;"
+                                          "margin-top: 20px; margin-bottom: 20px;")
+                              } (render-recaptcha)]
                        [:div {:class "row text-center"
                               :style "margin-top: 10px;"}
                         [:input {:class "btn btn-success"
                                  :type "submit"
-                                 :value "Submit record"}]]]]))]
+                                 :value "Submit record"}]]]
+                      ]))]
                  body)))
   ([req] (lol-render-questions nil req)))
 
