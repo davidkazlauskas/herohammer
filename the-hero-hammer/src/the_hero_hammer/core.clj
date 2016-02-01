@@ -11,7 +11,8 @@
             [cljs.build.api :as cljsbld]
             [clojure.data.json :as json])
   (:use hiccup.core
-        [ring.middleware.params :only [wrap-params]]))
+        [ring.middleware.params :only [wrap-params]]
+        [ring.middleware.cookies :as cook]))
 
 
 (def ^:dynamic *html-context* nil)
@@ -48,6 +49,7 @@
   (lol-ctx
     {:main-page-for-ctx "/lol"
      :question-post-link "/questions-post-lol"
+     :question-get-link "/questions-lol"
      :matchup-link-start "/matchup-lol"
      :add-record-link-start "/questions-lol"
      :record-link-start "/show-record-lol"
@@ -92,18 +94,26 @@
    }
   )
 
-(defn render-question [q]
-  (let [shortname (:shortname q)] (html
+(defn render-question [q form-data]
+  (let [shortname (:shortname q)
+        sel (get form-data shortname)
+        sel-no (if sel (parse-int sel))]
+    (html
    [:div {:class "text-center"} [:p (:question q)]
    [:div {:class "form-inline"}
-    (map-indexed #(identity
-          [:label
-                [:input
-                 {:style "margin-left: 7px; margin-right: 7px;"
+    (map-indexed
+      #(let [prelim-attr
+             {:style "margin-left: 7px; margin-right: 7px;"
                   :type "radio"
                   :value %1
-                  :name shortname
-                  } %2]])
+                  :name shortname}]
+          [:label
+                [:input
+                 (if
+                   (not (and sel-no (= sel-no %1)))
+                   prelim-attr
+                   (assoc prelim-attr :checked "checked"))
+                  %2]])
         (:options q))]]
    [:br])))
 
@@ -315,19 +325,33 @@
                (render-most-popular most-rec {:numbers false})
                ]]))))
 
-(defn generic-registration-page [context-vars]
-  (html
-    (context-js-variables)
-    [:div {:class "form-group"}
-     (generate-hero-selection {})
-     [:div {:class "form-inline text-center"}
-      [:label {:for "user-filter"} "Filter to use"]
-      [:br]
-      (filter-dropdown "user-filter")]
-     (reg-and-show-buttons)
-     ]
-     (game-stats-render context-vars)
-    ))
+(defn bootstrap-msg [the-val classes glyphs]
+  (html [:div {:class (str "alert " classes)}
+         [:span {:class (str "glyphicon " glyphs)
+                 :aria-hidden "true"}]
+         [:span {:class "sr-only"} "Error:"]
+         the-val]))
+
+(defn bootstrap-error [the-val]
+  (bootstrap-msg the-val "alert-danger" "glyphicon-exclamation-sign"))
+
+(defn bootstrap-successs [the-val]
+  (bootstrap-msg the-val "alert-success" "glyphicon-ok"))
+
+(defn generic-registration-page [context-vars req]
+  (let [good-msg (get-in req [:cookies "q-praise" :value])]
+    (html
+      (context-js-variables)
+      (if good-msg (bootstrap-successs good-msg))
+      [:div {:class "form-group"}
+       (generate-hero-selection {})
+       [:div {:class "form-inline text-center"}
+        [:label {:for "user-filter"} "Filter to use"]
+        [:br]
+        (filter-dropdown "user-filter")]
+       (reg-and-show-buttons)
+       ]
+       (game-stats-render context-vars))))
 
 (defn hero-pair-from-part-key [the-key]
   (if (not (clojure.string/blank? the-key))
@@ -388,7 +412,7 @@
              (assoc :sq-opp sq-opp)
              (assoc :link (gen-link-question key-tail))))))))
 
-(defn generic-main-page []
+(defn generic-main-page [req]
   (let [context-vars {
             :global-most-popular
               (wrap-most-popular-data
@@ -397,42 +421,49 @@
               (wrap-most-recent-data
                  (get-most-recent-questions 10))
             }]
-        (wrap-html (generic-registration-page context-vars))))
+        (wrap-html (generic-registration-page context-vars req))))
 
 (defn dota2-page []
   (wrap-html [:p "meow"]))
 
-(defn lol-page []
-  (lol-ctx (generic-main-page)))
+(defn lol-page [req]
+  (lol-ctx (generic-main-page req)))
 
 (defn q-post-link [] (:question-post-link (html-context)))
+(defn q-get-link [] (:question-get-link (html-context)))
 
 (defn lol-render-questions
-  ([matchup]
+  ([matchup req]
     (lol-ctx (let [split (hero-pair-from-part-key matchup)
+                   valid-error (get-in req [:cookies "q-error" :value])
+                   form-data (get-in req [:cookies "q-forms" :value])
+                   forms-des (if form-data (json/read-str form-data))
                    hu (:user split)
-                   ho (:opponent split)]
-               (wrap-html
-                 (html
-                   (context-js-variables)
-                   [:form {:id "questions-form"
-                         :method "POST" :action (q-post-link)}
-                  (generate-hero-selection
-                    (if split {:selected-user hu
-                               :selected-opponent ho}))
-                  [:div {:class "container-fluid input-group"}
-                   (map render-question (questions-full))]
-                  [:div {:classs "container"}
-                   [:div {:class "row text-center"}
-                    [:p "Your comment"]
-                    [:textarea {:name "user-comment"
-                              :rows 4 :cols 50}]]
-                   [:div {:class "row text-center"
-                          :style "margin-top: 10px;"}
-                    [:input {:class "btn btn-success"
-                             :type "submit"
-                             :value "Submit record"}]]]])))))
-  ([] (lol-render-questions nil)))
+                   ho (:opponent split)
+                   body (wrap-html
+                     (html
+                       (context-js-variables)
+                       (if valid-error
+                         (bootstrap-error valid-error ))
+                       [:form {:id "questions-form"
+                             :method "POST" :action (q-post-link)}
+                      (generate-hero-selection
+                        (if split {:selected-user hu
+                                   :selected-opponent ho}))
+                      [:div {:class "container-fluid input-group"}
+                       (map #(render-question %1 forms-des) (questions-full))]
+                      [:div {:classs "container"}
+                       [:div {:class "row text-center"}
+                        [:p "Your comment"]
+                        [:textarea {:name "user-comment"
+                                  :rows 4 :cols 50}]]
+                       [:div {:class "row text-center"
+                              :style "margin-top: 10px;"}
+                        [:input {:class "btn btn-success"
+                                 :type "submit"
+                                 :value "Submit record"}]]]]))]
+                 body)))
+  ([req] (lol-render-questions nil req)))
 
 (defn matchup-data-split [the-str]
   (let [findings (re-find #"(\d+)+-(\d+)-(\d+)" the-str)]
@@ -644,21 +675,29 @@
 (defmacro min-questions [] 77)
 (defmacro max-comment-size [] 512)
 
-(defn set-cookie [req key-val])
+(defn short-cookie [the-name the-value]
+  {the-name {:value the-value :max-age 5}})
 
 (defn lol-validate-answer [the-data req]
+  (println req)
   (let [answered (lol-question-set-similarity the-data)
         ret-err (fn [err]
-          (-> (ring.util.response/redirect (:url req))
-              (assoc :cookies {"q-error" err})))
+          (let [cookie-err (short-cookie "q-error" err)
+                cookie-forms (short-cookie "q-forms" (json/write-str the-data))
+                merged (merge cookie-err cookie-forms)]
+            (-> (ring.util.response/redirect (get-in req [:headers "referer"] (q-get-link)))
+              (assoc :cookies merged)
+              cook/cookies-response)))
         ret-succ (fn [praise]
           (-> (ring.util.response/redirect (:main-page-for-ctx (html-context)))
-              (assoc :cookies {"q-praise" praise})))]
+              (assoc :cookies {"q-praise" {:value praise :max-age 5}})
+              cook/cookies-response))]
     (cond
       (> (min-questions) answered)
-        (ret-err
+        (do (println "DAZZLIN" answered)
+         (ret-err
           (str "Only " answered "% questions were answered."
-                     " The minimum is " (min-questions) "%"))
+                     " The minimum is " (min-questions) "%")))
       :else
         (let [form-data (form-to-data the-data)
               comm (:comment form-data)]
@@ -680,15 +719,15 @@
   (route/files "/resources/" {:root "resources/public/"})
   (GET "/" [] (index))
   (GET "/dota2" [] (dota2-page))
-  (GET "/lol" [] (lol-page))
-  (GET "/questions-lol/:matchup" [matchup] (lol-render-questions matchup))
-  (GET "/questions-lol" [matchup] (lol-render-questions))
+  (GET "/lol" [:as req] (lol-page req))
+  (GET "/questions-lol/:matchup" [matchup :as req] (lol-render-questions matchup req))
+  (GET "/questions-lol" [matchup :as req] (lol-render-questions req))
   (GET "/show-record-lol/:id" [id] (lol-show-record id))
   (GET "/comments-lol/random/:matchup" [matchup] (lol-matchup-random-comments matchup))
   (GET "/comments-lol/recent/:matchup" [matchup] (lol-matchup-recent-comments matchup))
   (GET "/matchup-lol/:id" [id] (lol-render-matchup-data id))
-  (POST "/questions-post-lol" req (lol-post-questions req)
-  (route/not-found "Page not found")))
+  (POST "/questions-post-lol" req (lol-post-questions req))
+  (route/not-found "Page not found"))
 
 (defn run-jobs []
   (lol-ctx
@@ -697,4 +736,7 @@
 (defn -main [& args]
   (println "Muah runnin!")
   (run-jobs)
-  (run-server (wrap-params myapp) {:port 5000}))
+  (-> myapp
+      wrap-params
+      cook/wrap-cookies
+      (run-server {:port 5000})))
