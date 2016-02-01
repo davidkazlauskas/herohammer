@@ -387,20 +387,22 @@
              (assoc :sq-opp sq-opp)
              (assoc :link (gen-link-question key-tail))))))))
 
+(defn generic-main-page []
+  (let [context-vars {
+            :global-most-popular
+              (wrap-most-popular-data
+                (get-most-popular-matchups-global))
+            :global-most-recent
+              (wrap-most-recent-data
+                 (get-most-recent-questions 10))
+            }]
+        (wrap-html (generic-registration-page context-vars))))
+
 (defn dota2-page []
   (wrap-html [:p "meow"]))
 
 (defn lol-page []
-  (lol-ctx
-    (let [context-vars {
-          :global-most-popular
-            (wrap-most-popular-data
-              (get-most-popular-matchups-global))
-          :global-most-recent
-            (wrap-most-recent-data
-               (get-most-recent-questions 10))
-          }]
-      (wrap-html (generic-registration-page context-vars)))))
+  (lol-ctx (generic-main-page)))
 
 (defmacro q-post-link [] "/questions-post")
 
