@@ -722,7 +722,6 @@
           (-> (ring.util.response/redirect (:main-page-for-ctx (html-context)))
               (assoc :cookies {"q-praise" {:value praise :max-age 5}})
               cook/cookies-response))]
-    (println req)
     (cond
       (> (min-questions) answered)
          (ret-err
