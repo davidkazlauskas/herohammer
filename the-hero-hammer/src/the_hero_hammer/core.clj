@@ -9,7 +9,8 @@
             [the-hero-hammer.storage_ram :as sram]
             [org.httpkit.server :refer [run-server]]
             [cljs.build.api :as cljsbld]
-            [clojure.data.json :as json])
+            [clojure.data.json :as json]
+            [clj-http.client :as hclient])
   (:use hiccup.core
         [ring.middleware.params :only [wrap-params]]
         [ring.middleware.cookies :as cook]))
@@ -45,7 +46,9 @@
          first
          (#(round-percent-ratio (/ %1 divisor))))))
 
+(defmacro recaptcha-post-url [] "https://www.google.com/recaptcha/api/siteverify")
 (defmacro my-recaptcha-key [] "6Lc87xYTAAAAAPV2x9CEC8fZ68l_QEh3eYR_Wu5s")
+(defmacro my-recaptcha-key-sec [] "6Lc87xYTAAAAAMqxM_wvkgRXzaWsh2RPXU5Fmrc9")
 
 (defn render-recaptcha []
   (html [:div {:class "g-recaptcha"
@@ -693,6 +696,20 @@
 (defn short-cookie [the-name the-value]
   {the-name {:value the-value :max-age 5}})
 
+(defn verify-recaptcha [response ip]
+  (let [answer (hclient/post (recaptcha-post-url)
+    {:json
+      (json/write-str
+       {:secret (my-recaptcha-key-sec)
+        :response response
+        :remoteip ip})
+    :content-type :json
+    :accept :json})
+        parsed (if answer (json/read-str answer))]
+    (if parsed
+      (get parsed "success")
+      false)))
+
 (defn lol-validate-answer [the-data req]
   (let [answered (lol-question-set-similarity the-data)
         ret-err (fn [err]
@@ -706,6 +723,7 @@
           (-> (ring.util.response/redirect (:main-page-for-ctx (html-context)))
               (assoc :cookies {"q-praise" {:value praise :max-age 5}})
               cook/cookies-response))]
+    (println req)
     (cond
       (> (min-questions) answered)
          (ret-err
@@ -715,7 +733,9 @@
         (let [form-data (form-to-data the-data)
               comm (:comment form-data)
               hu (:hero-user form-data)
-              ho (:hero-opponent form-data)]
+              ho (:hero-opponent form-data)
+              recapthcha (get the-data "g-recaptcha-response")
+              ]
           (cond
             (or (nil? hu)
                 (nil? ho))
@@ -726,7 +746,13 @@
                 (ret-err (str "Comment exceeds maximum size of "
                             (max-comment-size) "."))
             ; TODO: check captcha
-            :else (ret-succ "Thank you! Your record will help everyone."))
+            (clojure.string/blank? recapthcha)
+                (ret-err "Recaptcha answer is invalid.")
+            :else (let [remote-ip (:remote-addr req)
+                        recaptcha-ans (verify-recaptcha recapthcha remote-ip)]
+                   (if recaptcha-ans
+                     (ret-succ "Thank you! Your record will help everyone.")
+                     (ret-err "Recaptcha answer is incorrect."))))
           ))))
 
 (defn lol-post-questions [req]
