@@ -2,20 +2,19 @@
 
 (def ^:dynamic *db-context* nil)
 
-(defn get-db-context []
-  *db-context*)
+(def ^:dynamic *get-db-context* nil)
 
 (defn fn-get-key []
-  (:get-key (get-db-context)))
+  (:get-key (*get-db-context*)))
 
 (defn fn-set-key []
-  (:set-key (get-db-context)))
+  (:set-key (*get-db-context*)))
 
 (defn fn-set-if-not-exists []
-  (:set-if-not-exists (get-db-context)))
+  (:set-if-not-exists (*get-db-context*)))
 
 (defn fn-get-keys-batch []
-  (:get-key-batch (get-db-context)))
+  (:get-key-batch (*get-db-context*)))
 
 (defn get-key
   "Get key"
