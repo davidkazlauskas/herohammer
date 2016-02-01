@@ -46,7 +46,8 @@
 
 (def ^:dynamic *html-context-lol*
   (lol-ctx
-    {:matchup-link-start "/matchup-lol"
+    {:main-page-for-ctx "/lol"
+     :matchup-link-start "/matchup-lol"
      :add-record-link-start "/questions-lol"
      :record-link-start "/show-record-lol"
      :registration-link "/questions-lol"
@@ -72,7 +73,9 @@
        (questions-full)))))
 
 (defn parse-int [s]
-   (Integer. (re-find  #"\d+" s )))
+   (if s
+     (let [try-parse (re-find  #"\d+" s)]
+       (if try-parse (Integer. try-parse)))))
 
 (defn form-to-data [form]
   {
@@ -636,18 +639,39 @@
     (* (/ (count cross) (count *radio-set-lol*)) 100)))
 
 (defmacro min-questions [] 77)
+(defmacro max-comment-size [] 512)
+
+(defn set-cookie [req key-val])
+
+(defn lol-validate-answer [the-data req]
+  (let [answered (lol-question-set-similarity the-data)
+        ret-err (fn [err]
+          (-> (ring.util.response/redirect (:url req))
+              (assoc :cookies {"q-error" err})))
+        ret-succ (fn [praise]
+          (-> (ring.util.response/redirect (:main-page-for-ctx (html-context)))
+              (assoc :cookies {"q-praise" praise})))]
+    (cond
+      (> (min-questions) answered)
+        (ret-err
+          (str "Only " answered "% questions were answered."
+                     " The minimum is " (min-questions) "%"))
+      :else
+        (let [form-data (form-to-data the-data)
+              comm (:comment form-data)]
+          (cond (or
+                  (nil? (:hero-user form-data))
+                  (nil? (:hero-opponent form-data))
+                 ) nil) ; these are bogus requests, don't give answer
+          (cond (and comm (>= (count comm) (max-comment-size)))
+            (ret-err (str "Comment exceeds maximum size of "
+                          (max-comment-size) ".")))
+          ; TODO: check captcha
+          :else (ret-succ "Thank you! Your record will help everyone.")))))
 
 (defn lol-post-questions [req]
-  (lol-ctx (let [answered (lol-question-set-similarity req)]
-    (if (> (min-questions) answered)
-      (do
-      (str "Only " answered "% of questions were answered."
-           " Minimum is " (min-questions) "%."))
-      (do
-        (process-question (form-to-data req))
-          (html [:p (map #(html [:p %1]) req)]))
-      )
-    )))
+  (lol-ctx (let [form-data (:params req)]
+    (lol-validate-answer form-data req))))
 
 (defroutes myapp
   (route/files "/resources/" {:root "resources/public/"})
@@ -660,7 +684,7 @@
   (GET "/comments-lol/random/:matchup" [matchup] (lol-matchup-random-comments matchup))
   (GET "/comments-lol/recent/:matchup" [matchup] (lol-matchup-recent-comments matchup))
   (GET "/matchup-lol/:id" [id] (lol-render-matchup-data id))
-  (POST (q-post-link) {params :params} (lol-post-questions params)
+  (POST (q-post-link) req (lol-post-questions req)
   (route/not-found "Page not found")))
 
 (defn run-jobs []
