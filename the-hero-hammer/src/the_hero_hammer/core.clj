@@ -592,6 +592,15 @@
           data (get-comments-by-id split rnd-nums)]
       (json/write-str data))))
 
+(defn lol-matchup-recent-comments [id]
+  (lol-ctx
+    (let [split (hero-pair-from-part-key id)
+          comm-count (get-comments-count split)
+          rnd-nums (reverse
+                      (range (- comm-count 10) comm-count))
+          data (get-comments-by-id split rnd-nums)]
+      (json/write-str data))))
+
 (defn lol-question-set-similarity
   "Return percentage of values picked from user"
   [request]
@@ -621,6 +630,7 @@
   (GET "/questions-lol" [] (lol-render-questions))
   (GET "/show-record-lol/:id" [id] (lol-show-record id))
   (GET "/comments-lol/random/:matchup" [matchup] (lol-matchup-random-comments matchup))
+  (GET "/comments-lol/recent/:matchup" [matchup] (lol-matchup-recent-comments matchup))
   (GET "/matchup-lol/:id" [id] (lol-render-matchup-data id))
   (POST (q-post-link) {params :params} (lol-post-questions params)
   (route/not-found "Page not found")))
