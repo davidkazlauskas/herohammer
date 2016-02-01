@@ -45,6 +45,12 @@
          first
          (#(round-percent-ratio (/ %1 divisor))))))
 
+(defmacro my-recaptcha-key [] "6Lc87xYTAAAAAPV2x9CEC8fZ68l_QEh3eYR_Wu5s")
+
+(defn render-recaptcha []
+  (html [:div {:class "g-recaptcha"
+               :data-sitekey (my-recaptcha-key)}]))
+
 (def ^:dynamic *html-context-lol*
   (lol-ctx
     {:main-page-for-ctx "/lol"
@@ -147,6 +153,7 @@
           [:script {:src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
                     :integrity "sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
                     :crossorigin "anonymous"}]
+          [:script {:scr "https://www.google.com/recaptcha/api.js"}]
           [:script {:src "/resources/js/main.js"}]]
          [:body
           (navbar {})
