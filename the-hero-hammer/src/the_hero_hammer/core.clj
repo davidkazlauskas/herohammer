@@ -81,7 +81,6 @@
        (if try-parse (Integer. try-parse)))))
 
 (defn form-to-data [form]
-  (println "ZE FORM" form)
   {
    :hero-user (parse-int (get form "hero-user"))
    :hero-opponent (parse-int (get form "hero-opponent"))
@@ -684,7 +683,6 @@
   {the-name {:value the-value :max-age 5}})
 
 (defn lol-validate-answer [the-data req]
-  (println req)
   (let [answered (lol-question-set-similarity the-data)
         ret-err (fn [err]
           (let [cookie-err (short-cookie "q-error" err)
@@ -699,29 +697,23 @@
               cook/cookies-response))]
     (cond
       (> (min-questions) answered)
-        (do (println "DAZZLIN" answered)
          (ret-err
           (str "Only " answered "% questions were answered."
-                     " The minimum is " (min-questions) "%")))
+                     " The minimum is " (min-questions) "%"))
       :else
         (let [form-data (form-to-data the-data)
               comm (:comment form-data)
               hu (:hero-user form-data)
               ho (:hero-opponent form-data)]
-          (println "CM SIZE" (count comm))
           (cond
             (or (nil? hu)
                 (nil? ho))
-              (do
-                (println "ZIGGA" hu ho)
-                (ret-err "lolwut?"))
+                (ret-err "lolwut?")
             ; these are bogus requests, don't give answer
 
             (and comm (>= (count comm) (max-comment-size)))
-              (do
-                (println "NAY")
                 (ret-err (str "Comment exceeds maximum size of "
-                            (max-comment-size) ".")))
+                            (max-comment-size) "."))
             ; TODO: check captcha
             :else (ret-succ "Thank you! Your record will help everyone."))
           ))))
