@@ -47,6 +47,7 @@
 (def ^:dynamic *html-context-lol*
   (lol-ctx
     {:main-page-for-ctx "/lol"
+     :question-post-link "/questions-post-lol"
      :matchup-link-start "/matchup-lol"
      :add-record-link-start "/questions-lol"
      :record-link-start "/show-record-lol"
@@ -404,7 +405,7 @@
 (defn lol-page []
   (lol-ctx (generic-main-page)))
 
-(defmacro q-post-link [] "/questions-post")
+(defn q-post-link [] (:question-post-link (html-context)))
 
 (defn lol-render-questions
   ([matchup]
@@ -686,7 +687,7 @@
   (GET "/comments-lol/random/:matchup" [matchup] (lol-matchup-random-comments matchup))
   (GET "/comments-lol/recent/:matchup" [matchup] (lol-matchup-recent-comments matchup))
   (GET "/matchup-lol/:id" [id] (lol-render-matchup-data id))
-  (POST (q-post-link) req (lol-post-questions req)
+  (POST "/questions-post-lol" req (lol-post-questions req)
   (route/not-found "Page not found")))
 
 (defn run-jobs []
