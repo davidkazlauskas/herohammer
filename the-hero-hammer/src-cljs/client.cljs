@@ -29,6 +29,10 @@
   (str js/randCommentsLink
        "/" js/heroUser "-" js/heroOpponent))
 
+(defn construct-link-to-10-recent-comments []
+  (str js/recentCommentsLink
+       "/" js/heroUser "-" js/heroOpponent))
+
 (defn thumb-link [opt]
   (aget js/heroSquares opt))
 
@@ -38,6 +42,12 @@
       (string/join (map #(str "<tr><td class='text-center'>"
         (aget %1 "comment") "</td></tr>") parsed)))
          "</table>")))
+
+(defn show-comments-generic [json-link]
+  (let [placeholder (by-id "comments-placeholder")]
+      (aj/GET json-link :handler
+              (fn [output]
+                (set-inner-html placeholder (gen-html-comments output))))))
 
 ; hero-user hero-opponent user-filter
 (defn ^:export goToMatchup []
@@ -64,8 +74,7 @@
     (set-attrib to "src" ho-l)))
 
 (defn ^:export show10RandomComments []
-  (let [to-get (construct-link-to-10-random-comments)
-        placeholder (by-id "comments-placeholder")]
-    (aj/GET to-get :handler
-            (fn [output]
-              (set-inner-html placeholder (gen-html-comments output))))))
+  (show-comments-generic (construct-link-to-10-random-comments)))
+
+(defn ^:export show10RecentComments []
+  (show-comments-generic (construct-link-to-10-recent-comments)))

@@ -50,6 +50,7 @@
      :record-link-start "/show-record-lol"
      :registration-link "/questions-lol"
      :rand-comments-link "/comments-lol/random"
+     :recent-comments-link "/comments-lol/recent"
      :squares-javascript (generate-javascript-hero-squares)
      :question-sort-function
        (fn [the-q]
@@ -177,6 +178,9 @@
 
 (defn show-10-random-comments-js-func []
   "the_hero_hammer.js_client.show10RandomComments();")
+
+(defn show-10-recent-comments-js-func []
+  "the_hero_hammer.js_client.show10RecentComments();")
 
 (defn update-hero-squares-script []
   (html [:script (update-hero-squares-js-func)]))
@@ -529,6 +533,7 @@
          "heroUser = " user ";"
          "heroOpponent = " opp ";"
          "randCommentsLink = '" (:rand-comments-link (html-context)) "';"
+         "recentCommentsLink = '" (:recent-comments-link (html-context)) "';"
          ]))
 
 (defn show-comments-button-group []
@@ -540,6 +545,11 @@
                            :onclick (show-10-random-comments-js-func)
                            }
                   "Show random comments"]
+                 [:button {:type "button"
+                           :class "btn btn-default"
+                           :onclick (show-10-recent-comments-js-func)
+                           }
+                  "Show recent comments"]
                  ]]]))
 
 (defn comments-placeholder []
