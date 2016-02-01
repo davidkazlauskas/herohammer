@@ -4,7 +4,9 @@
             [compojure.route :as route]
             [the-hero-hammer.hh_context :refer :all]
             [the-hero-hammer.hh_process :refer :all]
+            [the-hero-hammer.db_context :refer :all]
             [the-hero-hammer.lol_context :as lctx]
+            [the-hero-hammer.storage_ram :as sram]
             [org.httpkit.server :refer [run-server]]
             [cljs.build.api :as cljsbld]
             [clojure.data.json :as json])
@@ -16,6 +18,7 @@
 
 (defmacro lol-ctx [& args]
   `(binding [*ctx-get-func* (fn [] lctx/*hh-context-lol*)
+             *db-context* (fn [] sram/*storage-ram-context*)
              *html-context* *html-context-lol*]
      ~@args
    ))
