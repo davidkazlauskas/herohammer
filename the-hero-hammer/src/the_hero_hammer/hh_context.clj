@@ -1,26 +1,9 @@
 (ns the-hero-hammer.hh_context
-  (:require [taoensso.nippy :as nippy]))
+  (:require [the-hero-hammer.db_context :refer :all]
+            [taoensso.nippy :as nippy]))
 
 (def ^:dynamic *hh-context* nil)
 (def ^:dynamic *ctx-get-func* nil)
-
-(defn get-key [& args]
-  "Get key in db"
-  (apply (get-in (*ctx-get-func*) [:dbinfo :get-key]) args))
-
-(defn set-key [& args]
-  "Set key in db"
-  (apply (get-in (*ctx-get-func*) [:dbinfo :set-key]) args))
-
-(defn set-if-not-exists
-  "Put data into storage if it doesn't exist"
-  [db-key value]
-  (if (nil? (get-key db-key))
-    (set-key db-key value)))
-
-(defn get-key-batch [& args]
-  "Get multiple keys from db (faster)"
-  (apply (get-in (*ctx-get-func*) [:dbinfo :get-key-batch]) args))
 
 (defn get-ctx-jobs []
   (get-in (*ctx-get-func*) [:jobs]))

@@ -1,6 +1,8 @@
 (ns the-hero-hammer.hh_process
-  (:require [the-hero-hammer.hh_context :refer :all])
-  (:require [taoensso.nippy :as nippy]))
+  (:require
+    [the-hero-hammer.hh_context :refer :all]
+    [the-hero-hammer.db_context :refer :all]
+    [taoensso.nippy :as nippy]))
 
 (defn global-question-count []
   (get-key ((fn-global-question-count))))

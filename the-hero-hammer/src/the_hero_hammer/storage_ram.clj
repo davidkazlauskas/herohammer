@@ -1,4 +1,4 @@
-(ns the-hero-hammer.storage-ram)
+(ns the-hero-hammer.storage_ram)
 
 (def ^:dynamic *db-imitation* (java.util.concurrent.ConcurrentHashMap.))
 
@@ -31,7 +31,7 @@
        (map get-key)
        (into [])))
 
-(def *storage-ram-context*
+(def ^:dynamic *storage-ram-context*
   {:get-key get-key
    :set-key set-key
    :set-if-not-exists set-if-not-exists

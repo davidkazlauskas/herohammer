@@ -521,12 +521,6 @@
 
 (def ^:dynamic *hh-context-lol*
   {
-   :dbinfo {
-     :get-key stor/get-key
-     :set-key stor/set-key
-     :set-if-not-exists the-hero-hammer.storage/set-if-not-exists
-     :get-key-batch stor/get-key-batch
-   }
    :filters {
      :full *all-filters-lol*
    }
