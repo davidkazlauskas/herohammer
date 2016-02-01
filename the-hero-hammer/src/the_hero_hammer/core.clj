@@ -18,7 +18,7 @@
 
 (defmacro lol-ctx [& args]
   `(binding [*ctx-get-func* (fn [] lctx/*hh-context-lol*)
-             *db-context* (fn [] sram/*storage-ram-context*)
+             *get-db-context* (fn [] sram/*storage-ram-context*)
              *html-context* *html-context-lol*]
      ~@args
    ))
@@ -47,6 +47,7 @@
 (def ^:dynamic *html-context-lol*
   (lol-ctx
     {:matchup-link-start "/matchup-lol"
+     :add-record-link-start "/questions-lol"
      :record-link-start "/show-record-lol"
      :registration-link "/questions-lol"
      :rand-comments-link "/comments-lol/random"
@@ -185,14 +186,18 @@
 (defn update-hero-squares-script []
   (html [:script (update-hero-squares-js-func)]))
 
-(defn hero-dropdown [select-id]
-  (html [:select {:class "form-control"
+(defn hero-dropdown [select-id args]
+  (let [selected (:selected args)]
+    (html [:select {:class "form-control"
                   :id select-id
                   :onchange (update-hero-squares-js-func)}
          (map-indexed
-           #(html [:option {:value %1} %2])
+           #(do
+              (html [:option (if (= selected %1)
+                             {:selected "" :value %1}
+                             {:value %1}) %2]))
            (heroes-full))
-         ]))
+         ])))
 
 (defn filter-dropdown [select-id]
   (html [:select {:class "form-control"
@@ -216,10 +221,9 @@
 (defn reg-and-show-buttons []
   (html [:div {:style "margin-top: 20px;" :class "text-center"}
          [:div {:class "btn-group"}
-           [:a {:style "width: 120px;"
-                :class "btn btn-default"
-                :href (:registration-link (html-context))
-                } "Add record"]
+           [:a {:onclick "the_hero_hammer.js_client.goToNewRecord();"
+                :style "width: 120px;"
+                :class "btn btn-default" } "Add record"]
            [:a {:onclick "the_hero_hammer.js_client.goToMatchup();"
                 :style "width: 120px;"
                 :class "btn btn-default" } "Show results"]]]))
@@ -229,6 +233,8 @@
          (:registration-link (html-context))
          "'; matchupLink = '"
          (:matchup-link-start (html-context))
+         "'; addRecordLink = '"
+         (:add-record-link-start (html-context))
          "'; heroSquares = "
          (:squares-javascript (html-context))
          ";"]))
@@ -248,8 +254,12 @@
                   :for "hero-opponent"}
           "Opponent hero"]]
         [:div {:class "form-inline text-center"}
-         (hero-dropdown "hero-user")
-         (hero-dropdown "hero-opponent")
+         (hero-dropdown "hero-user"
+                        {:selected
+                         (:selected-user args)})
+         (hero-dropdown "hero-opponent"
+                        {:selected
+                         (:selected-opponent args)})
          ]
         (render-hero-pair {})
         (update-hero-squares-script)))
@@ -316,10 +326,11 @@
     ))
 
 (defn hero-pair-from-part-key [the-key]
-  (let [findings (re-find #"(\d+)-(\d+)" the-key)
+  (if (not (clojure.string/blank? the-key))
+   (let [findings (re-find #"(\d+)-(\d+)" the-key)
         hu (Integer. (nth findings 1))
         ho (Integer. (nth findings 2))]
-    (gen-matchup hu ho)))
+    (gen-matchup hu ho))))
 
 (defn gen-link-matchup-filter [matchup filter-id]
   (str (:matchup-link-start (html-context))
@@ -354,8 +365,7 @@
   (if most-rec
     (let [h-full (heroes-full)
           squares (get-hero-squares)
-          revved (reverse most-rec)
-          ]
+          revved (reverse most-rec)]
     (for [i revved]
       (let [split (matchup-pair-from-key i)
             key-tail (nth i 2)
@@ -391,25 +401,32 @@
 
 (defmacro q-post-link [] "/questions-post")
 
-(defn lol-render-questions []
-  (lol-ctx (wrap-html
-             (html
-               (context-js-variables)
-               [:form {:id "questions-form"
-                     :method "POST" :action (q-post-link)}
-              (generate-hero-selection {})
-              [:div {:class "container-fluid input-group"}
-               (map render-question (questions-full))]
-              [:div {:classs "container"}
-               [:div {:class "row text-center"}
-                [:p "Your comment"]
-                [:textarea {:name "user-comment"
-                          :rows 4 :cols 50}]]
-               [:div {:class "row text-center"
-                      :style "margin-top: 10px;"}
-                [:input {:class "btn btn-success"
-                         :type "submit"
-                         :value "Submit record"}]]]]))))
+(defn lol-render-questions
+  ([matchup]
+    (lol-ctx (let [split (hero-pair-from-part-key matchup)
+                   hu (:user split)
+                   ho (:opponent split)]
+               (wrap-html
+                 (html
+                   (context-js-variables)
+                   [:form {:id "questions-form"
+                         :method "POST" :action (q-post-link)}
+                  (generate-hero-selection
+                    (if split {:selected-user hu
+                               :selected-opponent ho}))
+                  [:div {:class "container-fluid input-group"}
+                   (map render-question (questions-full))]
+                  [:div {:classs "container"}
+                   [:div {:class "row text-center"}
+                    [:p "Your comment"]
+                    [:textarea {:name "user-comment"
+                              :rows 4 :cols 50}]]
+                   [:div {:class "row text-center"
+                          :style "margin-top: 10px;"}
+                    [:input {:class "btn btn-success"
+                             :type "submit"
+                             :value "Submit record"}]]]])))))
+  ([] (lol-render-questions nil)))
 
 (defn matchup-data-split [the-str]
   (let [findings (re-find #"(\d+)+-(\d+)-(\d+)" the-str)]
@@ -637,7 +654,8 @@
   (GET "/" [] (index))
   (GET "/dota2" [] (dota2-page))
   (GET "/lol" [] (lol-page))
-  (GET "/questions-lol" [] (lol-render-questions))
+  (GET "/questions-lol/:matchup" [matchup] (lol-render-questions matchup))
+  (GET "/questions-lol" [matchup] (lol-render-questions))
   (GET "/show-record-lol/:id" [id] (lol-show-record id))
   (GET "/comments-lol/random/:matchup" [matchup] (lol-matchup-random-comments matchup))
   (GET "/comments-lol/recent/:matchup" [matchup] (lol-matchup-recent-comments matchup))
