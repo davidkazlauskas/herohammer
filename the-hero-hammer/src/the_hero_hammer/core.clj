@@ -698,16 +698,15 @@
 
 (defn verify-recaptcha [response ip]
   (let [answer (hclient/post (recaptcha-post-url)
-    {:json
-      (json/write-str
-       {:secret (my-recaptcha-key-sec)
-        :response response
-        :remoteip ip})
-    :content-type :json
-    :accept :json})
-        parsed (if answer (json/read-str answer))]
-    (if parsed
-      (get parsed "success")
+        {:form-params
+         {:secret (my-recaptcha-key-sec)
+          :response response
+          :remoteip ip}
+        :accept :json
+        :debug true} :as :json)]
+    (if answer
+      (let [parsed-body (json/read-str (:body answer))]
+        (get parsed-body "success"))
       false)))
 
 (defn lol-validate-answer [the-data req]
