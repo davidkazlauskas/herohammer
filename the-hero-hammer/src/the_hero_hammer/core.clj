@@ -81,6 +81,7 @@
        (if try-parse (Integer. try-parse)))))
 
 (defn form-to-data [form]
+  (println "ZE FORM" form)
   {
    :hero-user (parse-int (get form "hero-user"))
    :hero-opponent (parse-int (get form "hero-opponent"))
@@ -204,6 +205,7 @@
   (let [selected (:selected args)]
     (html [:select {:class "form-control"
                   :id select-id
+                  :name select-id
                   :onchange (update-hero-squares-js-func)}
          (map-indexed
            #(do
@@ -438,6 +440,7 @@
                    valid-error (get-in req [:cookies "q-error" :value])
                    form-data (get-in req [:cookies "q-forms" :value])
                    forms-des (if form-data (json/read-str form-data))
+                   comm-data (if forms-des (get forms-des "user-comment" ""))
                    hu (:user split)
                    ho (:opponent split)
                    body (wrap-html
@@ -456,7 +459,9 @@
                        [:div {:class "row text-center"}
                         [:p "Your comment"]
                         [:textarea {:name "user-comment"
-                                  :rows 4 :cols 50}]]
+                                  :rows 4 :cols 50}
+                         comm-data
+                         ]]
                        [:div {:class "row text-center"
                               :style "margin-top: 10px;"}
                         [:input {:class "btn btn-success"
@@ -700,16 +705,26 @@
                      " The minimum is " (min-questions) "%")))
       :else
         (let [form-data (form-to-data the-data)
-              comm (:comment form-data)]
-          (cond (or
-                  (nil? (:hero-user form-data))
-                  (nil? (:hero-opponent form-data))
-                 ) nil) ; these are bogus requests, don't give answer
-          (cond (and comm (>= (count comm) (max-comment-size)))
-            (ret-err (str "Comment exceeds maximum size of "
-                          (max-comment-size) ".")))
-          ; TODO: check captcha
-          :else (ret-succ "Thank you! Your record will help everyone.")))))
+              comm (:comment form-data)
+              hu (:hero-user form-data)
+              ho (:hero-opponent form-data)]
+          (println "CM SIZE" (count comm))
+          (cond
+            (or (nil? hu)
+                (nil? ho))
+              (do
+                (println "ZIGGA" hu ho)
+                (ret-err "lolwut?"))
+            ; these are bogus requests, don't give answer
+
+            (and comm (>= (count comm) (max-comment-size)))
+              (do
+                (println "NAY")
+                (ret-err (str "Comment exceeds maximum size of "
+                            (max-comment-size) ".")))
+            ; TODO: check captcha
+            :else (ret-succ "Thank you! Your record will help everyone."))
+          ))))
 
 (defn lol-post-questions [req]
   (lol-ctx (let [form-data (:params req)]
