@@ -25,6 +25,12 @@
        ho-s "-"
        flt-s))
 
+(defn construct-link-to-new-record
+  [hu-s ho-s]
+  (str js/addRecordLink "/"
+       hu-s "-"
+       ho-s))
+
 (defn construct-link-to-10-random-comments []
   (str js/randCommentsLink
        "/" js/heroUser "-" js/heroOpponent))
@@ -44,8 +50,9 @@
          "</table>")))
 
 (defn show-comments-generic [json-link]
-  (let [placeholder (by-id "comments-placeholder")]
-      (aj/GET json-link :handler
+  (let [to-get (construct-link-to-10-random-comments)
+          placeholder (by-id "comments-placeholder")]
+      (aj/GET to-get :handler
               (fn [output]
                 (set-inner-html placeholder (gen-html-comments output))))))
 
@@ -58,8 +65,16 @@
         ho-s (sel-value ho)
         flt-s (sel-value flt)]
     (aset js/window "location"
-          (construct-link-to-results hu-s ho-s flt-s))
-    ))
+          (construct-link-to-results hu-s ho-s flt-s))))
+
+; hero-user hero-opponent user-filter
+(defn ^:export goToNewRecord []
+  (let [hu (by-id "hero-user")
+        ho (by-id "hero-opponent")
+        hu-s (sel-value hu)
+        ho-s (sel-value ho)]
+    (aset js/window "location"
+          (construct-link-to-new-record hu-s ho-s))))
 
 (defn ^:export updateHeroSquares []
   (let [hu (by-id "hero-user")
