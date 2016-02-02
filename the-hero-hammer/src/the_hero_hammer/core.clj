@@ -171,7 +171,7 @@
            [:a {:class "navbar-brand" :href "/"} "The Hero Hammer"]]
           [:div {:class "collapse navbar-collapse"}
            [:ul {:class "nav navbar-nav"}
-            [:li [:a {:href "/dota2"} "DotA 2"]]
+            [:li [:a {:href "/dota"} "DotA 2"]]
             [:li [:a {:href "/lol"} "League of Legends"]]
             ]
            [:ul {:class "nav navbar-nav navbar-right"}
@@ -228,7 +228,7 @@
                 [:div {:class "btn-group"}
                   [:a {:class "btn btn-default"
                        :style "width: 160px;"
-                       :href "/dota2"} "DotA 2"]
+                       :href "/dota"} "DotA 2"]
                   [:a {:class "btn btn-default"
                        :style  "width: 160px;"
                        :href "/lol"} "League of Legends"]
