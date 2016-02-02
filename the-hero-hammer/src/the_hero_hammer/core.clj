@@ -598,6 +598,9 @@
           prog-bars
           ])))
 
+(defn sum-counts [qdata]
+  (apply + (get-in qdata [:counts :val])))
+
 (defn render-single-question [qdata]
   (html [:p {:class "text-center"
              :style "font-weight: bold"}
@@ -606,7 +609,7 @@
           (get-in qdata [:counts :val])
           (get-in qdata [:options]))
         [:p {:class "text-center"}
-         (str (range-size (:counts qdata)) " samples.")]))
+         (str (sum-counts qdata) " samples.")]))
 
 (defn export-matchup-data-to-js [user opp]
   (html [:script
