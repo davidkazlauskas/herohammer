@@ -2,6 +2,9 @@
   (:require [the-hero-hammer.db_context :refer :all]
             [taoensso.nippy :as nippy]))
 
+; EZ START
+;(def ^:dynamic *ctx-get-func* (fn [] the-hero-hammer.lol_context/*hh-context-lol*))
+
 (def ^:dynamic *hh-context* nil)
 (def ^:dynamic *ctx-get-func* nil)
 
