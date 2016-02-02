@@ -161,7 +161,7 @@
                     :integrity "sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
                     :crossorigin "anonymous"}]
           [:script {:src "/resources/js/main.js"}]
-          [:script {:src "http://www.google.com/recaptcha/api.js"}]]
+          [:script {:src "https://www.google.com/recaptcha/api.js"}]]
          [:body
           (navbar {})
           [:div {:class "container"}
