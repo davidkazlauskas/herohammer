@@ -1,4 +1,4 @@
-(ns the-hero-hammer.storage_ram)
+(ns the-hero-hammer.storage_as)
 
 (def ^:dynamic *db-imitation* (java.util.concurrent.ConcurrentHashMap.))
 
