@@ -713,7 +713,7 @@
         (get parsed-body "success"))
       false)))
 
-(defn lol-validate-answer [the-data req]
+(defn generic-validate-answer [the-data req]
   (let [answered (question-set-similarity the-data)
         ret-err (fn [err]
           (let [cookie-err (short-cookie "q-error" err)
@@ -759,7 +759,7 @@
 
 (defn lol-post-questions [req]
   (lol-ctx (let [form-data (:params req)]
-    (lol-validate-answer form-data req))))
+    (generic-validate-answer form-data req))))
 
 (defroutes myapp
   (route/files "/resources/" {:root "resources/public/"})
