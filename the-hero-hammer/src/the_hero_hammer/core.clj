@@ -125,6 +125,11 @@
         (:options q))]]
    [:br])))
 
+(defn rand-header []
+  (rand-nth
+    ["Find out if you're about to get whooped... In seconds!"
+     "Where your whining can help!"]))
+
 (defn navbar [args]
   (html [:nav {:class "navbar navbar-default"}
          [:div {:class "container"}
@@ -136,7 +141,7 @@
             [:li [:a {:href "/lol"} "League of Legends"]]
             ]
            [:ul {:class "nav navbar-nav navbar-right"}
-            [:li [:h4 "Find out if you're about to get whooped... In seconds!"]]
+            [:li [:h4 (rand-header)]]
             ]
            ]
           ]
