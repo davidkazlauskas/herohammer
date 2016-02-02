@@ -83,12 +83,12 @@
                (= "position" sname) 198
                :else (highest-percent-part opt-vec))))
      :radio-set
-       (lol-ctx (into #{} (map #(:shortname %1)
-         (questions-full))))
+       (into #{} (map #(:shortname %1)
+         (questions-full)))
      }))
 
 (def ^:dynamic *html-context-dota*
-  (lol-ctx
+  (dota-ctx
     {:main-page-for-ctx "/dota"
      :question-post-link "/questions-post-dota"
      :question-get-link "/questions-dota"
@@ -108,8 +108,8 @@
                (= "position" sname) 198
                :else (highest-percent-part opt-vec))))
      :radio-set
-       (lol-ctx (into #{} (map #(:shortname %1)
-         (questions-full))))
+       (into #{} (map #(:shortname %1)
+         (questions-full)))
      }))
 
 (def ^:dynamic *html-context* nil)
