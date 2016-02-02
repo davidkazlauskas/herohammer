@@ -151,16 +151,23 @@
   (clojure.string/replace the-key #"^(\d+)-(\d+)-.*$" "$1-$2"))
 
 (defn distinct-java-array [the-arr]
-  (let [dist (into [] (distinct (vec the-arr)))
-        dcount (count dist)]
+  (let [the-vec (vec the-arr)
+        grouped (group-by :key the-vec)
+        gfiltered (filter #(some? (get % 0)) grouped)
+        mapped (mapv
+         #(hash-map :key (nth %1 0)
+                    :count (apply + (map :count (nth %1 1))))
+         gfiltered)
+        dcount (count mapped)]
     (dotimes [n (count the-arr)]
       (let [to-set (if (< n dcount)
-                     (nth dist n) nil)]
+                     (nth mapped n) nil)]
         (aset the-arr n to-set))))
   the-arr)
 
 (defn gen-map-reduce-tasks-global [max-proc]
-  [{:save-key-func (lol-generate-global-question-proc)
+  [; generic processing
+   {:save-key-func (lol-generate-global-question-proc)
     :map-function lol-matchup-pair-from-key
     :initial-reduce (fn [the-val]
                       (java.util.ArrayList.))
@@ -172,6 +179,7 @@
                        (.add the-val mapped)
                        the-val)
     }
+   ; most popular questions
     {:save-key-func (lol-generate-most-popular-matchups)
      :map-function (fn [the-val]
                      (let [matchup (matchup-pair-from-key the-val)
