@@ -12,14 +12,8 @@
    :expected max-available-range
    :process-question (fn [args]
      (count-in))
-   :required-questions ["poking"]
    :full-name "All matches"
    })
-
-; run jerb every 5 minutes
-(defn proc-delay-ms [] (* 1000 * 60 * 5))
-
-(declare get-map-reduce-job)
 
 (def ^:dynamic *all-filters-lol*
   [(main-filter)])
@@ -98,17 +92,16 @@
          :most-popular-matchups-key (lol-generate-most-popular-matchups)
          :turn-key-to-uniq-matchup drop-tail-from-key
          }]
-  ;:glob-question-key -> global key for questions (to db)
-  ;:id-key-gen -> function with 1 arg (id) to get glob question id
-  ;:max-proc -> maximum questions to process at a time
-  ;:count-key-func -> function to generate count from pair
-  ;:generate-matchup-question-id -> function to generate matchup question id
-  ;  takes 2 args, pair + filter
-  ;"Argmap:
-  ;:generate-filter-matchup-question-count ->
-    ;generate question count key for filter and matchup
-  ;"
-
+      ;:glob-question-key -> global key for questions (to db)
+      ;:id-key-gen -> function with 1 arg (id) to get glob question id
+      ;:max-proc -> maximum questions to process at a time
+      ;:count-key-func -> function to generate count from pair
+      ;:generate-matchup-question-id -> function to generate matchup question id
+      ;  takes 2 args, pair + filter
+      ;"Argmap:
+      ;:generate-filter-matchup-question-count ->
+        ;generate question count key for filter and matchup
+      ;"
     [; generic processing
      (scon/generic-processing-job lol-args)
      ; most popular questions
