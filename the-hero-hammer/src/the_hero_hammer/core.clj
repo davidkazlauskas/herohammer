@@ -597,6 +597,9 @@
 (defn lol-show-record [id]
   (lol-ctx (generic-show-record id)))
 
+(defn dota-show-record [id]
+  (dota-ctx (generic-show-record id)))
+
 (defn bold-upper-text [the-text]
   (html [:p {:style "color: black; font-weight: bold;"}
          (clojure.string/upper-case the-text)]))
@@ -683,36 +686,41 @@
          [:div {:class "col-md-12 text-center"
                 :id "comments-placeholder"}]]))
 
+(defn generic-render-matchup-data [id]
+  (let [[matchup filter-id]
+            (matchup-data-split id)
+            sort-func (:question-sort-function (html-context))
+            rel-data (fetch-relevant-matchup-data
+                      matchup filter-id)
+            sorted-data (into [] (sort-by sort-func > rel-data))
+            squares (get-hero-squares)
+            heroes (heroes-full)
+            hu (:user matchup)
+            ho (:opponent matchup)
+            hn-hu (nth heroes hu)
+            hn-ho (nth heroes ho)
+            sq-hu (nth squares hu)
+            sq-ho (nth squares ho)]
+          (wrap-html
+            (html
+              (export-matchup-data-to-js hu ho)
+              (render-vs-title hn-hu hn-ho)
+              (render-hero-pair
+                {:src-user sq-hu :src-opp sq-ho})
+                  [:ul {:class "list-group"}
+              (->> sorted-data
+                   (map render-single-question)
+                   (map #(html
+                           [:li {:class "list-group-item"}
+                                %1])))]
+              (show-comments-button-group)
+              (comments-placeholder)))))
+
 (defn lol-render-matchup-data [id]
-  (lol-ctx
-    (let [[matchup filter-id]
-          (matchup-data-split id)
-          sort-func (:question-sort-function (html-context))
-          rel-data (fetch-relevant-matchup-data
-                    matchup filter-id)
-          sorted-data (into [] (sort-by sort-func > rel-data))
-          squares (get-hero-squares)
-          heroes (heroes-full)
-          hu (:user matchup)
-          ho (:opponent matchup)
-          hn-hu (nth heroes hu)
-          hn-ho (nth heroes ho)
-          sq-hu (nth squares hu)
-          sq-ho (nth squares ho)]
-        (wrap-html
-          (html
-            (export-matchup-data-to-js hu ho)
-            (render-vs-title hn-hu hn-ho)
-            (render-hero-pair
-              {:src-user sq-hu :src-opp sq-ho})
-                [:ul {:class "list-group"}
-            (->> sorted-data
-                 (map render-single-question)
-                 (map #(html
-                         [:li {:class "list-group-item"}
-                              %1])))]
-            (show-comments-button-group)
-            (comments-placeholder))))))
+  (lol-ctx (generic-render-matchup-data id)))
+
+(defn dota-render-matchup-data [id]
+  (dota-ctx (generic-render-matchup-data id)))
 
 (defn random-range [to-make max-num]
   (loop [the-set #{}]
@@ -720,22 +728,32 @@
       the-set
       (recur (conj the-set (rand-int max-num))))))
 
+(defn generic-random-comments [id]
+  (let [split (hero-pair-from-part-key id)
+            comm-count (get-comments-count split)
+            rnd-nums (into [] (random-range 10 comm-count))
+            data (get-comments-by-id split rnd-nums)]
+        (json/write-str data)))
+
+(defn generic-recent-comments [id]
+  (let [split (hero-pair-from-part-key id)
+            comm-count (get-comments-count split)
+            rnd-nums (reverse
+                        (range (- comm-count 10) comm-count))
+            data (get-comments-by-id split rnd-nums)]
+        (json/write-str data)))
+
 (defn lol-matchup-random-comments [id]
-  (lol-ctx
-    (let [split (hero-pair-from-part-key id)
-          comm-count (get-comments-count split)
-          rnd-nums (into [] (random-range 10 comm-count))
-          data (get-comments-by-id split rnd-nums)]
-      (json/write-str data))))
+  (lol-ctx (generic-random-comments id)))
 
 (defn lol-matchup-recent-comments [id]
-  (lol-ctx
-    (let [split (hero-pair-from-part-key id)
-          comm-count (get-comments-count split)
-          rnd-nums (reverse
-                      (range (- comm-count 10) comm-count))
-          data (get-comments-by-id split rnd-nums)]
-      (json/write-str data))))
+  (lol-ctx (generic-recent-comments id)))
+
+(defn dota-matchup-random-comments [id]
+  (dota-ctx (generic-random-comments id)))
+
+(defn dota-matchup-recent-comments [id]
+  (dota-ctx (generic-recent-comments id)))
 
 (defn question-set-similarity
   "Return percentage of values picked from user"
@@ -831,6 +849,10 @@
   (lol-ctx (let [form-data (:params req)]
     (generic-validate-answer form-data req))))
 
+(defn dota-post-questions [req]
+  (dota-ctx (let [form-data (:params req)]
+    (generic-validate-answer form-data req))))
+
 (defroutes routes-lol
   (GET "/lol" [:as req] (lol-page req))
   (GET "/questions-lol/:matchup" [matchup :as req] (lol-render-questions matchup req))
@@ -843,18 +865,18 @@
 
 (defroutes routes-dota
   (GET "/dota" [:as req] (dota2-page req))
-  (GET "/questions-dota/:matchup" [matchup :as req] (lol-render-questions matchup req))
-  (GET "/questions-dota" [matchup :as req] (lol-render-questions req))
-  (GET "/show-record-dota" [id] (lol-show-record id))
-  (GET "/comments-dota" [matchup] (lol-matchup-random-comments matchup))
-  (GET "/comments-dota" [matchup] (lol-matchup-recent-comments matchup))
-  (GET "/matchup-dota" [id] (lol-render-matchup-data id))
-  (POST "/questions-post-dota" req (lol-post-questions req)))
+  (GET "/questions-dota/:matchup" [matchup :as req] (dota-render-questions matchup req))
+  (GET "/questions-dota" [matchup :as req] (dota-render-questions req))
+  (GET "/show-record-dota" [id] (dota-show-record id))
+  (GET "/comments-dota" [matchup] (dota-matchup-random-comments matchup))
+  (GET "/comments-dota" [matchup] (dota-matchup-recent-comments matchup))
+  (GET "/matchup-dota" [id] (dota-render-matchup-data id))
+  (POST "/questions-post-dota" req (dota-post-questions req)))
 
 (defroutes myapp
   (route/files "/resources/" {:root "resources/public/"})
   (GET "/" [] (index))
-  (GET "/dota2" [:as req] (dota2-page req))
+  routes-dota
   routes-lol
   (route/not-found "Page not found"))
 
