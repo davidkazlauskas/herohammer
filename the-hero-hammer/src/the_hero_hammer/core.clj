@@ -870,7 +870,7 @@
   (GET "/show-record-dota" [id] (dota-show-record id))
   (GET "/comments-dota" [matchup] (dota-matchup-random-comments matchup))
   (GET "/comments-dota" [matchup] (dota-matchup-recent-comments matchup))
-  (GET "/matchup-dota" [id] (dota-render-matchup-data id))
+  (GET "/matchup-dota/:id" [id] (dota-render-matchup-data id))
   (POST "/questions-post-dota" req (dota-post-questions req)))
 
 (defroutes myapp
