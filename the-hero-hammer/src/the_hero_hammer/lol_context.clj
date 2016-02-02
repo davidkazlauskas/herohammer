@@ -3,6 +3,7 @@
             [the-hero-hammer.hh_context :refer :all]
             [the-hero-hammer.hh_process :refer :all]
             [the-hero-hammer.storage :as stor]
+            [the-hero-hammer.shared_context :as scon]
             [taoensso.nippy :as nippy]
             [co.paralleluniverse.pulsar.core :as pulsar]))
 
@@ -19,22 +20,6 @@
 (defn proc-delay-ms [] (* 1000 * 60 * 5))
 
 (declare get-map-reduce-job)
-
-(defn process-questions []
-  (let [max-units 128
-        job (get-map-reduce-job max-units)]
-    (advance-map-reduce-job job max-units)))
-
-(defn schedule-question-processing []
-  (pulsar/spawn-fiber process-questions))
-
-(defn main-job []
-  (while true
-    (schedule-question-processing)
-    (pulsar/sleep (proc-delay-ms))))
-
-(defn gen-jobs []
-  (fn [] (pulsar/spawn-fiber main-job)))
 
 (def ^:dynamic *all-filters-lol*
   [(main-filter)])
@@ -575,6 +560,6 @@
    :util {
      :matchup-pair-from-key lol-matchup-pair-from-key
    }
-   :jobs (gen-jobs)
+   :jobs (scon/gen-jobs (get-map-reduce-job 128))
   })
 
