@@ -132,7 +132,7 @@
                        (let [matchup (matchup-pair-from-key the-val)
                              qcount (get-matchup-question-count matchup)]
                        {:count qcount
-                        :key (most-pop-matchups-key the-val)}))
+                        :key (key-to-uniq-matcup the-val)}))
        :initial-reduce (fn [the-val]
                          (let [the-arr (object-array 11)]
                            (if the-val
