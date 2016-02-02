@@ -5,18 +5,18 @@
 
 (def ^:dynamic *db-imitation* (java.util.concurrent.ConcurrentHashMap.))
 
-(defn set-key-aes [client the-key the-value]
+(defn set-key-aes [client policy the-key the-value]
   (let [as-ns (nth the-key 0)
         as-set (nth the-key 1)
         as-idx (nth the-key 2)
         key-aes (Key. as-ns as-set as-idx)
         bin-aes (Bin. "default" the-value)
-        ] (.put client key-aes bin-aes)))
+        ] (.put client policy key-aes bin-aes)))
 
 (defn make-aerospike-context [ip port]
   (let [cl (AerospikeClient. ip port)
         wp (WritePolicy.)]
-    {:get-key "" }
+    {:get-key (partial set-key-aes cl wp)}
     ))
 
 (defn key-merge [arg]
