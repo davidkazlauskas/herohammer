@@ -54,6 +54,10 @@
   (html [:div {:class "g-recaptcha"
                :data-sitekey (my-recaptcha-key)}]))
 
+(def ^:dynamic *radio-set-lol*
+  (lol-ctx (into #{} (map #(:shortname %1)
+       (questions-full)))))
+
 (def ^:dynamic *html-context-lol*
   (lol-ctx
     {:main-page-for-ctx "/lol"
@@ -73,16 +77,13 @@
          (cond (= "mtype" sname) 200
                (= "ladder" sname) 199
                :else (highest-percent-part opt-vec))))
+     :radio-set *radio-set-lol*
      }))
 
 (def ^:dynamic *html-context* nil)
 
 (defn html-context []
   *html-context*)
-
-(def ^:dynamic *radio-set-lol*
-  (lol-ctx (into #{} (map #(:shortname %1)
-       (questions-full)))))
 
 (defn parse-int [s]
    (if s
@@ -206,6 +207,9 @@
 
 (defn show-10-recent-comments-js-func []
   "the_hero_hammer.js_client.show10RecentComments();")
+
+(defn get-radio-set []
+  (:radio-set (html-context)))
 
 (defn update-hero-squares-script []
   (html [:script (update-hero-squares-js-func)]))
@@ -686,9 +690,9 @@
 (defn lol-question-set-similarity
   "Return percentage of values picked from user"
   [request]
-  (let [cross (clojure.set/intersection *radio-set-lol*
+  (let [cross (clojure.set/intersection (get-radio-set)
                 (into #{} (keys request)))]
-    (* (/ (count cross) (count *radio-set-lol*)) 100)))
+    (* (/ (count cross) (count (get-radio-set))) 100)))
 
 (defmacro min-questions [] 77)
 (defmacro max-comment-size [] 512)
