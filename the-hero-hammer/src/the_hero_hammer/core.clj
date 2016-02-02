@@ -72,6 +72,7 @@
                opt-vec (get-in the-q [:counts :val])]
          (cond (= "mtype" sname) 200
                (= "ladder" sname) 199
+               (= "position" sname) 198
                :else (highest-percent-part opt-vec))))
      :radio-set
        (lol-ctx (into #{} (map #(:shortname %1)

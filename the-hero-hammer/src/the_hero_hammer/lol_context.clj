@@ -216,6 +216,9 @@
    :is-nipped true
    :tasks (gen-map-reduce-tasks-global max-proc)})
 
+(defn process-questions []
+  (scon/process-questions (get-map-reduce-job 128)))
+
 (defmacro all-questions-lol []
   (questions-m
     ("end-res" "Won or lost?"
