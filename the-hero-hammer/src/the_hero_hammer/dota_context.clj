@@ -1,4 +1,4 @@
-(ns the-hero-hammer.lol_context
+(ns the-hero-hammer.dota_context
   (:require [the-hero-hammer.questions :refer :all]
             [the-hero-hammer.hh_context :refer :all]
             [the-hero-hammer.hh_process :refer :all]
@@ -36,62 +36,62 @@
 (defn gen-jobs []
   (fn [] (pulsar/spawn-fiber main-job)))
 
-(def ^:dynamic *all-filters-lol*
+(def ^:dynamic *all-filters-dota*
   [(main-filter)])
 
-(defn lol-filters [] *all-filters-lol*)
+(defn dota-filters [] *all-filters-dota*)
 
-(defn lol-generate-global-question-key [the-id]
-  ["lol" "glob-question" the-id])
+(defn dota-generate-global-question-key [the-id]
+  ["dota" "glob-question" the-id])
 
-(defn lol-generate-global-question-count []
-  ["lol" "glob-question-count" "count"])
+(defn dota-generate-global-question-count []
+  ["dota" "glob-question-count" "count"])
 
-(defn lol-generate-global-question-proc []
-  ["lol" "glob-question-count" "proc"])
+(defn dota-generate-global-question-proc []
+  ["dota" "glob-question-count" "proc"])
 
-(defn lol-generate-most-popular-matchups []
-  ["lol" "glob-question-count" "most-popular"])
+(defn dota-generate-most-popular-matchups []
+  ["dota" "glob-question-count" "most-popular"])
 
-(defn lol-generate-matchup-question-count
+(defn dota-generate-matchup-question-count
   "Matchup pair - {:user 7 :opponent 7}"
   [matchup-pair]
-  ["lol" "matchup-question-count"
+  ["dota" "matchup-question-count"
    (clojure.string/join "-" (pair-vec matchup-pair))])
 
-(defn lol-generate-matchup-question-id
+(defn dota-generate-matchup-question-id
   "Generate question id"
   [matchup-pair id]
-  ["lol" "matchup-questions"
+  ["dota" "matchup-questions"
    (clojure.string/join "-"
      (flatten [(pair-vec matchup-pair) id]))])
 
-(defn lol-matchup-pair-from-key [the-key]
+(defn dota-matchup-pair-from-key [the-key]
   (let [arr (re-find #"(\d+)-(\d+)-" (nth the-key 2))]
     {:user (Integer. (nth arr 1))
      :opponent (Integer. (nth arr 2))}))
 
-(defn lol-generate-matchup-comment-count
+(defn dota-generate-matchup-comment-count
   "Matchup pair - {:user 7 :opponent 7}"
   [matchup-pair]
-  ["lol" "matchup-comment-count"
+  ["dota" "matchup-comment-count"
    (clojure.string/join "-" (pair-vec matchup-pair))])
 
-(defn lol-generate-matchup-comment-id
+(defn dota-generate-matchup-comment-id
   "Generate question id"
   [matchup-pair id]
-  ["lol" "matchup-comments"
+  ["dota" "matchup-comments"
    (clojure.string/join "-"
      (flatten [(pair-vec matchup-pair) id]))])
 
-(defn lol-generate-question-first-time-key [the-id]
-  ["lol" "question-first-time" the-id])
+(defn dota-generate-question-first-time-key [the-id]
+  ["dota" "question-first-time" the-id])
 
-(defn lol-generate-filter-matchup-question-count
+(defn dota-generate-filter-matchup-question-count
   "Generate matchup question count for question
   And filter."
   [matchup-pair question-id filter-id]
-  ["lol" "question-matchup-filter-count"
+  ["dota" "question-matchup-filter-count"
    (clojure.string/join "-"
      (flatten [(pair-vec matchup-pair)
                question-id filter-id]))])
@@ -103,7 +103,7 @@
             flt (filters-full)]
         (let [first-occ (get-question-first-time (:id question))]
           (if first-occ {:save-key-func
-             (lol-generate-filter-matchup-question-count
+             (dota-generate-filter-matchup-question-count
                the-pair
                (:id question)
                (:id flt))
@@ -135,8 +135,8 @@
          }))))))
 
 (defn matchup-pair-map-reduce-job [the-pair]
-  {:count-key (lol-generate-matchup-question-count the-pair)
-   :id-key-function (partial lol-generate-matchup-question-id the-pair)
+  {:count-key (dota-generate-matchup-question-count the-pair)
+   :id-key-function (partial dota-generate-matchup-question-id the-pair)
    :is-nipped true
    :tasks (generate-matchup-tasks the-pair)})
 
@@ -167,8 +167,8 @@
 
 (defn gen-map-reduce-tasks-global [max-proc]
   [; generic processing
-   {:save-key-func (lol-generate-global-question-proc)
-    :map-function lol-matchup-pair-from-key
+   {:save-key-func (dota-generate-global-question-proc)
+    :map-function dota-matchup-pair-from-key
     :initial-reduce (fn [the-val]
                       (java.util.ArrayList.))
     :final-reduce (fn [the-val] (let [dist (distinct the-val)]
@@ -180,7 +180,7 @@
                        the-val)
     }
    ; most popular questions
-    {:save-key-func (lol-generate-most-popular-matchups)
+    {:save-key-func (dota-generate-most-popular-matchups)
      :map-function (fn [the-val]
                      (let [matchup (matchup-pair-from-key the-val)
                            qcount (get-matchup-question-count matchup)]
@@ -206,12 +206,12 @@
    ])
 
 (defn get-map-reduce-job [max-proc]
-  {:count-key (lol-generate-global-question-count)
-   :id-key-function lol-generate-global-question-key
+  {:count-key (dota-generate-global-question-count)
+   :id-key-function dota-generate-global-question-key
    :is-nipped true
    :tasks (gen-map-reduce-tasks-global max-proc)})
 
-(defmacro all-questions-lol []
+(defmacro all-questions-dota []
   (questions-m
     ("end-res" "Won or lost?"
            "Won" "Lost")
@@ -243,7 +243,7 @@
     ("wave-clear" "Clearing waves was a breeze" "yes" "no")
     ))
 
-(defn hero-squares-lol []
+(defn hero-squares-dota []
   [
   "http://vignette3.wikia.nocookie.net/leagueoflegends/images/c/cc/AatroxSquare.png"
   "http://vignette1.wikia.nocookie.net/leagueoflegends/images/1/18/AhriSquare.png"
@@ -391,7 +391,7 @@
 
 (defn square-for-hero [hero-full-name]
   (let [idx (hero-name-full-to-short hero-full-name)]
-    (->> (hero-squares-lol)
+    (->> (hero-squares-dota)
          (map-indexed #(vector %1 (lowercase-replace %2) %2))
          (map #(hash-map :idx (nth %1 0)
                          :rgx (re-find (re-pattern idx) (nth %1 1))
@@ -400,7 +400,7 @@
          (first)
          (:full))))
 
-(defn all-heroes-lol []
+(defn all-heroes-dota []
   [
   "Aatrox"
   "Ahri"
@@ -534,46 +534,46 @@
 )
 
 (defn squares-for-heroes []
-  (into [] (map square-for-hero (all-heroes-lol))))
+  (into [] (map square-for-hero (all-heroes-dota))))
 
-(def ^:dynamic *all-questions-lol*
-  (all-questions-lol))
+(def ^:dynamic *all-questions-dota*
+  (all-questions-dota))
 
-(def ^:dynamic *shortname-to-index-question-lol*
-  (question-index-shortnames *all-questions-lol*))
+(def ^:dynamic *shortname-to-index-question-dota*
+  (question-index-shortnames *all-questions-dota*))
 
-(def ^:dynamic *hh-context-lol*
+(def ^:dynamic *hh-context-dota*
   {
    :filters {
-     :full *all-filters-lol*
+     :full *all-filters-dota*
    }
    :queries {
-     :glob-question-count lol-generate-global-question-count
-     :glob-question-proc lol-generate-global-question-proc
-     :glob-question-id lol-generate-global-question-key
-     :question-first-time lol-generate-question-first-time-key
-     :matchup-question-count lol-generate-matchup-question-count
-     :matchup-question-id lol-generate-matchup-question-id
-     :matchup-comment-count lol-generate-matchup-comment-count
-     :matchup-comment-id lol-generate-matchup-comment-id
-     :matchup-filter-count lol-generate-filter-matchup-question-count
-     :matchup-most-popular-global lol-generate-most-popular-matchups
+     :glob-question-count dota-generate-global-question-count
+     :glob-question-proc dota-generate-global-question-proc
+     :glob-question-id dota-generate-global-question-key
+     :question-first-time dota-generate-question-first-time-key
+     :matchup-question-count dota-generate-matchup-question-count
+     :matchup-question-id dota-generate-matchup-question-id
+     :matchup-comment-count dota-generate-matchup-comment-count
+     :matchup-comment-id dota-generate-matchup-comment-id
+     :matchup-filter-count dota-generate-filter-matchup-question-count
+     :matchup-most-popular-global dota-generate-most-popular-matchups
    }
    :questions {
-     :full *all-questions-lol*
-     :short-to-index *shortname-to-index-question-lol*
+     :full *all-questions-dota*
+     :short-to-index *shortname-to-index-question-dota*
      :cross-question-filter
        (cross-questions-and-filters
-         *all-questions-lol* *all-filters-lol*)
+         *all-questions-dota* *all-filters-dota*)
    }
    :heroes {
-     :full (all-heroes-lol)
-     :short-to-index (heroes-full-to-short (all-heroes-lol))
-     :shortnames (heroes-shortnames (all-heroes-lol))
+     :full (all-heroes-dota)
+     :short-to-index (heroes-full-to-short (all-heroes-dota))
+     :shortnames (heroes-shortnames (all-heroes-dota))
      :squares (squares-for-heroes)
    }
    :util {
-     :matchup-pair-from-key lol-matchup-pair-from-key
+     :matchup-pair-from-key dota-matchup-pair-from-key
    }
    :jobs (gen-jobs)
   })
