@@ -306,141 +306,127 @@
          (first)
          (:full))))
 
-(defn all-heroes-dota []
+(defn full-data-dota []
   [
-  "Aatrox"
-  "Ahri"
-  "Akali"
-  "Alistar"
-  "Amumu"
-  "Anivia"
-  "Annie"
-  "Ashe"
-  "Azir"
-  "Bard"
-  "Blitzcrank"
-  "Brand"
-  "Braum"
-  "Caitlyn"
-  "Cassiopeia"
-  "Cho'Gath"
-  "Corki"
-  "Darius"
-  "Diana"
-  "Dr. Mundo"
-  "Draven"
-  "Ekko"
-  "Elise"
-  "Evelynn"
-  "Ezreal"
-  "Fiddlesticks"
-  "Fiora"
-  "Fizz"
-  "Galio"
-  "Gangplank"
-  "Garen"
-  "Gnar"
-  "Gragas"
-  "Graves"
-  "Hecarim"
-  "Heimerdinger"
-  "Illaoi"
-  "Irelia"
-  "Janna"
-  "Jarvan IV"
-  "Jax"
-  "Jayce"
-  "Jinx"
-  "Kalista"
-  "Karma"
-  "Karthus"
-  "Kassadin"
-  "Katarina"
-  "Kayle"
-  "Kennen"
-  "Kha'Zix"
-  "Kindred"
-  "Kog'Maw"
-  "LeBlanc"
-  "Lee Sin"
-  "Leona"
-  "Lissandra"
-  "Lucian"
-  "Lulu"
-  "Lux"
-  "Malphite"
-  "Malzahar"
-  "Maokai"
-  "Master Yi"
-  "Miss Fortune"
-  "Mordekaiser"
-  "Morgana"
-  "Nami"
-  "Nasus"
-  "Nautilus"
-  "Nidalee"
-  "Nocturne"
-  "Nunu"
-  "Olaf"
-  "Orianna"
-  "Pantheon"
-  "Poppy"
-  "Quinn"
-  "Rammus"
-  "Rek'Sai"
-  "Renekton"
-  "Rengar"
-  "Riven"
-  "Rumble"
-  "Ryze"
-  "Sejuani"
-  "Shaco"
-  "Shen"
-  "Shyvana"
-  "Singed"
-  "Sion"
-  "Sivir"
-  "Skarner"
-  "Sona"
-  "Soraka"
-  "Swain"
-  "Syndra"
-  "Tahm Kench"
-  "Talon"
-  "Taric"
-  "Teemo"
-  "Thresh"
-  "Tristana"
-  "Trundle"
-  "Tryndamere"
-  "Twisted Fate"
-  "Twitch"
-  "Udyr"
-  "Urgot"
-  "Varus"
-  "Vayne"
-  "Veigar"
-  "Vel'Koz"
-  "Vi"
-  "Viktor"
-  "Vladimir"
-  "Volibear"
-  "Warwick"
-  "Wukong"
-  "Xerath"
-  "Xin Zhao"
-  "Yasuo"
-  "Yorick"
-  "Zac"
-  "Zed"
-  "Ziggs"
-  "Zilean"
-  "Zyra"
+  {:name "Earthshaker" :image "http://cdn.dota2.com/apps/dota2/images/heroes/earthshaker_vert.jpg"}
+  {:name "Sven" :image "http://cdn.dota2.com/apps/dota2/images/heroes/sven_vert.jpg"}
+  {:name "Tiny" :image "http://cdn.dota2.com/apps/dota2/images/heroes/tiny_vert.jpg"}
+  {:name "Kunkka" :image "http://cdn.dota2.com/apps/dota2/images/heroes/kunkka_vert.jpg"}
+  {:name "Beastmaster" :image "http://cdn.dota2.com/apps/dota2/images/heroes/beastmaster_vert.jpg"}
+  {:name "Dragon Knight" :image "http://cdn.dota2.com/apps/dota2/images/heroes/dragon_knight_vert.jpg"}
+  {:name "Clockwerk" :image "http://cdn.dota2.com/apps/dota2/images/heroes/rattletrap_vert.jpg"}
+  {:name "Omniknight" :image "http://cdn.dota2.com/apps/dota2/images/heroes/omniknight_vert.jpg"}
+  {:name "Huskar" :image "http://cdn.dota2.com/apps/dota2/images/heroes/huskar_vert.jpg"}
+  {:name "Alchemist" :image "http://cdn.dota2.com/apps/dota2/images/heroes/alchemist_vert.jpg"}
+  {:name "Brewmaster" :image "http://cdn.dota2.com/apps/dota2/images/heroes/brewmaster_vert.jpg"}
+  {:name "Treant Protector" :image "http://cdn.dota2.com/apps/dota2/images/heroes/treant_vert.jpg"}
+  {:name "Io" :image "http://cdn.dota2.com/apps/dota2/images/heroes/wisp_vert.jpg"}
+  {:name "Centaur Warrunner" :image "http://cdn.dota2.com/apps/dota2/images/heroes/centaur_vert.jpg"}
+  {:name "Timbersaw" :image "http://cdn.dota2.com/apps/dota2/images/heroes/shredder_vert.jpg"}
+  {:name "Bristleback" :image "http://cdn.dota2.com/apps/dota2/images/heroes/bristleback_vert.jpg"}
+  {:name "Tusk" :image "http://cdn.dota2.com/apps/dota2/images/heroes/tusk_vert.jpg"}
+  {:name "Elder Titan" :image "http://cdn.dota2.com/apps/dota2/images/heroes/elder_titan_vert.jpg"}
+  {:name "Legion Commander" :image "http://cdn.dota2.com/apps/dota2/images/heroes/legion_commander_vert.jpg"}
+  {:name "Earth Spirit" :image "http://cdn.dota2.com/apps/dota2/images/heroes/earth_spirit_vert.jpg"}
+  {:name "Phoenix" :image "http://cdn.dota2.com/apps/dota2/images/heroes/phoenix_vert.jpg"}
+  {:name "Anti-Mage" :image "http://cdn.dota2.com/apps/dota2/images/heroes/antimage_vert.jpg"}
+  {:name "Drow Ranger" :image "http://cdn.dota2.com/apps/dota2/images/heroes/drow_ranger_vert.jpg"}
+  {:name "Juggernaut" :image "http://cdn.dota2.com/apps/dota2/images/heroes/juggernaut_vert.jpg"}
+  {:name "Mirana" :image "http://cdn.dota2.com/apps/dota2/images/heroes/mirana_vert.jpg"}
+  {:name "Morphling" :image "http://cdn.dota2.com/apps/dota2/images/heroes/morphling_vert.jpg"}
+  {:name "Phantom Lancer" :image "http://cdn.dota2.com/apps/dota2/images/heroes/phantom_lancer_vert.jpg"}
+  {:name "Vengeful Spirit" :image "http://cdn.dota2.com/apps/dota2/images/heroes/vengefulspirit_vert.jpg"}
+  {:name "Riki" :image "http://cdn.dota2.com/apps/dota2/images/heroes/riki_vert.jpg"}
+  {:name "Sniper" :image "http://cdn.dota2.com/apps/dota2/images/heroes/sniper_vert.jpg"}
+  {:name "Templar Assassin" :image "http://cdn.dota2.com/apps/dota2/images/heroes/templar_assassin_vert.jpg"}
+  {:name "Luna" :image "http://cdn.dota2.com/apps/dota2/images/heroes/luna_vert.jpg"}
+  {:name "Bounty Hunter" :image "http://cdn.dota2.com/apps/dota2/images/heroes/bounty_hunter_vert.jpg"}
+  {:name "Ursa" :image "http://cdn.dota2.com/apps/dota2/images/heroes/ursa_vert.jpg"}
+  {:name "Gyrocopter" :image "http://cdn.dota2.com/apps/dota2/images/heroes/gyrocopter_vert.jpg"}
+  {:name "Lone Druid" :image "http://cdn.dota2.com/apps/dota2/images/heroes/lone_druid_vert.jpg"}
+  {:name "Naga Siren" :image "http://cdn.dota2.com/apps/dota2/images/heroes/naga_siren_vert.jpg"}
+  {:name "Troll Warlord" :image "http://cdn.dota2.com/apps/dota2/images/heroes/troll_warlord_vert.jpg"}
+  {:name "Ember Spirit" :image "http://cdn.dota2.com/apps/dota2/images/heroes/ember_spirit_vert.jpg"}
+  {:name "Arc Warden" :image "http://cdn.dota2.com/apps/dota2/images/heroes/arc_warden_vert.jpg"}
+  {:name "Crystal Maiden" :image "http://cdn.dota2.com/apps/dota2/images/heroes/crystal_maiden_vert.jpg"}
+  {:name "Puck" :image "http://cdn.dota2.com/apps/dota2/images/heroes/puck_vert.jpg"}
+  {:name "Storm Spirit" :image "http://cdn.dota2.com/apps/dota2/images/heroes/storm_spirit_vert.jpg"}
+  {:name "Windranger" :image "http://cdn.dota2.com/apps/dota2/images/heroes/windrunner_vert.jpg"}
+  {:name "Zeus" :image "http://cdn.dota2.com/apps/dota2/images/heroes/zuus_vert.jpg"}
+  {:name "Lina" :image "http://cdn.dota2.com/apps/dota2/images/heroes/lina_vert.jpg"}
+  {:name "Shadow Shaman" :image "http://cdn.dota2.com/apps/dota2/images/heroes/shadow_shaman_vert.jpg"}
+  {:name "Tinker" :image "http://cdn.dota2.com/apps/dota2/images/heroes/tinker_vert.jpg"}
+  {:name "Natures Prophet" :image "http://cdn.dota2.com/apps/dota2/images/heroes/furion_vert.jpg"}
+  {:name "Enchantress" :image "http://cdn.dota2.com/apps/dota2/images/heroes/enchantress_vert.jpg"}
+  {:name "Jakiro" :image "http://cdn.dota2.com/apps/dota2/images/heroes/jakiro_vert.jpg"}
+  {:name "Chen" :image "http://cdn.dota2.com/apps/dota2/images/heroes/chen_vert.jpg"}
+  {:name "Silencer" :image "http://cdn.dota2.com/apps/dota2/images/heroes/silencer_vert.jpg"}
+  {:name "Ogre Magi" :image "http://cdn.dota2.com/apps/dota2/images/heroes/ogre_magi_vert.jpg"}
+  {:name "Rubick" :image "http://cdn.dota2.com/apps/dota2/images/heroes/rubick_vert.jpg"}
+  {:name "Disruptor" :image "http://cdn.dota2.com/apps/dota2/images/heroes/disruptor_vert.jpg"}
+  {:name "Keeper of the Light" :image "http://cdn.dota2.com/apps/dota2/images/heroes/keeper_of_the_light_vert.jpg"}
+  {:name "Skywrath Mage" :image "http://cdn.dota2.com/apps/dota2/images/heroes/skywrath_mage_vert.jpg"}
+  {:name "Oracle" :image "http://cdn.dota2.com/apps/dota2/images/heroes/oracle_vert.jpg"}
+  {:name "Techies" :image "http://cdn.dota2.com/apps/dota2/images/heroes/techies_vert.jpg"}
+  {:name "Axe" :image "http://cdn.dota2.com/apps/dota2/images/heroes/axe_vert.jpg"}
+  {:name "Pudge" :image "http://cdn.dota2.com/apps/dota2/images/heroes/pudge_vert.jpg"}
+  {:name "Sand King" :image "http://cdn.dota2.com/apps/dota2/images/heroes/sand_king_vert.jpg"}
+  {:name "Slardar" :image "http://cdn.dota2.com/apps/dota2/images/heroes/slardar_vert.jpg"}
+  {:name "Tidehunter" :image "http://cdn.dota2.com/apps/dota2/images/heroes/tidehunter_vert.jpg"}
+  {:name "Wraith King" :image "http://cdn.dota2.com/apps/dota2/images/heroes/skeleton_king_vert.jpg"}
+  {:name "Lifestealer" :image "http://cdn.dota2.com/apps/dota2/images/heroes/life_stealer_vert.jpg"}
+  {:name "Night Stalker" :image "http://cdn.dota2.com/apps/dota2/images/heroes/night_stalker_vert.jpg"}
+  {:name "Doom" :image "http://cdn.dota2.com/apps/dota2/images/heroes/doom_bringer_vert.jpg"}
+  {:name "Spirit Breaker" :image "http://cdn.dota2.com/apps/dota2/images/heroes/spirit_breaker_vert.jpg"}
+  {:name "Lycan" :image "http://cdn.dota2.com/apps/dota2/images/heroes/lycan_vert.jpg"}
+  {:name "Chaos Knight" :image "http://cdn.dota2.com/apps/dota2/images/heroes/chaos_knight_vert.jpg"}
+  {:name "Undying" :image "http://cdn.dota2.com/apps/dota2/images/heroes/undying_vert.jpg"}
+  {:name "Magnus" :image "http://cdn.dota2.com/apps/dota2/images/heroes/magnataur_vert.jpg"}
+  {:name "Abaddon" :image "http://cdn.dota2.com/apps/dota2/images/heroes/abaddon_vert.jpg"}
+  {:name "Bloodseeker" :image "http://cdn.dota2.com/apps/dota2/images/heroes/bloodseeker_vert.jpg"}
+  {:name "Shadow Fiend" :image "http://cdn.dota2.com/apps/dota2/images/heroes/nevermore_vert.jpg"}
+  {:name "Razor" :image "http://cdn.dota2.com/apps/dota2/images/heroes/razor_vert.jpg"}
+  {:name "Venomancer" :image "http://cdn.dota2.com/apps/dota2/images/heroes/venomancer_vert.jpg"}
+  {:name "Faceless Void" :image "http://cdn.dota2.com/apps/dota2/images/heroes/faceless_void_vert.jpg"}
+  {:name "Phantom Assassin" :image "http://cdn.dota2.com/apps/dota2/images/heroes/phantom_assassin_vert.jpg"}
+  {:name "Viper" :image "http://cdn.dota2.com/apps/dota2/images/heroes/viper_vert.jpg"}
+  {:name "Clinkz" :image "http://cdn.dota2.com/apps/dota2/images/heroes/clinkz_vert.jpg"}
+  {:name "Broodmother" :image "http://cdn.dota2.com/apps/dota2/images/heroes/broodmother_vert.jpg"}
+  {:name "Weaver" :image "http://cdn.dota2.com/apps/dota2/images/heroes/weaver_vert.jpg"}
+  {:name "Spectre" :image "http://cdn.dota2.com/apps/dota2/images/heroes/spectre_vert.jpg"}
+  {:name "Meepo" :image "http://cdn.dota2.com/apps/dota2/images/heroes/meepo_vert.jpg"}
+  {:name "Nyx Assassin" :image "http://cdn.dota2.com/apps/dota2/images/heroes/nyx_assassin_vert.jpg"}
+  {:name "Slark" :image "http://cdn.dota2.com/apps/dota2/images/heroes/slark_vert.jpg"}
+  {:name "Medusa" :image "http://cdn.dota2.com/apps/dota2/images/heroes/medusa_vert.jpg"}
+  {:name "Terrorblade" :image "http://cdn.dota2.com/apps/dota2/images/heroes/terrorblade_vert.jpg"}
+  {:name "Bane" :image "http://cdn.dota2.com/apps/dota2/images/heroes/bane_vert.jpg"}
+  {:name "Lich" :image "http://cdn.dota2.com/apps/dota2/images/heroes/lich_vert.jpg"}
+  {:name "Lion" :image "http://cdn.dota2.com/apps/dota2/images/heroes/lion_vert.jpg"}
+  {:name "Witch Doctor" :image "http://cdn.dota2.com/apps/dota2/images/heroes/witch_doctor_vert.jpg"}
+  {:name "Enigma" :image "http://cdn.dota2.com/apps/dota2/images/heroes/enigma_vert.jpg"}
+  {:name "Necrophos" :image "http://cdn.dota2.com/apps/dota2/images/heroes/necrolyte_vert.jpg"}
+  {:name "Warlock" :image "http://cdn.dota2.com/apps/dota2/images/heroes/warlock_vert.jpg"}
+  {:name "Queen of Pain" :image "http://cdn.dota2.com/apps/dota2/images/heroes/queenofpain_vert.jpg"}
+  {:name "Death Prophet" :image "http://cdn.dota2.com/apps/dota2/images/heroes/death_prophet_vert.jpg"}
+  {:name "Pugna" :image "http://cdn.dota2.com/apps/dota2/images/heroes/pugna_vert.jpg"}
+  {:name "Dazzle" :image "http://cdn.dota2.com/apps/dota2/images/heroes/dazzle_vert.jpg"}
+  {:name "Leshrac" :image "http://cdn.dota2.com/apps/dota2/images/heroes/leshrac_vert.jpg"}
+  {:name "Dark Seer" :image "http://cdn.dota2.com/apps/dota2/images/heroes/dark_seer_vert.jpg"}
+  {:name "Batrider" :image "http://cdn.dota2.com/apps/dota2/images/heroes/batrider_vert.jpg"}
+  {:name "Ancient Apparition" :image "http://cdn.dota2.com/apps/dota2/images/heroes/ancient_apparition_vert.jpg"}
+  {:name "Invoker" :image "http://cdn.dota2.com/apps/dota2/images/heroes/invoker_vert.jpg"}
+  {:name "Outworld Devourer" :image "http://cdn.dota2.com/apps/dota2/images/heroes/obsidian_destroyer_vert.jpg"}
+  {:name "Shadow Demon" :image "http://cdn.dota2.com/apps/dota2/images/heroes/shadow_demon_vert.jpg"}
+  {:name "Visage" :image "http://cdn.dota2.com/apps/dota2/images/heroes/visage_vert.jpg"}
+  {:name "Winter Wyvern" :image "http://cdn.dota2.com/apps/dota2/images/heroes/winter_wyvern_vert.jpg"}
   ]
-)
+  )
+
+(defn all-heroes-dota []
+  (mapv :name (full-data-dota)))
 
 (defn squares-for-heroes []
-  (into [] (map square-for-hero (all-heroes-dota))))
+  (mapv :image (full-data-dota)))
 
 (def ^:dynamic *all-questions-dota*
   (all-questions-dota))
