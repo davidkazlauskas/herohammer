@@ -713,6 +713,25 @@
         (get parsed-body "success"))
       false)))
 
+(defn check-answer-vec [the-vec]
+  (if the-vec
+    (let [questions (questions-full)
+        all-good (every?
+         #(let [index (get %1 0)
+                answer (get %1 1)
+                idx-q (get questions index)
+                opts (if idx-q (:options idx-q))
+                final (if opts (get opts answer))]
+            (and index answer idx-q opts final)
+          ) the-vec)
+        uniq (into {} the-vec)
+        uniq-same-size (= (count the-vec) (count uniq))]
+    (and all-good uniq-same-size))
+    false))
+
+(defn check-answer-range [the-data]
+  (check-answer-vec (:answers the-data)))
+
 (defn generic-validate-answer [the-data req]
   (let [answered (question-set-similarity the-data)
         ret-err (fn [err]
@@ -736,17 +755,17 @@
               comm (:comment form-data)
               hu (:hero-user form-data)
               ho (:hero-opponent form-data)
-              recapthcha (get the-data "g-recaptcha-response")
-              ]
+              recapthcha (get the-data "g-recaptcha-response")]
           (cond
             (or (nil? hu)
                 (nil? ho))
                 (ret-err "lolwut?")
             ; these are bogus requests, don't give answer
-
+            (not (check-answer-range form-data))
+              (ret-err "Invalid answers posted.")
             (and comm (>= (count comm) (max-comment-size)))
-                (ret-err (str "Comment exceeds maximum size of "
-                            (max-comment-size) "."))
+              (ret-err (str "Comment exceeds maximum size of "
+                          (max-comment-size) "."))
             ; TODO: check captcha
             (clojure.string/blank? recapthcha)
                 (ret-err "Recaptcha answer is invalid.")
