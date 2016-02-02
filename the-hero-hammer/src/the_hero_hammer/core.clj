@@ -6,6 +6,7 @@
             [the-hero-hammer.hh_process :refer :all]
             [the-hero-hammer.db_context :refer :all]
             [the-hero-hammer.lol_context :as lctx]
+            [the-hero-hammer.dota_context :as dctx]
             [the-hero-hammer.storage_ram :as sram]
             [org.httpkit.server :refer [run-server]]
             [cljs.build.api :as cljsbld]
@@ -22,6 +23,13 @@
   `(binding [*ctx-get-func* (fn [] lctx/*hh-context-lol*)
              *get-db-context* (fn [] sram/*storage-ram-context*)
              *html-context* *html-context-lol*]
+     ~@args
+   ))
+
+(defmacro dota-ctx [& args]
+  `(binding [*ctx-get-func* (fn [] dctx/*hh-context-dota*)
+             *get-db-context* (fn [] sram/*storage-ram-context*)
+             *html-context* *html-context-dota*]
      ~@args
    ))
 
@@ -65,6 +73,31 @@
      :registration-link "/questions-lol"
      :rand-comments-link "/comments-lol/random"
      :recent-comments-link "/comments-lol/recent"
+     :squares-javascript (generate-javascript-hero-squares)
+     :question-sort-function
+       (fn [the-q]
+         (let [sname (:shortname the-q)
+               opt-vec (get-in the-q [:counts :val])]
+         (cond (= "mtype" sname) 200
+               (= "ladder" sname) 199
+               (= "position" sname) 198
+               :else (highest-percent-part opt-vec))))
+     :radio-set
+       (lol-ctx (into #{} (map #(:shortname %1)
+         (questions-full))))
+     }))
+
+(def ^:dynamic *html-context-dota*
+  (lol-ctx
+    {:main-page-for-ctx "/dota"
+     :question-post-link "/questions-post-dota"
+     :question-get-link "/questions-dota"
+     :matchup-link-start "/matchup-dota"
+     :add-record-link-start "/questions-dota"
+     :record-link-start "/show-record-dota"
+     :registration-link "/questions-dota"
+     :rand-comments-link "/comments-dota/random"
+     :recent-comments-link "/comments-dota/recent"
      :squares-javascript (generate-javascript-hero-squares)
      :question-sort-function
        (fn [the-q]
@@ -443,8 +476,8 @@
             }]
         (wrap-html (generic-registration-page context-vars req))))
 
-(defn dota2-page []
-  (wrap-html [:p "meow"]))
+(defn dota2-page [req]
+  (dota-ctx (generic-main-page req)))
 
 (defn lol-page [req]
   (lol-ctx (generic-main-page req)))
@@ -792,7 +825,7 @@
 (defroutes myapp
   (route/files "/resources/" {:root "resources/public/"})
   (GET "/" [] (index))
-  (GET "/dota2" [] (dota2-page))
+  (GET "/dota2" [:as req] (dota2-page req))
   (GET "/lol" [:as req] (lol-page req))
   (GET "/questions-lol/:matchup" [matchup :as req] (lol-render-questions matchup req))
   (GET "/questions-lol" [matchup :as req] (lol-render-questions req))
