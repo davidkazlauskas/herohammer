@@ -384,23 +384,24 @@
 (defn wrap-most-popular-data [most-pop]
   (let [h-full (heroes-full)
         squares (get-hero-squares)]
-   (for [i most-pop]
-     (let [the-key (:key i)
-           split (hero-pair-from-part-key the-key)
-           hu (:user split)
-           ho (:opponent split)
-           hn-user (nth h-full hu)
-           hn-opp (nth h-full ho)
-           sq-user (nth squares hu)
-           sq-opp (nth squares ho)]
-       (-> i
-         (assoc :matchup split)
-         (assoc :hn-user hn-user)
-         (assoc :hn-opp hn-opp)
-         (assoc :sq-user sq-user)
-         (assoc :sq-opp sq-opp)
-         (assoc :link (gen-link-matchup-filter split 0))
-         )))))
+   (filterv some?
+     (for [i most-pop]
+       (if i (let [the-key (:key i)
+             split (hero-pair-from-part-key the-key)
+             hu (:user split)
+             ho (:opponent split)
+             hn-user (nth h-full hu)
+             hn-opp (nth h-full ho)
+             sq-user (nth squares hu)
+             sq-opp (nth squares ho)]
+         (-> i
+           (assoc :matchup split)
+           (assoc :hn-user hn-user)
+           (assoc :hn-opp hn-opp)
+           (assoc :sq-user sq-user)
+           (assoc :sq-opp sq-opp)
+           (assoc :link (gen-link-matchup-filter split 0))
+           )))))))
 
 (defn wrap-most-recent-data [most-rec]
   (if most-rec
