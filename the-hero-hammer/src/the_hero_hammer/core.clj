@@ -485,45 +485,54 @@
 (defn q-post-link [] (:question-post-link (html-context)))
 (defn q-get-link [] (:question-get-link (html-context)))
 
+(defn generic-render-questions
+  [matchup req]
+  (let [split (hero-pair-from-part-key matchup)
+                     valid-error (get-in req [:cookies "q-error" :value])
+                     form-data (get-in req [:cookies "q-forms" :value])
+                     forms-des (if form-data (json/read-str form-data))
+                     comm-data (if forms-des (get forms-des "user-comment" ""))
+                     hu (:user split)
+                     ho (:opponent split)
+                     body (wrap-html
+                       (html
+                         (context-js-variables)
+                         (if valid-error
+                           (bootstrap-error valid-error ))
+                         [:form {:id "questions-form"
+                               :method "POST" :action (q-post-link)}
+                        (generate-hero-selection
+                          (if split {:selected-user hu
+                                     :selected-opponent ho}))
+                        [:div {:class "container-fluid input-group"}
+                         (map #(render-question %1 forms-des) (questions-full))]
+                        [:div {:classs "container"}
+                         [:div {:class "row text-center"}
+                          [:p "Your comment"]
+                          [:textarea {:name "user-comment"
+                                    :rows 4 :cols 50}
+                           comm-data]]
+                         [:div {:class "col-md-12"
+                                :style (str "margin-left: 28%; margin-right: 28%;"
+                                            "margin-top: 20px; margin-bottom: 20px;")
+                                } (render-recaptcha)]
+                         [:div {:class "row text-center"
+                                :style "margin-top: 10px;"}
+                          [:input {:class "btn btn-success"
+                                   :type "submit"
+                                   :value "Submit record"}]]]
+                        ]))]
+                   body))
+
 (defn lol-render-questions
   ([matchup req]
-    (lol-ctx (let [split (hero-pair-from-part-key matchup)
-                   valid-error (get-in req [:cookies "q-error" :value])
-                   form-data (get-in req [:cookies "q-forms" :value])
-                   forms-des (if form-data (json/read-str form-data))
-                   comm-data (if forms-des (get forms-des "user-comment" ""))
-                   hu (:user split)
-                   ho (:opponent split)
-                   body (wrap-html
-                     (html
-                       (context-js-variables)
-                       (if valid-error
-                         (bootstrap-error valid-error ))
-                       [:form {:id "questions-form"
-                             :method "POST" :action (q-post-link)}
-                      (generate-hero-selection
-                        (if split {:selected-user hu
-                                   :selected-opponent ho}))
-                      [:div {:class "container-fluid input-group"}
-                       (map #(render-question %1 forms-des) (questions-full))]
-                      [:div {:classs "container"}
-                       [:div {:class "row text-center"}
-                        [:p "Your comment"]
-                        [:textarea {:name "user-comment"
-                                  :rows 4 :cols 50}
-                         comm-data]]
-                       [:div {:class "col-md-12"
-                              :style (str "margin-left: 28%; margin-right: 28%;"
-                                          "margin-top: 20px; margin-bottom: 20px;")
-                              } (render-recaptcha)]
-                       [:div {:class "row text-center"
-                              :style "margin-top: 10px;"}
-                        [:input {:class "btn btn-success"
-                                 :type "submit"
-                                 :value "Submit record"}]]]
-                      ]))]
-                 body)))
+    (lol-ctx (generic-render-questions matchup req)))
   ([req] (lol-render-questions nil req)))
+
+(defn dota-render-questions
+  ([matchup req]
+    (dota-ctx (generic-render-questions matchup req)))
+  ([req] (dota-render-questions nil req)))
 
 (defn matchup-data-split [the-str]
   (let [findings (re-find #"(\d+)+-(\d+)-(\d+)" the-str)]
@@ -822,10 +831,7 @@
   (lol-ctx (let [form-data (:params req)]
     (generic-validate-answer form-data req))))
 
-(defroutes myapp
-  (route/files "/resources/" {:root "resources/public/"})
-  (GET "/" [] (index))
-  (GET "/dota2" [:as req] (dota2-page req))
+(defroutes routes-lol
   (GET "/lol" [:as req] (lol-page req))
   (GET "/questions-lol/:matchup" [matchup :as req] (lol-render-questions matchup req))
   (GET "/questions-lol" [matchup :as req] (lol-render-questions req))
@@ -833,7 +839,23 @@
   (GET "/comments-lol/random/:matchup" [matchup] (lol-matchup-random-comments matchup))
   (GET "/comments-lol/recent/:matchup" [matchup] (lol-matchup-recent-comments matchup))
   (GET "/matchup-lol/:id" [id] (lol-render-matchup-data id))
-  (POST "/questions-post-lol" req (lol-post-questions req))
+  (POST "/questions-post-lol" req (lol-post-questions req)))
+
+(defroutes routes-dota
+  (GET "/dota" [:as req] (dota2-page req))
+  (GET "/questions-dota/:matchup" [matchup :as req] (lol-render-questions matchup req))
+  (GET "/questions-dota" [matchup :as req] (lol-render-questions req))
+  (GET "/show-record-dota" [id] (lol-show-record id))
+  (GET "/comments-dota" [matchup] (lol-matchup-random-comments matchup))
+  (GET "/comments-dota" [matchup] (lol-matchup-recent-comments matchup))
+  (GET "/matchup-dota" [id] (lol-render-matchup-data id))
+  (POST "/questions-post-dota" req (lol-post-questions req)))
+
+(defroutes myapp
+  (route/files "/resources/" {:root "resources/public/"})
+  (GET "/" [] (index))
+  (GET "/dota2" [:as req] (dota2-page req))
+  routes-lol
   (route/not-found "Page not found"))
 
 (defn run-jobs []
