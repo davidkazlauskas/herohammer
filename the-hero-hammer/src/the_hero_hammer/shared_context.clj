@@ -17,6 +17,10 @@
   (fn [] (pulsar/spawn-fiber main-job map-red-job)))
 
 (defn generate-matchup-tasks [argmap the-pair]
+  "Argmap:
+  :generate-filter-matchup-question-count ->
+    generate question count key for filter and matchup
+  "
   (let [generate-filter-matchup-question-count
         (:generate-filter-matchup-question-count argmap)]
     (into []
