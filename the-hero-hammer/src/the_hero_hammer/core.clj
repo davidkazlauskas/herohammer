@@ -751,7 +751,7 @@
     (cond
       (> (min-questions) answered)
          (ret-err
-          (str "Only " answered "% questions were answered."
+          (str "Only " (round-percent-ratio answered) "% questions were answered."
                      " The minimum is " (min-questions) "%"))
       :else
         (let [form-data (form-to-data the-data)
