@@ -687,7 +687,7 @@
           data (get-comments-by-id split rnd-nums)]
       (json/write-str data))))
 
-(defn lol-question-set-similarity
+(defn question-set-similarity
   "Return percentage of values picked from user"
   [request]
   (let [cross (clojure.set/intersection (get-radio-set)
@@ -714,7 +714,7 @@
       false)))
 
 (defn lol-validate-answer [the-data req]
-  (let [answered (lol-question-set-similarity the-data)
+  (let [answered (question-set-similarity the-data)
         ret-err (fn [err]
           (let [cookie-err (short-cookie "q-error" err)
                 cookie-forms (short-cookie "q-forms" (json/write-str the-data))
