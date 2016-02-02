@@ -81,54 +81,6 @@
      (flatten [(pair-vec matchup-pair)
                question-id filter-id]))])
 
-(defn generate-matchup-tasks [the-pair]
-  (into []
-    (filter some?
-      (for [question (questions-full)
-            flt (filters-full)]
-        (let [first-occ (get-question-first-time (:id question))]
-          (if first-occ {:save-key-func
-             (lol-generate-filter-matchup-question-count
-               the-pair
-               (:id question)
-               (:id flt))
-           :map-function (fn [the-val]
-                           (let [the-map
-                                 (->> (:answers the-val)
-                                      (partition 2)
-                                      (map #(into [] %1))
-                                      (into {}))
-                                 our-val (get the-map (:id question))
-                                 ]
-                             our-val))
-           :initial-reduce (fn [the-val]
-                             (let [the-victim
-                               (long-array
-                                (count
-                                  (:options question)))]
-                             (if the-val
-                               (dotimes [i (count the-val)]
-                                 (aset the-victim i (nth the-val i))))
-                             the-victim))
-           :final-reduce (fn [the-val] (vec the-val))
-           :reduce-function (fn [old-val curr]
-                              (if (some? curr)
-                                (inc-arr-index-longs
-                                  old-val curr))
-                              old-val)
-           :initial-range {:from first-occ :to first-occ}
-         }))))))
-
-(defn matchup-pair-map-reduce-job [the-pair]
-  {:count-key (lol-generate-matchup-question-count the-pair)
-   :id-key-function (partial lol-generate-matchup-question-id the-pair)
-   :is-nipped true
-   :tasks (generate-matchup-tasks the-pair)})
-
-(defn process-matchup-pair [pair max-chunk]
-  (let [the-job (matchup-pair-map-reduce-job pair)]
-    (advance-map-reduce-job the-job max-chunk)))
-
 (defn most-popular-question-sort [the-arr]
   (sort-by #(if %1 (:count %1) 0) > the-arr))
 
@@ -170,20 +122,7 @@
     ;generate question count key for filter and matchup
   ;"
 
-    [; generic processing job
-     ;{:save-key-func (lol-generate-global-question-proc)
-      ;:map-function lol-matchup-pair-from-key
-      ;:initial-reduce (fn [the-val]
-                        ;(java.util.ArrayList.))
-      ;:final-reduce (fn [the-val] (let [dist (distinct the-val)]
-                                    ;(doseq [i dist]
-                                      ;(process-matchup-pair i max-proc)))
-                      ;nil)
-      ;:reduce-function (fn [the-val mapped]
-                         ;(.add the-val mapped)
-                         ;the-val)
-      ;}
-     (scon/generic-processing-job lol-args)
+    [(scon/generic-processing-job lol-args)
      ; most popular questions
       {:save-key-func (lol-generate-most-popular-matchups)
        :map-function (fn [the-val]
