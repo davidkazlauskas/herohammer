@@ -1,13 +1,21 @@
 (ns the-hero-hammer.storage_as
-  (:import [com.aerospike.client AerospikeClient]
+  (:import [com.aerospike.client AerospikeClient Key Bin]
            [com.aerospike.client.policy WritePolicy]
            ))
 
 (def ^:dynamic *db-imitation* (java.util.concurrent.ConcurrentHashMap.))
 
+(defn set-key-aes [client the-key the-value]
+  (let [as-ns (nth the-key 0)
+        as-set (nth the-key 1)
+        as-idx (nth the-key 2)
+        key-aes (Key. as-ns as-set as-idx)
+        bin-aes (Bin. "default" the-value)
+        ] (.put client key-aes bin-aes)))
+
 (defn make-aerospike-context [ip port]
-  (let [cl (com.aerospike.client.AerospikeClient. ip port)
-        wp (com.aerospike.client.policy.WritePolicy.)]
+  (let [cl (AerospikeClient. ip port)
+        wp (WritePolicy.)]
     {:get-key "" }
     ))
 
