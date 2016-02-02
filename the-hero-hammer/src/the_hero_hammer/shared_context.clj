@@ -1,5 +1,6 @@
 (ns the-hero-hammer.shared_context
-  (:require [co.paralleluniverse.pulsar.core :as pulsar]))
+  (:require [the-hero-hammer.hh_process :refer :all]
+            [co.paralleluniverse.pulsar.core :as pulsar]))
 
 (defn process-questions [map-red-job]
   (let [max-units 128]
@@ -81,17 +82,19 @@
   "Argmap:
   :glob-question-key -> global key for questions (to db)
   :id-key-gen -> function with 1 arg (id) to get glob question id
+  :max-proc -> maximum questions to process at a time
   "
   [argmap]
   (let [glob-question-key (:glob-question-key argmap)
-        id-key-gen (:id-key-gen argmap)]
+        id-key-gen (:id-key-gen argmap)
+        max-proc (:max-proc argmap 128)]
     {:save-key-func glob-question-key
      :map-function id-key-gen
      :initial-reduce (fn [the-val]
                         (java.util.ArrayList.))
      :final-reduce (fn [the-val] (let [dist (distinct the-val)]
                                     (doseq [i dist]
-                                      (process-matchup-pair i max-proc)))
+                                      (process-matchup-pair argmap i max-proc)))
                       nil)
      :reduce-function (fn [the-val mapped]
                          (.add the-val mapped)
