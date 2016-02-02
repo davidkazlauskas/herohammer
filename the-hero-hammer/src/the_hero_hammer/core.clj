@@ -771,7 +771,9 @@
             :else (let [remote-ip (:remote-addr req)
                         recaptcha-ans (verify-recaptcha recapthcha remote-ip)]
                    (if recaptcha-ans
-                     (ret-succ "Thank you! Your record will help everyone.")
+                     (do
+                      (process-question form-data)
+                      (ret-succ "Thank you! Your record will help everyone."))
                      (ret-err "Recaptcha answer is incorrect."))))
           ))))
 
