@@ -123,11 +123,6 @@
            "Won" "Lost")
     ("mtype" "Match solo queue or ranked?"
            "Solo" "Ranked")
-    ("ladder" "What is your ranking?"
-              "Bronze" "Silver" "Gold" "Platinum"
-              "Diamond" "Master" "Challenger")
-    ("position" "What was your position?"
-                "Top" "Mid" "ADC" "Support" "Jungler")
     ("poking" "I got poked a lot" "yes" "no")
     ("poking-o" "I poked my opponent a lot" "yes" "no")
     ("sustain" "I could not sustain well" "yes" "no")
