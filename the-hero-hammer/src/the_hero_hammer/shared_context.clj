@@ -16,3 +16,79 @@
 (defn gen-jobs [map-red-job]
   (fn [] (pulsar/spawn-fiber main-job map-red-job)))
 
+(defn generate-matchup-tasks [argmap the-pair]
+  (let [generate-filter-matchup-question-count
+        (:generate-filter-matchup-question-count argmap)]
+    (into []
+      (filter some?
+        (for [question (questions-full)
+              flt (filters-full)]
+          (let [first-occ (get-question-first-time (:id question))]
+            (if first-occ {:save-key-func
+               (generate-filter-matchup-question-count
+                 the-pair
+                 (:id question)
+                 (:id flt))
+             :map-function (fn [the-val]
+                             (let [the-map
+                                   (->> (:answers the-val)
+                                        (partition 2)
+                                        (map #(into [] %1))
+                                        (into {}))
+                                   our-val (get the-map (:id question))
+                                   ]
+                               our-val))
+             :initial-reduce (fn [the-val]
+                               (let [the-victim
+                                 (long-array
+                                  (count
+                                    (:options question)))]
+                               (if the-val
+                                 (dotimes [i (count the-val)]
+                                   (aset the-victim i (nth the-val i))))
+                               the-victim))
+             :final-reduce (fn [the-val] (vec the-val))
+             :reduce-function (fn [old-val curr]
+                                (if (some? curr)
+                                  (inc-arr-index-longs
+                                    old-val curr))
+                                old-val)
+             :initial-range {:from first-occ :to first-occ}
+           })))))))
+
+(defn matchup-pair-map-reduce-job [argmap the-pair]
+  "Argmap:
+  :count-key-func -> function to generate count from pair
+  :generate-matchup-question-id -> function to generate matchup question id
+    takes 2 args, pair + filter
+  "
+  (let [count-key-func (:count-key-func argmap)
+        generate-matchup-question-id (:generate-matchup-question-id argmap)]
+  {:count-key (count-key-func the-pair)
+   :id-key-function (partial generate-matchup-question-id the-pair)
+   :is-nipped true
+   :tasks (generate-matchup-tasks argmap the-pair)}))
+
+(defn process-matchup-pair [argma pair max-chunk]
+  (let [the-job (matchup-pair-map-reduce-job argmap pair)]
+    (advance-map-reduce-job the-job max-chunk)))
+
+(defn generic-processing-job
+  "Argmap:
+  :glob-question-key -> global key for questions (to db)
+  :id-key-gen -> function with 1 arg (id) to get glob question id
+  "
+  [argmap]
+  (let [glob-question-key (:glob-question-key argmap)
+        id-key-gen (:id-key-gen argmap)]
+    {:save-key-func glob-question-key
+     :map-function id-key-gen
+     :initial-reduce (fn [the-val]
+                        (java.util.ArrayList.))
+     :final-reduce (fn [the-val] (let [dist (distinct the-val)]
+                                    (doseq [i dist]
+                                      (process-matchup-pair i max-proc)))
+                      nil)
+     :reduce-function (fn [the-val mapped]
+                         (.add the-val mapped)
+                         the-val)}))
