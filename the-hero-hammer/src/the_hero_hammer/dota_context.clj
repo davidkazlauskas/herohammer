@@ -144,21 +144,6 @@
     ("wave-clear" "Clearing waves was a breeze" "yes" "no")
     ))
 
-(defn lowercase-replace [the-link]
-  (clojure.string/replace (clojure.string/lower-case the-link)
-                          "%27" ""))
-
-(defn square-for-hero [hero-full-name]
-  (let [idx (hero-name-full-to-short hero-full-name)]
-    (->> (hero-squares-dota)
-         (map-indexed #(vector %1 (lowercase-replace %2) %2))
-         (map #(hash-map :idx (nth %1 0)
-                         :rgx (re-find (re-pattern idx) (nth %1 1))
-                         :full (nth %1 2)))
-         (filter #(some? (:rgx %1)))
-         (first)
-         (:full))))
-
 (defn full-data-dota []
   [
   {:name "Earthshaker" :image "http://cdn.dota2.com/apps/dota2/images/heroes/earthshaker_vert.jpg"}
