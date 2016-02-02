@@ -54,10 +54,6 @@
   (html [:div {:class "g-recaptcha"
                :data-sitekey (my-recaptcha-key)}]))
 
-(def ^:dynamic *radio-set-lol*
-  (lol-ctx (into #{} (map #(:shortname %1)
-       (questions-full)))))
-
 (def ^:dynamic *html-context-lol*
   (lol-ctx
     {:main-page-for-ctx "/lol"
@@ -77,7 +73,9 @@
          (cond (= "mtype" sname) 200
                (= "ladder" sname) 199
                :else (highest-percent-part opt-vec))))
-     :radio-set *radio-set-lol*
+     :radio-set
+       (lol-ctx (into #{} (map #(:shortname %1)
+         (questions-full))))
      }))
 
 (def ^:dynamic *html-context* nil)
