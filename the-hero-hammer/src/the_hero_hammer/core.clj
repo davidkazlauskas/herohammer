@@ -699,7 +699,7 @@
   [request]
   (let [cross (clojure.set/intersection (get-radio-set)
                 (into #{} (keys request)))]
-    (* (/ (count cross) (count (get-radio-set))) 100)))
+    (Math/round (float (* (/ (count cross) (count (get-radio-set))) 100)))))
 
 (defmacro min-questions [] 77)
 (defmacro max-comment-size [] 512)
@@ -754,7 +754,7 @@
     (cond
       (> (min-questions) answered)
          (ret-err
-          (str "Only " (round-percent-ratio answered) "% questions were answered."
+          (str "Only " answered "% questions were answered."
                      " The minimum is " (min-questions) "%"))
       :else
         (let [form-data (form-to-data the-data)
