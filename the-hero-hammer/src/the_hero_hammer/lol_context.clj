@@ -205,6 +205,8 @@
 
 (defmacro all-questions-lol []
   (questions-m
+    ("end-res" "Won or lost?"
+           "Won" "Lost")
     ("mtype" "Match solo queue or ranked?"
            "Solo" "Ranked")
     ("ladder" "What is your ranking?"
@@ -215,9 +217,20 @@
     ("sustain" "I could not sustain well" "yes" "no")
     ("sustain-o" "My opponent could not sustain me" "yes" "no")
     ("first-blood" "I got first blood" "yes" "no")
+    ("lane-to-me" "Lane was often pushed up to me" "yes" "no")
+    ("lane-to-opp" "I often pushed lane to opponent" "yes" "no")
     ("cc" "I got a lot of cc (stuns/slows)" "yes" "no")
     ("gank" "I was ganked quite often" "yes" "no")
     ("last-hit" "I had trouble last hitting minions" "yes" "no")
+    ("aggro-me" "I could play very aggresively against my opponent" "yes" "no")
+    ("with-team" "I needed team before I could make some moves" "yes" "no")
+    ("strong-alone" "I felt very strong alone" "yes" "no")
+    ("must-def" "I had no choice but to play defensively" "yes" "no")
+    ("carried" "I carried the game" "yes" "no")
+    ("retards" "My team was full of retards" "yes" "no")
+    ("fed-me" "I got pretty fed" "yes" "no")
+    ("ganked-payback" "If I got ganked at least I could kill someone before death" "yes" "no")
+    ("wave-clear" "Clearing waves was a breeze" "yes" "no")
     ))
 
 (defn hero-squares-lol []
