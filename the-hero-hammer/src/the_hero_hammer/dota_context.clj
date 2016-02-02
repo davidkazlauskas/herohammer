@@ -3,6 +3,7 @@
             [the-hero-hammer.hh_context :refer :all]
             [the-hero-hammer.hh_process :refer :all]
             [the-hero-hammer.storage :as stor]
+            [the-hero-hammer.shared_context :as scon]
             [taoensso.nippy :as nippy]
             [co.paralleluniverse.pulsar.core :as pulsar]))
 
@@ -11,30 +12,8 @@
    :expected max-available-range
    :process-question (fn [args]
      (count-in))
-   :required-questions ["poking"]
    :full-name "All matches"
    })
-
-; run jerb every 5 minutes
-(defn proc-delay-ms [] (* 1000 * 60 * 5))
-
-(declare get-map-reduce-job)
-
-(defn process-questions []
-  (let [max-units 128
-        job (get-map-reduce-job max-units)]
-    (advance-map-reduce-job job max-units)))
-
-(defn schedule-question-processing []
-  (pulsar/spawn-fiber process-questions))
-
-(defn main-job []
-  (while true
-    (schedule-question-processing)
-    (pulsar/sleep (proc-delay-ms))))
-
-(defn gen-jobs []
-  (fn [] (pulsar/spawn-fiber main-job)))
 
 (def ^:dynamic *all-filters-dota*
   [(main-filter)])
@@ -96,120 +75,47 @@
      (flatten [(pair-vec matchup-pair)
                question-id filter-id]))])
 
-(defn generate-matchup-tasks [the-pair]
-  (into []
-    (filter some?
-      (for [question (questions-full)
-            flt (filters-full)]
-        (let [first-occ (get-question-first-time (:id question))]
-          (if first-occ {:save-key-func
-             (dota-generate-filter-matchup-question-count
-               the-pair
-               (:id question)
-               (:id flt))
-           :map-function (fn [the-val]
-                           (let [the-map
-                                 (->> (:answers the-val)
-                                      (partition 2)
-                                      (map #(into [] %1))
-                                      (into {}))
-                                 our-val (get the-map (:id question))
-                                 ]
-                             our-val))
-           :initial-reduce (fn [the-val]
-                             (let [the-victim
-                               (long-array
-                                (count
-                                  (:options question)))]
-                             (if the-val
-                               (dotimes [i (count the-val)]
-                                 (aset the-victim i (nth the-val i))))
-                             the-victim))
-           :final-reduce (fn [the-val] (vec the-val))
-           :reduce-function (fn [old-val curr]
-                              (if (some? curr)
-                                (inc-arr-index-longs
-                                  old-val curr))
-                              old-val)
-           :initial-range {:from first-occ :to first-occ}
-         }))))))
-
-(defn matchup-pair-map-reduce-job [the-pair]
-  {:count-key (dota-generate-matchup-question-count the-pair)
-   :id-key-function (partial dota-generate-matchup-question-id the-pair)
-   :is-nipped true
-   :tasks (generate-matchup-tasks the-pair)})
-
-(defn process-matchup-pair [pair max-chunk]
-  (let [the-job (matchup-pair-map-reduce-job pair)]
-    (advance-map-reduce-job the-job max-chunk)))
-
-(defn most-popular-question-sort [the-arr]
-  (sort-by #(if %1 (:count %1) 0) > the-arr))
-
 (defn drop-tail-from-key [the-key]
-  (clojure.string/replace the-key #"^(\d+)-(\d+)-.*$" "$1-$2"))
-
-(defn distinct-java-array [the-arr]
-  (let [the-vec (vec the-arr)
-        grouped (group-by :key the-vec)
-        gfiltered (filter #(some? (get % 0)) grouped)
-        mapped (mapv
-         #(hash-map :key (nth %1 0)
-                    :count (apply + (map :count (nth %1 1))))
-         gfiltered)
-        dcount (count mapped)]
-    (dotimes [n (count the-arr)]
-      (let [to-set (if (< n dcount)
-                     (nth mapped n) nil)]
-        (aset the-arr n to-set))))
-  the-arr)
+  (clojure.string/replace (nth the-key 2) #"^(\d+)-(\d+)-.*$" "$1-$2"))
 
 (defn gen-map-reduce-tasks-global [max-proc]
-  [; generic processing
-   {:save-key-func (dota-generate-global-question-proc)
-    :map-function dota-matchup-pair-from-key
-    :initial-reduce (fn [the-val]
-                      (java.util.ArrayList.))
-    :final-reduce (fn [the-val] (let [dist (distinct the-val)]
-                                  (doseq [i dist]
-                                    (process-matchup-pair i max-proc)))
-                    nil)
-    :reduce-function (fn [the-val mapped]
-                       (.add the-val mapped)
-                       the-val)
-    }
-   ; most popular questions
-    {:save-key-func (dota-generate-most-popular-matchups)
-     :map-function (fn [the-val]
-                     (let [matchup (matchup-pair-from-key the-val)
-                           qcount (get-matchup-question-count matchup)]
-                     {:count qcount
-                      :key (drop-tail-from-key (nth the-val 2))}))
-     :initial-reduce (fn [the-val]
-                       (let [the-arr (object-array 11)]
-                         (if the-val
-                           (do
-                             (dotimes [i (count the-val)]
-                               (aset the-arr i (nth the-val i)))
-                             (most-popular-question-sort the-arr)
-                             ))
-                         the-arr))
-     :final-reduce (fn [the-arr]
-                     (vec the-arr))
-     :reduce-function (fn [the-arr mapped]
-                        (aset the-arr 10 mapped)
-                        (distinct-java-array the-arr)
-                        (most-popular-question-sort the-arr)
-                        the-arr)
-    }
-   ])
+  (let [dota-args
+        {; generic
+         :glob-question-key (dota-generate-global-question-proc)
+         :id-key-gen dota-matchup-pair-from-key
+         :max-proc 128
+         :count-key-func dota-generate-matchup-question-count
+         :generate-matchup-question-id dota-generate-matchup-question-id
+         :generate-filter-matchup-question-count dota-generate-filter-matchup-question-count
+
+         ; most popular
+         :most-popular-matchups-key (dota-generate-most-popular-matchups)
+         :turn-key-to-uniq-matchup drop-tail-from-key
+         }]
+      ;:glob-question-key -> global key for questions (to db)
+      ;:id-key-gen -> function with 1 arg (id) to get glob question id
+      ;:max-proc -> maximum questions to process at a time
+      ;:count-key-func -> function to generate count from pair
+      ;:generate-matchup-question-id -> function to generate matchup question id
+      ;  takes 2 args, pair + filter
+      ;"Argmap:
+      ;:generate-filter-matchup-question-count ->
+        ;generate question count key for filter and matchup
+      ;"
+    [; generic processing
+     (scon/generic-processing-job dota-args)
+     ; most popular questions
+     (scon/most-popular-matchups-proc-job dota-args)
+     ]))
 
 (defn get-map-reduce-job [max-proc]
   {:count-key (dota-generate-global-question-count)
    :id-key-function dota-generate-global-question-key
    :is-nipped true
    :tasks (gen-map-reduce-tasks-global max-proc)})
+
+(defn process-questions []
+  (scon/process-questions (get-map-reduce-job 128)))
 
 (defmacro all-questions-dota []
   (questions-m
@@ -575,6 +481,6 @@
    :util {
      :matchup-pair-from-key dota-matchup-pair-from-key
    }
-   :jobs (gen-jobs)
+   :jobs (scon/gen-jobs (get-map-reduce-job 128))
   })
 
