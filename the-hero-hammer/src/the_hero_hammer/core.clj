@@ -706,8 +706,7 @@
          {:secret (my-recaptcha-key-sec)
           :response response
           :remoteip ip}
-        :accept :json
-        :debug true} :as :json)]
+        :accept :json} :as :json)]
     (if answer
       (let [parsed-body (json/read-str (:body answer))]
         (get parsed-body "success"))
