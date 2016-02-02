@@ -1,6 +1,15 @@
-(ns the-hero-hammer.storage_as)
+(ns the-hero-hammer.storage_as
+  (:import [com.aerospike.client AerospikeClient]
+           [com.aerospike.client.policy WritePolicy]
+           ))
 
 (def ^:dynamic *db-imitation* (java.util.concurrent.ConcurrentHashMap.))
+
+(defn make-aerospike-context [ip port]
+  (let [cl (com.aerospike.client.AerospikeClient. ip port)
+        wp (com.aerospike.client.policy.WritePolicy.)]
+    {:get-key "" }
+    ))
 
 (defn key-merge [arg]
   (cond (instance? String arg) arg
