@@ -73,7 +73,7 @@
    :is-nipped true
    :tasks (generate-matchup-tasks argmap the-pair)}))
 
-(defn process-matchup-pair [argma pair max-chunk]
+(defn process-matchup-pair [argmap pair max-chunk]
   (let [the-job (matchup-pair-map-reduce-job argmap pair)]
     (advance-map-reduce-job the-job max-chunk)))
 
