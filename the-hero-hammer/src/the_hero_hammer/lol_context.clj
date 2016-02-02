@@ -151,44 +151,64 @@
   the-arr)
 
 (defn gen-map-reduce-tasks-global [max-proc]
-  [; generic processing
-   {:save-key-func (lol-generate-global-question-proc)
-    :map-function lol-matchup-pair-from-key
-    :initial-reduce (fn [the-val]
-                      (java.util.ArrayList.))
-    :final-reduce (fn [the-val] (let [dist (distinct the-val)]
-                                  (doseq [i dist]
-                                    (process-matchup-pair i max-proc)))
-                    nil)
-    :reduce-function (fn [the-val mapped]
-                       (.add the-val mapped)
-                       the-val)
-    }
-   ; most popular questions
-    {:save-key-func (lol-generate-most-popular-matchups)
-     :map-function (fn [the-val]
-                     (let [matchup (matchup-pair-from-key the-val)
-                           qcount (get-matchup-question-count matchup)]
-                     {:count qcount
-                      :key (drop-tail-from-key (nth the-val 2))}))
-     :initial-reduce (fn [the-val]
-                       (let [the-arr (object-array 11)]
-                         (if the-val
-                           (do
-                             (dotimes [i (count the-val)]
-                               (aset the-arr i (nth the-val i)))
-                             (most-popular-question-sort the-arr)
-                             ))
-                         the-arr))
-     :final-reduce (fn [the-arr]
-                     (vec the-arr))
-     :reduce-function (fn [the-arr mapped]
-                        (aset the-arr 10 mapped)
-                        (distinct-java-array the-arr)
-                        (most-popular-question-sort the-arr)
-                        the-arr)
-    }
-   ])
+  (let [lol-args
+        {:glob-question-key (lol-generate-global-question-proc)
+         :id-key-gen lol-matchup-pair-from-key
+         :max-proc 128
+         :count-key-func lol-generate-matchup-question-count
+         :generate-matchup-question-id lol-generate-matchup-question-id
+         :generate-filter-matchup-question-count lol-generate-filter-matchup-question-count
+         }]
+  ;:glob-question-key -> global key for questions (to db)
+  ;:id-key-gen -> function with 1 arg (id) to get glob question id
+  ;:max-proc -> maximum questions to process at a time
+  ;:count-key-func -> function to generate count from pair
+  ;:generate-matchup-question-id -> function to generate matchup question id
+  ;  takes 2 args, pair + filter
+  ;"Argmap:
+  ;:generate-filter-matchup-question-count ->
+    ;generate question count key for filter and matchup
+  ;"
+
+    [; generic processing job
+     ;{:save-key-func (lol-generate-global-question-proc)
+      ;:map-function lol-matchup-pair-from-key
+      ;:initial-reduce (fn [the-val]
+                        ;(java.util.ArrayList.))
+      ;:final-reduce (fn [the-val] (let [dist (distinct the-val)]
+                                    ;(doseq [i dist]
+                                      ;(process-matchup-pair i max-proc)))
+                      ;nil)
+      ;:reduce-function (fn [the-val mapped]
+                         ;(.add the-val mapped)
+                         ;the-val)
+      ;}
+     (scon/generic-processing-job lol-args)
+     ; most popular questions
+      {:save-key-func (lol-generate-most-popular-matchups)
+       :map-function (fn [the-val]
+                       (let [matchup (matchup-pair-from-key the-val)
+                             qcount (get-matchup-question-count matchup)]
+                       {:count qcount
+                        :key (drop-tail-from-key (nth the-val 2))}))
+       :initial-reduce (fn [the-val]
+                         (let [the-arr (object-array 11)]
+                           (if the-val
+                             (do
+                               (dotimes [i (count the-val)]
+                                 (aset the-arr i (nth the-val i)))
+                               (most-popular-question-sort the-arr)
+                               ))
+                           the-arr))
+       :final-reduce (fn [the-arr]
+                       (vec the-arr))
+       :reduce-function (fn [the-arr mapped]
+                          (aset the-arr 10 mapped)
+                          (distinct-java-array the-arr)
+                          (most-popular-question-sort the-arr)
+                          the-arr)
+      }
+     ]))
 
 (defn get-map-reduce-job [max-proc]
   {:count-key (lol-generate-global-question-count)

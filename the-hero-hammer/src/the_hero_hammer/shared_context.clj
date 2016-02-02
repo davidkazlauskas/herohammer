@@ -1,5 +1,6 @@
 (ns the-hero-hammer.shared_context
   (:require [the-hero-hammer.hh_process :refer :all]
+            [the-hero-hammer.hh_context :refer :all]
             [co.paralleluniverse.pulsar.core :as pulsar]))
 
 (defn process-questions [map-red-job]
