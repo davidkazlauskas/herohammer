@@ -1,7 +1,6 @@
 (ns the-hero-hammer.storage_as
   (:import [com.aerospike.client AerospikeClient Key Bin]
-           [com.aerospike.client.policy WritePolicy]
-           ))
+           [com.aerospike.client.policy WritePolicy QueryPolicy]))
 
 (def ^:dynamic *db-imitation* (java.util.concurrent.ConcurrentHashMap.))
 
@@ -11,21 +10,22 @@
         as-idx (nth the-key 2)
         key-aes (Key. as-ns as-set as-idx)
         bin-aes (Bin. "default" the-value)
-        ] (.put client policy key-aes bin-aes)))
+        ] (.put client policy key-aes (into-array [bin-aes]))))
 
 (defn get-key-aes [client policy the-key]
   (let [as-ns (nth the-key 0)
         as-set (nth the-key 1)
         as-idx (nth the-key 2)
         key-aes (Key. as-ns as-set as-idx)
-        get-first (.get client policy the-key)]
-    (println get-first)
-    ))
+        get-first (.get client policy key-aes)]
+    get-first))
 
 (defn make-aerospike-context [ip port]
   (let [cl (AerospikeClient. ip port)
-        wp (WritePolicy.)]
-    {:get-key (partial get-key-aes cl wp)}
+        wp (WritePolicy.)
+        rp (QueryPolicy.)]
+    {:get-key (partial get-key-aes cl rp)
+     :set-key (partial set-key-aes cl wp)}
     ))
 
 (def ^:dynamic *aes-client* (make-aerospike-context "192.168.56.101" 3000))
@@ -41,12 +41,15 @@
   [db-key]
   (let [client (*get-aes-client*)
         func (:get-key client)]
+  (println "dizzle" func)
    (func db-key)))
 
 (defn set-key
   "Put data into storage with specified key."
   [db-key value]
-  (.put *db-imitation* (key-merge db-key) value))
+  (let [client (*get-aes-client*)
+        func (:set-key client)]
+    (func db-key value)))
 
 (defn set-if-not-exists
   "Put data into storage if it doesn't exist"
