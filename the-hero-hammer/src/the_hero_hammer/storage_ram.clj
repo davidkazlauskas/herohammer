@@ -31,8 +31,17 @@
        (map get-key)
        (into [])))
 
+(defn atomic-increment
+  "Increment atomically"
+  [db-key]
+  (set-if-not-exists db-key 0)
+  (let [resget (get-key db-key)]
+    (set-key db-key (inc resget))
+    resget))
+
 (def ^:dynamic *storage-ram-context*
   {:get-key get-key
    :set-key set-key
    :set-if-not-exists set-if-not-exists
-   :get-key-batch get-key-batch})
+   :get-key-batch get-key-batch
+   :atomic-increment atomic-increment})
