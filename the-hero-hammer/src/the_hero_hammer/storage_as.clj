@@ -1,5 +1,5 @@
 (ns the-hero-hammer.storage_as
-  (:import [com.aerospike.client AerospikeClient Key Bin]
+  (:import [com.aerospike.client AerospikeClient Key Bin Operation]
            [com.aerospike.client.policy WritePolicy QueryPolicy BatchPolicy]))
 
 (defn set-key-aes [client policy the-key the-value]
@@ -38,6 +38,16 @@
         key-aes (Key. as-ns as-set as-idx)
         the-val (.exists client policy key-aes)]
     the-val))
+
+(defn atomic-increment-aes [client policy the-key]
+  (let [as-ns (nth the-key 0)
+        as-set (nth the-key 1)
+        as-idx (nth the-key 2)
+        add-op (Operation/add (Bin. "default" 1))
+        get-op (Operation/get "default")
+        key-aes (Key. as-ns as-set as-idx)
+        the-val (.operate nil key-aes add-op get-op)]
+    (.getLong the-val)))
 
 (defn make-aerospike-context [ip port]
   (let [cl (AerospikeClient. ip port)
