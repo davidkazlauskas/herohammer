@@ -305,6 +305,6 @@
    :util {
      :matchup-pair-from-key dota-matchup-pair-from-key
    }
-   :jobs (scon/gen-jobs (get-map-reduce-job 128) (n-min 5))
+   :jobs (scon/gen-jobs (get-map-reduce-job 128) (scon/n-min 5))
   })
 
