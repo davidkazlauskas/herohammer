@@ -17,8 +17,9 @@
         as-set (nth the-key 1)
         as-idx (nth the-key 2)
         key-aes (Key. as-ns as-set as-idx)
-        get-first (.get client policy key-aes)]
-    get-first))
+        get-first (.get client policy key-aes)
+        the-value (.getValue get-first "default")]
+    the-value))
 
 (defn make-aerospike-context [ip port]
   (let [cl (AerospikeClient. ip port)
@@ -41,7 +42,6 @@
   [db-key]
   (let [client (*get-aes-client*)
         func (:get-key client)]
-  (println "dizzle" func)
    (func db-key)))
 
 (defn set-key
