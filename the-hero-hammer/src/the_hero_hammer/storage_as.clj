@@ -29,7 +29,7 @@
                         as-idx (nth % 2)]
                    (Key. as-ns as-set as-idx)) the-keys))
         get-first (.get client policy keys-aes)
-        the-value (.getValue get-first "default")]
+        the-value (mapv #(.getValue % "default") get-first)]
     the-value))
 
 (defn make-aerospike-context [ip port]
