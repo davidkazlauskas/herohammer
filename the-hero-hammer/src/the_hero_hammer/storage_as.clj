@@ -52,7 +52,15 @@
      :exists (partial record-exists-aes cl rp)}
     ))
 
-(def ^:dynamic *aes-client* (make-aerospike-context "192.168.56.101" 3000))
+(defn aes-serv []
+  (or (System/getenv "AES_URL")
+      "192.168.56.101"))
+
+(defn aes-port []
+  (or (System/getenv "AES_PORT")
+      3000))
+
+(def ^:dynamic *aes-client* (make-aerospike-context (aes-serv) (aes-port)))
 (def ^:dynamic *get-aes-client* (fn [] *aes-client*))
 
 (defn key-merge [arg]
