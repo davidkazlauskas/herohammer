@@ -19,6 +19,9 @@
 (defn fn-get-keys-batch []
   (:get-key-batch (*get-db-context*)))
 
+(defn fn-atomic-increment []
+  (:atomic-increment (*get-db-context*)))
+
 (defn get-key
   "Get key"
   [db-key]
@@ -38,3 +41,8 @@
   "Get keys in batch."
   [db-keys]
   ((fn-get-keys-batch) db-keys))
+
+(defn atomic-increment-key
+  "Atomic increment on key."
+  [db-key]
+  ((fn-atomic-increment) db-key))
