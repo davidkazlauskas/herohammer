@@ -131,14 +131,8 @@
   "Store next item (or create) for specified key (for counter)
   And the function which generates key from id."
   [count-key id-gen-function data]
-  (let [curr (get-key count-key)]
-    (let [toreturn
-          (if (some? curr)
-            (do (set-key count-key (inc curr))
-                curr)
-            (do (set-key count-key 1)
-                0)
-            )]
+  (let [curr (atomic-increment-key count-key)]
+    (let [toreturn curr]
       (set-key (id-gen-function toreturn) data)
       toreturn)))
 
