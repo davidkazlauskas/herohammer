@@ -3,6 +3,8 @@
             [the-hero-hammer.hh_context :refer :all]
             [co.paralleluniverse.pulsar.core :as pulsar]))
 
+(defmacro n-min [n] (* 1000 60 n))
+
 (defn process-questions [map-red-job]
   (let [max-units 128]
     (advance-map-reduce-job map-red-job max-units)))
@@ -15,8 +17,8 @@
     (schedule-question-processing map-red-job)
     (pulsar/sleep proc-delay-ms)))
 
-(defn gen-jobs [map-red-job]
-  (fn [] (pulsar/spawn-fiber main-job map-red-job)))
+(defn gen-jobs [map-red-job delay-ms]
+  (fn [] (pulsar/spawn-fiber main-job map-red-job delay-ms)))
 
 (defn generate-matchup-tasks [argmap the-pair]
   "Argmap:
