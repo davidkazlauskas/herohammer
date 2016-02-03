@@ -1,6 +1,6 @@
 (ns the-hero-hammer.storage_as
   (:import [com.aerospike.client AerospikeClient Key Bin]
-           [com.aerospike.client.policy WritePolicy QueryPolicy]))
+           [com.aerospike.client.policy WritePolicy QueryPolicy BatchPolicy]))
 
 (def ^:dynamic *db-imitation* (java.util.concurrent.ConcurrentHashMap.))
 
@@ -21,12 +21,25 @@
         the-value (.getValue get-first "default")]
     the-value))
 
+(defn get-key-batch-aes [client policy the-keys]
+  (let [keys-aes
+         (into-array
+           (mapv #(let [as-ns (nth % 0)
+                        as-set (nth % 1)
+                        as-idx (nth % 2)]
+                   (Key. as-ns as-set as-idx)) the-keys))
+        get-first (.get client policy keys-aes)
+        the-value (.getValue get-first "default")]
+    the-value))
+
 (defn make-aerospike-context [ip port]
   (let [cl (AerospikeClient. ip port)
         wp (WritePolicy.)
-        rp (QueryPolicy.)]
+        rp (QueryPolicy.)
+        bp (BatchPolicy.)]
     {:get-key (partial get-key-aes cl rp)
-     :set-key (partial set-key-aes cl wp)}
+     :set-key (partial set-key-aes cl wp)
+     :get-key-batch (partial get-key-batch-aes cl bp)}
     ))
 
 (def ^:dynamic *aes-client* (make-aerospike-context "192.168.56.101" 3000))
@@ -61,9 +74,9 @@
 (defn get-key-batch
   "Get keys in batch."
   [db-keys]
-  (->> db-keys
-       (map get-key)
-       (into [])))
+  (let [client (*get-aes-client*)
+        func (:get-key-batch client)]
+    (func db-keys)))
 
 (def ^:dynamic *storage-ram-context*
   {:get-key get-key
