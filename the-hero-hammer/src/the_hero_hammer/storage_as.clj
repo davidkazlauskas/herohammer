@@ -13,13 +13,13 @@
         ] (.put client policy key-aes (into-array [bin-aes]))))
 
 (defn get-key-aes [client policy the-key]
-  (let [
-        as-ns (nth the-key 0)
+  (let [as-ns (nth the-key 0)
         as-set (nth the-key 1)
         as-idx (nth the-key 2)
         key-aes (Key. as-ns as-set as-idx)
         get-first (.get client policy key-aes)
-        the-value (.getValue get-first "default")]
+        the-value (if get-first
+                    (.getValue get-first "default"))]
     the-value))
 
 (defn get-key-batch-aes [client policy the-keys]
