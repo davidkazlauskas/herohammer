@@ -1,7 +1,8 @@
 (ns the-hero-hammer.shared_context
   (:require [the-hero-hammer.hh_process :refer :all]
             [the-hero-hammer.hh_context :refer :all]
-            [co.paralleluniverse.pulsar.core :as pulsar]))
+            [co.paralleluniverse.pulsar.core :as pulsar])
+  (:import [co.paralleluniverse.fibers Fiber]))
 
 (defmacro n-min [n] (* 1000 60 n))
 
@@ -15,7 +16,7 @@
 (defn main-job [map-red-job proc-delay-ms]
   (while true
     (schedule-question-processing map-red-job)
-    (pulsar/sleep proc-delay-ms)))
+    (Fiber/sleep proc-delay-ms)))
 
 (defn gen-jobs [map-red-job delay-ms]
   (fn [] (pulsar/spawn-fiber main-job map-red-job delay-ms)))

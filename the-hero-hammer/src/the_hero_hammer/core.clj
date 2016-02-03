@@ -888,6 +888,8 @@
 
 (defn run-jobs []
   (lol-ctx
+    ((get-ctx-jobs)))
+  (dota-ctx
     ((get-ctx-jobs))))
 
 ; PROC EZ
