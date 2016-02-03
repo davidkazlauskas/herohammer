@@ -8,6 +8,7 @@
             [the-hero-hammer.lol_context :as lctx]
             [the-hero-hammer.dota_context :as dctx]
             [the-hero-hammer.storage_ram :as sram]
+            [the-hero-hammer.storage_as :as saes]
             [org.httpkit.server :refer [run-server]]
             [cljs.build.api :as cljsbld]
             [clojure.data.json :as json]
@@ -21,14 +22,16 @@
 
 (defmacro lol-ctx [& args]
   `(binding [*ctx-get-func* (fn [] lctx/*hh-context-lol*)
-             *get-db-context* (fn [] sram/*storage-ram-context*)
+             ;*get-db-context* (fn [] sram/*storage-ram-context*) ; for testing
+             *get-db-context* (fn [] saes/*storage-aes-context*)
              *html-context* *html-context-lol*]
      ~@args
    ))
 
 (defmacro dota-ctx [& args]
   `(binding [*ctx-get-func* (fn [] dctx/*hh-context-dota*)
-             *get-db-context* (fn [] sram/*storage-ram-context*)
+             ;*get-db-context* (fn [] sram/*storage-ram-context*) ; for testing
+             *get-db-context* (fn [] saes/*storage-aes-context*)
              *html-context* *html-context-dota*]
      ~@args
    ))
