@@ -13,7 +13,8 @@
         ] (.put client policy key-aes (into-array [bin-aes]))))
 
 (defn get-key-aes [client policy the-key]
-  (let [as-ns (nth the-key 0)
+  (let [
+        as-ns (nth the-key 0)
         as-set (nth the-key 1)
         as-idx (nth the-key 2)
         key-aes (Key. as-ns as-set as-idx)
@@ -32,6 +33,14 @@
         the-value (mapv #(.getValue % "default") get-first)]
     the-value))
 
+(defn record-exists-aes [client policy the-key]
+  (let [as-ns (nth the-key 0)
+        as-set (nth the-key 1)
+        as-idx (nth the-key 2)
+        key-aes (Key. as-ns as-set as-idx)
+        the-val (.exists client policy key-aes)]
+    the-val))
+
 (defn make-aerospike-context [ip port]
   (let [cl (AerospikeClient. ip port)
         wp (WritePolicy.)
@@ -39,7 +48,8 @@
         bp (BatchPolicy.)]
     {:get-key (partial get-key-aes cl rp)
      :set-key (partial set-key-aes cl wp)
-     :get-key-batch (partial get-key-batch-aes cl bp)}
+     :get-key-batch (partial get-key-batch-aes cl bp)
+     :exists (partial record-exists-aes cl rp)}
     ))
 
 (def ^:dynamic *aes-client* (make-aerospike-context "192.168.56.101" 3000))
@@ -67,9 +77,11 @@
 (defn set-if-not-exists
   "Put data into storage if it doesn't exist"
   [db-key value]
-  (let [merged (key-merge db-key)]
-    (if (nil? (get-key merged))
-      (set-key merged value))))
+  (let [client (*get-aes-client*)
+        exists-func (:exists client)
+        set-func (:set-key client)]
+    (if (not (exists-func db-key))
+             (set-func db-key value))))
 
 (defn get-key-batch
   "Get keys in batch."
