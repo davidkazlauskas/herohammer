@@ -2,8 +2,6 @@
   (:import [com.aerospike.client AerospikeClient Key Bin]
            [com.aerospike.client.policy WritePolicy QueryPolicy BatchPolicy]))
 
-(def ^:dynamic *db-imitation* (java.util.concurrent.ConcurrentHashMap.))
-
 (defn set-key-aes [client policy the-key the-value]
   (let [as-ns (nth the-key 0)
         as-set (nth the-key 1)
@@ -98,7 +96,7 @@
         func (:get-key-batch client)]
     (func db-keys)))
 
-(def ^:dynamic *storage-ram-context*
+(def ^:dynamic *storage-aes-context*
   {:get-key get-key
    :set-key set-key
    :set-if-not-exists set-if-not-exists
