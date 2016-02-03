@@ -46,8 +46,9 @@
         add-op (Operation/add (Bin. "default" 1))
         get-op (Operation/get "default")
         key-aes (Key. as-ns as-set as-idx)
-        the-val (.operate policy key-aes add-op get-op)]
-    (.getLong the-val)))
+        the-val (.operate client policy key-aes
+                          (into-array [add-op get-op]))]
+    (dec (.getLong the-val "default"))))
 
 (defn make-aerospike-context [ip port]
   (let [cl (AerospikeClient. ip port)
@@ -57,8 +58,8 @@
     {:get-key (partial get-key-aes cl rp)
      :set-key (partial set-key-aes cl wp)
      :get-key-batch (partial get-key-batch-aes cl bp)
-     :atomic-increment (partial atomic-increment-aes cl)
-     :exists (partial record-exists-aes cl nil)}))
+     :atomic-increment (partial atomic-increment-aes cl wp)
+     :exists (partial record-exists-aes cl rp)}))
 
 (defn aes-serv []
   (or (System/getenv "AES_URL")
