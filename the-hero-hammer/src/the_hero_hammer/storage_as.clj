@@ -13,11 +13,23 @@
         bin-aes (Bin. "default" the-value)
         ] (.put client policy key-aes bin-aes)))
 
+(defn get-key-aes [client policy the-key]
+  (let [as-ns (nth the-key 0)
+        as-set (nth the-key 1)
+        as-idx (nth the-key 2)
+        key-aes (Key. as-ns as-set as-idx)
+        get-first (.get client policy the-key)]
+    (println get-first)
+    ))
+
 (defn make-aerospike-context [ip port]
   (let [cl (AerospikeClient. ip port)
         wp (WritePolicy.)]
-    {:get-key (partial set-key-aes cl wp)}
+    {:get-key (partial get-key-aes cl wp)}
     ))
+
+(def ^:dynamic *aes-client* (make-aerospike-context "192.168.56.101" 3000))
+(def ^:dynamic *get-aes-client* (fn [] *aes-client*))
 
 (defn key-merge [arg]
   (cond (instance? String arg) arg
@@ -27,7 +39,9 @@
 (defn get-key
   "Get data from storage with given key."
   [db-key]
-  (.get *db-imitation* (key-merge db-key)))
+  (let [client (*get-aes-client*)
+        func (:get-key client)]
+   (func db-key)))
 
 (defn set-key
   "Put data into storage with specified key."
