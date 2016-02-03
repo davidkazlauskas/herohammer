@@ -118,4 +118,5 @@
   {:get-key get-key
    :set-key set-key
    :set-if-not-exists set-if-not-exists
-   :get-key-batch get-key-batch})
+   :get-key-batch get-key-batch
+   :atomic-increment atomic-increment})
