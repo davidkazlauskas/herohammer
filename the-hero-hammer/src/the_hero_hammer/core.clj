@@ -90,9 +90,10 @@
     "}(document, 'script', 'facebook-jssdk'));</script>"))
 
 (defmacro email-link []
-  (html [:span "(If there is something not covered here "
+  (html [:p
+         "(If there is something not covered here "
          "feel free to send suggestions "
-         [:a {:href "mailto:questions@herohammer.io?Subject=Question%20suggestion"} "here"]
+         [:a {:href "mailto:questions@herohammer.io?Subject=Question%20suggestion"} "this email"]
          ")"]))
 
 (defn render-recaptcha []
