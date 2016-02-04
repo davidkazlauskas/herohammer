@@ -701,6 +701,12 @@
          "recentCommentsLink = '" (:recent-comments-link (html-context)) "';"
          ]))
 
+(defn gen-fb-comments [url numposts]
+  (let [ze-num (or numposts 5)]
+    (str "<div class=\"fb-comments\" "
+    "data-href=\"" url "\" "
+    "data-numposts=\"" ze-num "\"></div>")))
+
 (defn show-comments-button-group []
   (html [:div {:class "row"}
                [:div {:class "col-md-12 text-center"}
