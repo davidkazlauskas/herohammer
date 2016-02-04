@@ -93,7 +93,7 @@
   (html [:p
          "(If there is something not covered here "
          "feel free to send suggestions "
-         [:a {:href "mailto:questions@herohammer.io?Subject=Question%20suggestion"} "this email"]
+         [:a {:href "mailto:questions@herohammer.io?Subject=Question%20suggestion"} "to this email"]
          ")"]))
 
 (defn render-recaptcha []
