@@ -20,6 +20,10 @@
 
 (def ^:dynamic *html-context* nil)
 
+(defn env-num [var-name]
+  (let [prelim (System/getenv var-name)]
+    (if prelim (Integer. prelim))))
+
 (defn relevant-storage-ctx []
   (let [use-ram (System/getenv "HH_MOCK_DB")]
     (if use-ram
@@ -900,7 +904,7 @@
 ;(the-hero-hammer.lol_context/process-questions)
 
 (defn running-port []
-  (or (System/getenv "HH_PORT") 5000))
+  (or (env-num "HH_PORT") 5000))
 
 (defn -main [& args]
   (println "Muah runnin!")
