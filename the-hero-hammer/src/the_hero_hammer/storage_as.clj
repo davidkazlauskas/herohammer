@@ -68,7 +68,7 @@
       "192.168.56.101"))
 
 (defn aes-port []
-  (or (System/getenv "AES_PORT")
+  (or (Integer. (System/getenv "AES_PORT"))
       3000))
 
 (def ^:dynamic *aes-client* (make-aerospike-context (aes-serv) (aes-port)))
