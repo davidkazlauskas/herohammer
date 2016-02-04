@@ -89,6 +89,12 @@
     "fjs.parentNode.insertBefore(js, fjs);"
     "}(document, 'script', 'facebook-jssdk'));</script>"))
 
+(defmacro email-link []
+  (html [:span "(If there is something not covered here "
+         "feel free to send suggestions "
+         [:a {:href "mailto:questions@herohammer.io?Subject=Question%20suggestion"} "here"]
+         ")"]))
+
 (defn render-recaptcha []
   (html [:div {:class "g-recaptcha"
                :data-sitekey (my-recaptcha-key)}]))
@@ -541,6 +547,7 @@
                          (map #(render-question %1 forms-des) (questions-full))]
                         [:div {:classs "container"}
                          [:div {:class "row text-center"}
+                          (email-link)
                           [:p "Your comment"]
                           [:textarea {:name "user-comment"
                                     :rows 4 :cols 50}
