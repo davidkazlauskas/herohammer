@@ -895,10 +895,13 @@
 ; PROC EZ
 ;(the-hero-hammer.lol_context/process-questions)
 
+(defn running-port []
+  (or (System/getenv "HH_PORT") 5000))
+
 (defn -main [& args]
   (println "Muah runnin!")
   (run-jobs)
   (-> myapp
       wrap-params
       cook/wrap-cookies
-      (run-server {:port 5000})))
+      (run-server {:port (running-port)})))
