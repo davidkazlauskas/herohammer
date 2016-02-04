@@ -20,18 +20,22 @@
 
 (def ^:dynamic *html-context* nil)
 
+(defn relevant-storage-ctx []
+  (let [use-ram (System/getenv "HH_MOCK_DB")]
+    (if use-ram
+      (fn [] sram/*storage-ram-context*)
+      (fn [] saes/*storage-aes-context*))))
+
 (defmacro lol-ctx [& args]
   `(binding [*ctx-get-func* (fn [] lctx/*hh-context-lol*)
-             ;*get-db-context* (fn [] sram/*storage-ram-context*) ; for testing
-             *get-db-context* (fn [] saes/*storage-aes-context*)
+             *get-db-context* (relevant-storage-ctx)
              *html-context* *html-context-lol*]
      ~@args
    ))
 
 (defmacro dota-ctx [& args]
   `(binding [*ctx-get-func* (fn [] dctx/*hh-context-dota*)
-             ;*get-db-context* (fn [] sram/*storage-ram-context*) ; for testing
-             *get-db-context* (fn [] saes/*storage-aes-context*)
+             *get-db-context* (relevant-storage-ctx)
              *html-context* *html-context-dota*]
      ~@args
    ))
