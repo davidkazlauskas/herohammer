@@ -51,7 +51,8 @@
     (dec (.getLong the-val "default"))))
 
 (defn make-aerospike-context [ip port]
-  (let [cl (AerospikeClient. ip port)
+  (try
+    (let [cl (AerospikeClient. ip port)
         wp (WritePolicy.)
         rp (QueryPolicy.)
         bp (BatchPolicy.)]
@@ -59,7 +60,8 @@
      :set-key (partial set-key-aes cl wp)
      :get-key-batch (partial get-key-batch-aes cl bp)
      :atomic-increment (partial atomic-increment-aes cl wp)
-     :exists (partial record-exists-aes cl rp)}))
+     :exists (partial record-exists-aes cl rp)})
+    (catch Exception e nil)))
 
 (defn aes-serv []
   (or (System/getenv "AES_URL")
