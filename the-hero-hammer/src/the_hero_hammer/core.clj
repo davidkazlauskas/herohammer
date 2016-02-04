@@ -183,7 +183,7 @@
 (defn rand-header []
   (rand-nth
     ["Find out if you're about to get whooped... In seconds!"
-     "Where your whining can help!"]))
+     "Where your whining matters!"]))
 
 (defn navbar [args]
   (html [:nav {:class "navbar navbar-default"}
