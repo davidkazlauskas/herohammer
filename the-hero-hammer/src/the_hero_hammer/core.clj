@@ -447,7 +447,7 @@
 
 (defn gen-link-matchup-filter [matchup filter-id]
   (str (:matchup-link-start (html-context))
-    "/" (:user matchup) "-" (:opponent matchup) "-0"))
+    "/" (:user matchup) "-" (:opponent matchup) "-" filter-id))
 
 (defn gen-link-question [qid-tail]
   (str (:record-link-start (html-context))
@@ -703,9 +703,12 @@
 
 (defn gen-fb-comments [url numposts]
   (let [ze-num (or numposts 5)]
-    (str "<div class=\"fb-comments\" "
-    "data-href=\"" url "\" "
-    "data-numposts=\"" ze-num "\"></div>")))
+    (html [:div {:class "row"}
+        [:div {:class "col-md-12 text-center"
+               :id "fb-comments-placeholder"}
+         (str "<div class=\"fb-comments\" "
+              "data-href=\"" url "\" "
+              "data-numposts=\"" ze-num "\"></div>")]])))
 
 (defn show-comments-button-group []
   (html [:div {:class "row"}
@@ -728,9 +731,14 @@
          [:div {:class "col-md-12 text-center"
                 :id "comments-placeholder"}]]))
 
+(defn full-url [tail]
+  (str "https://herohammer.io" tail))
+
 (defn generic-render-matchup-data [id]
   (let [[matchup filter-id]
             (matchup-data-split id)
+            matchup-full-link
+              (full-url (gen-link-matchup-filter matchup filter-id))
             sort-func (:question-sort-function (html-context))
             rel-data (fetch-relevant-matchup-data
                       matchup filter-id)
@@ -756,7 +764,8 @@
                            [:li {:class "list-group-item"}
                                 %1])))]
               (show-comments-button-group)
-              (comments-placeholder)))))
+              (comments-placeholder)
+              (gen-fb-comments matchup-full-link 5)))))
 
 (defn lol-render-matchup-data [id]
   (lol-ctx (generic-render-matchup-data id)))
