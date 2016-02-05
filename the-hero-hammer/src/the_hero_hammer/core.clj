@@ -672,7 +672,6 @@
         prog-bars (map #(html
                      [:div {:class (str
                                      "progress-bar "
-                                     "progress-bar-striped "
                                      (if (= (mod %1 2) 0)
                                        "progress-bar-success"
                                        "progress-bar-info"))
