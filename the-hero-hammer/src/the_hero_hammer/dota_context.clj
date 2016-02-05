@@ -144,7 +144,7 @@
     ))
 
 (defn full-data-dota []
-  [
+  (into [] (sort-by :name [
   {:name "Earthshaker" :image "http://cdn.dota2.com/apps/dota2/images/heroes/earthshaker_vert.jpg"}
   {:name "Sven" :image "http://cdn.dota2.com/apps/dota2/images/heroes/sven_vert.jpg"}
   {:name "Tiny" :image "http://cdn.dota2.com/apps/dota2/images/heroes/tiny_vert.jpg"}
@@ -256,7 +256,7 @@
   {:name "Shadow Demon" :image "http://cdn.dota2.com/apps/dota2/images/heroes/shadow_demon_vert.jpg"}
   {:name "Visage" :image "http://cdn.dota2.com/apps/dota2/images/heroes/visage_vert.jpg"}
   {:name "Winter Wyvern" :image "http://cdn.dota2.com/apps/dota2/images/heroes/winter_wyvern_vert.jpg"}
-  ]
+  ]))
   )
 
 (defn all-heroes-dota []
