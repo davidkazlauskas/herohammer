@@ -141,6 +141,8 @@
     ("fed-me" "I got pretty fed" "yes" "no")
     ("ganked-payback" "If I got ganked at least I could kill someone before death" "yes" "no")
     ("wave-clear" "Clearing waves was a breeze" "yes" "no")
+    ("took-skill" "I could outplay my opponent but it took a lot of skill and technique" "yes" "no")
+    ("faceroll" "I facerolled my opponent" "yes" "no")
     ))
 
 (defn full-data-dota []
