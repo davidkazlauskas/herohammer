@@ -627,15 +627,14 @@
             {:src-user square-user :src-opp square-opp})
           [:p "Date: " (date-from-unix date)]
           (render-answers parted)
-          (if comm
-            [:div {:class "row text-center"}
-             [:div {:class "panel text-center col-md-12"}
-              [:h4 "User comment"]
-              [:p {:style "font-size: 17px;"} comm]
-              [:a {:class "btn btn-default"
-                   :href (gen-link-matchup-filter matchup 0)}
-               "Go to matchup stats"]
-              ]]))
+          [:div {:class "row text-center"}
+           [:div {:class "panel text-center col-md-12"}
+            (if comm ([:h4 "User comment"]
+              [:p {:style "font-size: 17px;"} comm]))
+            [:a {:class "btn btn-default"
+                 :href (gen-link-matchup-filter matchup 0)}
+             "Go to matchup stats"]
+            ]])
           [:h3 "No such question."])))))
 
 (defn lol-show-record [id]
