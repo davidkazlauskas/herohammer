@@ -28,7 +28,9 @@
                         as-idx (nth % 2)]
                    (Key. as-ns as-set as-idx)) the-keys))
         get-first (.get client policy keys-aes)
-        the-value (mapv #(.getValue % "default") get-first)]
+        the-value (mapv #(if %1
+                           (.getValue %1 "default")
+                           nil) get-first)]
     the-value))
 
 (defn record-exists-aes [client policy the-key]
