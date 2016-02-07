@@ -28,6 +28,8 @@
          :output-to "resources/public/js/main.js"
          :optimizations :advanced
          :pretty-print false
+         ;:optimizations :whitespace
+         ;:pretty-print true
          }
       }]
     }
