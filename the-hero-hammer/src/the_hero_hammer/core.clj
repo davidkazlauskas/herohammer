@@ -103,6 +103,8 @@
 (def ^:dynamic *html-context-lol*
   (lol-ctx
     {:main-page-for-ctx "/lol"
+     :main-page-by-hero "/lol-by-hero"
+     :main-page-by-question "/lol-by-question"
      :question-post-link "/questions-post-lol"
      :question-get-link "/questions-lol"
      :matchup-link-start "/matchup-lol"
@@ -129,6 +131,8 @@
 (def ^:dynamic *html-context-dota*
   (dota-ctx
     {:main-page-for-ctx "/dota"
+     :main-page-by-hero "/dota-by-hero"
+     :main-page-by-question "/dota-by-question"
      :question-post-link "/questions-post-dota"
      :question-get-link "/questions-dota"
      :matchup-link-start "/matchup-dota"
