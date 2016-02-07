@@ -155,6 +155,10 @@
 (defn html-context []
   *html-context*)
 
+(defmacro rebind-html-context [new-val ops]
+  `(binding [*html-context* ~new-val]
+     ~@ops))
+
 (defn parse-int [s]
    (if s
      (let [try-parse (re-find  #"\d+" s)]
