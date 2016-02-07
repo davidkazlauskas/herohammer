@@ -148,6 +148,7 @@
     ("wave-clear" "Clearing waves was a breeze" "yes" "no")
     ("took-skill" "I could outplay my opponent but it took a lot of skill and technique" "yes" "no")
     ("faceroll" "I facerolled my opponent" "yes" "no")
+    ("mana-probs" "I had mana problems" "yes" "no")
     ))
 
 (defn hero-squares-lol []
