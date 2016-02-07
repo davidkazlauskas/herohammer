@@ -62,7 +62,7 @@
                                   (inc-arr-index-longs
                                     old-val curr))
                                 old-val)
-             :initial-range {:from first-occ :to first-occ}
+             :initial-range {:from 0 :to 0}
            })))))))
 
 (defn matchup-pair-map-reduce-job [argmap the-pair]
