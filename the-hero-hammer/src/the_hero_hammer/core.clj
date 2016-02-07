@@ -419,15 +419,19 @@
                {:style "font-size: 12px;"} hn-user " vs. " hn-opp]]
          ])))
 
-(defn render-most-popular [the-vec args]
+(defn render-most-popular-generic [the-vec args func-each]
   (let [draw-numbers (:numbers args true)]
    (for [i (range (count the-vec))]
     (html [:table
            {:class
            "table table-hover table-striped table-condensed"}
-           (single-matchup-listing
+           (func-each
              (nth the-vec i)
              (if draw-numbers (inc i)))]))))
+
+(defn render-most-popular [the-vec args]
+  (render-most-popular-generic
+    the-vec args single-matchup-listing))
 
 (defn game-stats-render [context-vars]
   (let [most-pop (:global-most-popular context-vars)
