@@ -575,7 +575,7 @@
   (dota-ctx (generic-main-page req)))
 
 (defn render-single-most-popular-hero [arg the-num]
-  (html [:p "nay"]))
+  (html [:tr [:td "nay"]]))
 
 (defn render-most-popular-heroes [the-vec]
   (render-most-popular-generic
