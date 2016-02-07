@@ -315,11 +315,14 @@
   (html [:script (update-hero-squares-js-func)]))
 
 (defn hero-dropdown [select-id args]
-  (let [selected (:selected args)]
-    (html [:select {:class "form-control"
-                  :id select-id
-                  :name select-id
-                  :onchange (update-hero-squares-js-func)}
+  (let [selected (:selected args)
+        style (:style args)]
+    (html [:select
+           {:class "form-control"
+            :id select-id
+            :name select-id
+            :onchange (update-hero-squares-js-func)
+            :style style}
          (map-indexed
            #(do
               (html [:option (if (= selected %1)
@@ -572,10 +575,16 @@
     (wrap-in-panel
       (html
         (context-js-variables)
-        [:div {:class "form-group text-center"}
-         [:h4 "View stats by hero"]
-         (hero-dropdown "hero-user" {})
-         (hero-icon "thumb-user" (nth (get-hero-squares) 0))]))))
+        [:div {:class "input-group col-md-12"}
+           [:h4 "View stats by hero"]
+           [:div {:class "row"
+                  :style "margin-bottom: 7px;"}
+             [:div {:class "col-md-4"}]
+             [:div {:class "col-md-4"}
+              (hero-dropdown "hero-user"
+                             {})]
+             [:div {:class "col-md-4"}]]
+           (hero-icon "thumb-user" (nth (get-hero-squares) 0))]))))
 
 (defn dota2-by-hero-page [req]
   (dota-ctx
