@@ -440,19 +440,25 @@
 (defn bootstrap-successs [the-val]
   (bootstrap-msg the-val "alert-success" "glyphicon-ok"))
 
+(defmacro is-main-tab [to-check the-var]
+  `(if (= ~the-var ~to-check) {:class "active"}))
+
 (defn wrap-in-panel [inner-html]
-  (html [:div {:class "text-center"}
+  (let [curr-tab (current-tab)]
+   (html [:div {:class "text-center"}
    [:div {:class "row"}
     [:div {:class "col-md-2"}]
     [:div {:class "col-md-8"}
      [:ul {:class "nav nav-tabs nav-justified"
-         :style "margin-bottom: 15px;"
-         }
-     [:li {:class "active"} [:a {:href "#"} "By matchup"]]
-     [:li [:a {:href "#"} "By hero"]]
-     [:li [:a {:href "#"} "By question"]]]]
+         :style "margin-bottom: 15px;"}
+     [:li (is-main-tab "main" curr-tab)
+      [:a {:href "#"} "By matchup"]]
+     [:li (is-main-tab "by-hero" curr-tab)
+      [:a {:href "#"} "By hero"]]
+     [:li (is-main-tab "by-question" curr-tab)
+      [:a {:href "#"} "By question"]]]]
     [:div {:class "col-md-2"}]]
-   inner-html]))
+   inner-html])))
 
 (defn generic-registration-page [context-vars req]
   (let [good-msg (get-in req [:cookies "q-praise" :value])]
