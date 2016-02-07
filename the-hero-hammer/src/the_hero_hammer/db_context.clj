@@ -7,6 +7,15 @@
 
 (def ^:dynamic *get-db-context* nil)
 
+(def ^:dynamic *allow-writes*
+  (if (System/getenv "HH_ALLOW_WRITES")
+    (do
+      (println "WRITES ARE ALLOWED (HH_ALLOW_WRITES)")
+      true)
+    (do
+      (println "WRITES ARE PREVENTED (HH_ALLOW_WRITES doesnt exist)")
+      false)))
+
 (defn fn-get-key []
   (:get-key (*get-db-context*)))
 
@@ -30,12 +39,16 @@
 (defn set-key
   "Set key"
   [db-key value]
-  ((fn-set-key) db-key value))
+  (if *allow-writes*
+   ((fn-set-key) db-key value)
+   (println "Would write (prevented): " db-key "->" value)))
 
 (defn set-if-not-exists
   "Put data into storage if it doesn't exist"
   [db-key value]
-  ((fn-set-if-not-exists) db-key value))
+  (if *allow-writes*
+    ((fn-set-if-not-exists) db-key value)
+    (println "Would write (prevented): " db-key "->" value)))
 
 (defn get-key-batch
   "Get keys in batch."
@@ -45,4 +58,6 @@
 (defn atomic-increment-key
   "Atomic increment on key."
   [db-key]
-  ((fn-atomic-increment) db-key))
+  (if *allow-writes*
+    ((fn-atomic-increment) db-key)
+    (println "Would increment" db-key)))

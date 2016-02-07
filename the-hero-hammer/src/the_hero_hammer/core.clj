@@ -431,19 +431,31 @@
 (defn bootstrap-successs [the-val]
   (bootstrap-msg the-val "alert-success" "glyphicon-ok"))
 
+(defn wrap-in-panel [inner-html]
+  (html [:div {:class "text-center"}
+   [:ul {:class "nav nav-tabs"
+         :style "margin-bottom: 15px;"
+         }
+     [:li {:class "active"} [:a {:href "#"} "By matchup"]]
+     [:li [:a {:href "#"} "By hero"]]
+     [:li [:a {:href "#"} "By question"]]]
+   inner-html]))
+
 (defn generic-registration-page [context-vars req]
   (let [good-msg (get-in req [:cookies "q-praise" :value])]
     (html
       (context-js-variables)
       (if good-msg (bootstrap-successs good-msg))
-      [:div {:class "form-group"}
-       (generate-hero-selection {})
-       [:div {:class "form-inline text-center"}
-        [:label {:for "user-filter"} "Filter to use"]
-        [:br]
-        (filter-dropdown "user-filter")]
-       (reg-and-show-buttons)
-       ]
+      (wrap-in-panel
+        (html
+          [:div {:class "form-group"}
+         (generate-hero-selection {})
+         [:div {:class "form-inline text-center"}
+          [:label {:for "user-filter"} "Filter to use"]
+          [:br]
+          (filter-dropdown "user-filter")]
+         (reg-and-show-buttons)
+         ]))
        (game-stats-render context-vars))))
 
 (defn hero-pair-from-part-key [the-key]
