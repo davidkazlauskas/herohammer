@@ -629,7 +629,7 @@
           (render-answers parted)
           [:div {:class "row text-center"}
            [:div {:class "panel text-center col-md-12"}
-            (if comm ([:h4 "User comment"]
+            (if comm (html [:h4 "User comment"]
               [:p {:style "font-size: 17px;"} comm]))
             [:a {:class "btn btn-default"
                  :href (gen-link-matchup-filter matchup 0)}
