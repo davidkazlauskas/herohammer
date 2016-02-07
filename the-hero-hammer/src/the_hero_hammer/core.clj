@@ -944,6 +944,7 @@
 
 (defroutes routes-lol
   (GET "/lol" [:as req] (lol-page req))
+  (GET "/lol-by-hero" [:as req] "meow lol")
   (GET "/questions-lol/:matchup" [matchup :as req] (lol-render-questions matchup req))
   (GET "/questions-lol" [matchup :as req] (lol-render-questions req))
   (GET "/show-record-lol/:id" [id] (lol-show-record id))
@@ -954,6 +955,7 @@
 
 (defroutes routes-dota
   (GET "/dota" [:as req] (dota2-page req))
+  (GET "/dota-by-hero" [:as req] "meow")
   (GET "/questions-dota/:matchup" [matchup :as req] (dota-render-questions matchup req))
   (GET "/questions-dota" [matchup :as req] (dota-render-questions req))
   (GET "/show-record-dota/:id" [id] (dota-show-record id))
