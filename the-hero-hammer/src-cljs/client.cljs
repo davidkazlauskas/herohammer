@@ -56,6 +56,12 @@
               (fn [output]
                 (set-inner-html placeholder (gen-html-comments output))))))
 
+(defn updateSingleSquare [el thumb-id]
+  (let [hu-s (sel-value el)
+        hu-l (thumb-link hu-s)
+        tu (by-id thumb-id)]
+    (set-attrib tu "src" hu-l)))
+
 ; hero-user hero-opponent user-filter
 (defn ^:export goToMatchup []
   (let [hu (by-id "hero-user")
@@ -78,15 +84,9 @@
 
 (defn ^:export updateHeroSquares []
   (let [hu (by-id "hero-user")
-        ho (by-id "hero-opponent")
-        hu-s (sel-value hu)
-        ho-s (sel-value ho)
-        hu-l (thumb-link hu-s)
-        ho-l (thumb-link ho-s)
-        tu (by-id "thumb-user")
-        to (by-id "thumb-opponent")]
-    (set-attrib tu "src" hu-l)
-    (set-attrib to "src" ho-l)))
+        ho (by-id "hero-opponent")]
+    (if hu (updateSingleSquare hu "thumb-user"))
+    (if ho (updateSingleSquare ho "thumb-opponent"))))
 
 (defn ^:export show10RandomComments []
   (show-comments-generic (construct-link-to-10-random-comments)))
