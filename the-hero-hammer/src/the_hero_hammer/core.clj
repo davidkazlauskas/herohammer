@@ -925,8 +925,8 @@
   (GET "/questions-dota/:matchup" [matchup :as req] (dota-render-questions matchup req))
   (GET "/questions-dota" [matchup :as req] (dota-render-questions req))
   (GET "/show-record-dota/:id" [id] (dota-show-record id))
-  (GET "/comments-dota" [matchup] (dota-matchup-random-comments matchup))
-  (GET "/comments-dota" [matchup] (dota-matchup-recent-comments matchup))
+  (GET "/comments-dota/random/:matchup" [matchup] (dota-matchup-random-comments matchup))
+  (GET "/comments-dota/recent/:matchup" [matchup] (dota-matchup-recent-comments matchup))
   (GET "/matchup-dota/:id" [id] (dota-render-matchup-data id))
   (POST "/questions-post-dota" req (dota-post-questions req)))
 
