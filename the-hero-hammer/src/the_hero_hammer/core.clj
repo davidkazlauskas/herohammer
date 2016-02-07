@@ -570,7 +570,11 @@
 (defn generic-by-hero-page [req]
   (wrap-html
     (wrap-in-panel
-      (html [:h3 "moo"]))))
+      (html
+        [:div {:class "form-inline text-center"}
+         [:h4 "View stats by hero"]
+         (hero-dropdown "hero-user" {})
+         ]))))
 
 (defn dota2-by-hero-page [req]
   (dota-ctx
