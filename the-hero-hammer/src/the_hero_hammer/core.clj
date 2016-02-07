@@ -433,12 +433,16 @@
 
 (defn wrap-in-panel [inner-html]
   (html [:div {:class "text-center"}
-   [:ul {:class "nav nav-tabs"
+   [:div {:class "row"}
+    [:div {:class "col-md-2"}]
+    [:div {:class "col-md-8"}
+     [:ul {:class "nav nav-tabs nav-justified"
          :style "margin-bottom: 15px;"
          }
      [:li {:class "active"} [:a {:href "#"} "By matchup"]]
      [:li [:a {:href "#"} "By hero"]]
-     [:li [:a {:href "#"} "By question"]]]
+     [:li [:a {:href "#"} "By question"]]]]
+    [:div {:class "col-md-2"}]]
    inner-html]))
 
 (defn generic-registration-page [context-vars req]
