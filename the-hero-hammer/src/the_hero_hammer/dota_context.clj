@@ -131,7 +131,7 @@
     ("lane-to-opp" "I often pushed lane to opponent" "yes" "no")
     ("cc" "I got a lot of cc (stuns/slows)" "yes" "no")
     ("gank" "I was ganked quite often" "yes" "no")
-    ("last-hit" "I had trouble last hitting minions" "yes" "no")
+    ("last-hit" "I had trouble last hitting creeps" "yes" "no")
     ("aggro-me" "I could play very aggresively against my opponent" "yes" "no")
     ("with-team" "I needed team before I could make some moves" "yes" "no")
     ("strong-alone" "I felt very strong alone" "yes" "no")
