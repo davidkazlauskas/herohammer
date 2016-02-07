@@ -574,6 +574,14 @@
 (defn dota2-page [req]
   (dota-ctx (generic-main-page req)))
 
+(defn render-single-most-popular-hero [arg the-num]
+  (html [:p "nay"]))
+
+(defn render-most-popular-heroes [the-vec]
+  (render-most-popular-generic
+    the-vec {:numbers true}
+    render-single-most-popular-hero))
+
 (defn generic-by-hero-page [req]
   (wrap-html
     (wrap-in-panel
@@ -588,7 +596,13 @@
               (hero-dropdown "hero-user"
                              {})]
              [:div {:class "col-md-4"}]]
-           (hero-icon "thumb-user" "")]
+           (hero-icon "thumb-user" "")
+           [:div {:class "row"}
+            [:div {:class "col-md-3"}]
+            [:div {:class "col-md-6"}
+             [:h4 "Most popular user heroes"]
+             (render-most-popular-heroes [1 2 3])]
+            [:div {:class "col-md-3"}]]]
         (update-hero-squares-script)))))
 
 (defn dota2-by-hero-page [req]
