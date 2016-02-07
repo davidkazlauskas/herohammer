@@ -111,6 +111,7 @@
      :registration-link "/questions-lol"
      :rand-comments-link "/comments-lol/random"
      :recent-comments-link "/comments-lol/recent"
+     :current-tab "main"
      :squares-javascript (generate-javascript-hero-squares)
      :question-sort-function
        (fn [the-q]
@@ -136,6 +137,7 @@
      :registration-link "/questions-dota"
      :rand-comments-link "/comments-dota/random"
      :recent-comments-link "/comments-dota/recent"
+     :current-tab "main"
      :squares-javascript (generate-javascript-hero-squares)
      :question-sort-function
        (fn [the-q]
@@ -163,6 +165,9 @@
    (if s
      (let [try-parse (re-find  #"\d+" s)]
        (if try-parse (Integer. try-parse)))))
+
+(defn current-tab []
+  (:current-tab (html-context)))
 
 (defn form-to-data [form]
   {
