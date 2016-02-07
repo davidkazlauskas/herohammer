@@ -457,7 +457,10 @@
   `(if (= ~the-var ~to-check) {:class "active"}))
 
 (defn wrap-in-panel [inner-html]
-  (let [curr-tab (current-tab)]
+  (let [curr-tab (current-tab)
+        mpage (main-page-link)
+        byhero (by-hero-link)
+        byquestion (by-question-link)]
    (html [:div {:class "text-center"}
    [:div {:class "row"}
     [:div {:class "col-md-2"}]
@@ -465,11 +468,11 @@
      [:ul {:class "nav nav-tabs nav-justified"
          :style "margin-bottom: 15px;"}
      [:li (is-main-tab "main" curr-tab)
-      [:a {:href "#"} "By matchup"]]
+      [:a {:href mpage} "By matchup"]]
      [:li (is-main-tab "by-hero" curr-tab)
-      [:a {:href "#"} "By hero"]]
+      [:a {:href byhero} "By hero"]]
      [:li (is-main-tab "by-question" curr-tab)
-      [:a {:href "#"} "By question"]]]]
+      [:a {:href byquestion} "By question"]]]]
     [:div {:class "col-md-2"}]]
    inner-html])))
 
