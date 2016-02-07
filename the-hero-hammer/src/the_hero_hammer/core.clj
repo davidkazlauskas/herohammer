@@ -584,7 +584,8 @@
               (hero-dropdown "hero-user"
                              {})]
              [:div {:class "col-md-4"}]]
-           (hero-icon "thumb-user" (nth (get-hero-squares) 0))]))))
+           (hero-icon "thumb-user" "")]
+        (update-hero-squares-script)))))
 
 (defn dota2-by-hero-page [req]
   (dota-ctx
