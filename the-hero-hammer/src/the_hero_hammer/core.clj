@@ -567,17 +567,27 @@
 (defn dota2-page [req]
   (dota-ctx (generic-main-page req)))
 
+(defn generic-by-hero-page [req]
+  (wrap-html
+    (wrap-in-panel
+      (html [:h3 "moo"]))))
+
 (defn dota2-by-hero-page [req]
   (dota-ctx
     (rebind-html-context
       (assoc (html-context) :current-tab "by-hero")
-      (generic-main-page req))))
+      (generic-by-hero-page req))))
+
+(defn generic-by-question-page [req]
+  (wrap-html
+    (wrap-in-panel
+      (html [:h3 "zoo"]))))
 
 (defn dota2-by-question-page [req]
   (dota-ctx
     (rebind-html-context
       (assoc (html-context) :current-tab "by-question")
-      (generic-main-page req))))
+      (generic-by-question-page req))))
 
 (defn lol-page [req]
   (lol-ctx (generic-main-page req)))
