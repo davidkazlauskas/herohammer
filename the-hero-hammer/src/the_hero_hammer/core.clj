@@ -571,10 +571,11 @@
   (wrap-html
     (wrap-in-panel
       (html
-        [:div {:class "form-inline text-center"}
+        (context-js-variables)
+        [:div {:class "form-group text-center"}
          [:h4 "View stats by hero"]
          (hero-dropdown "hero-user" {})
-         ]))))
+         (hero-icon "thumb-user" (nth (get-hero-squares) 0))]))))
 
 (defn dota2-by-hero-page [req]
   (dota-ctx
