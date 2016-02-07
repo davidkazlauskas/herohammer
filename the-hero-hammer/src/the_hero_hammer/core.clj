@@ -170,6 +170,15 @@
      (let [try-parse (re-find  #"\d+" s)]
        (if try-parse (Integer. try-parse)))))
 
+(defn main-page-link []
+  (:main-page-for-ctx (html-context)))
+
+(defn by-hero-link []
+  (:main-page-by-hero (html-context)))
+
+(defn by-question-link []
+  (:main-page-by-question (html-context)))
+
 (defn current-tab []
   (:current-tab (html-context)))
 
@@ -914,7 +923,7 @@
               (assoc :cookies merged)
               cook/cookies-response)))
         ret-succ (fn [praise]
-          (-> (ring.util.response/redirect (:main-page-for-ctx (html-context)))
+          (-> (ring.util.response/redirect (main-page-link))
               (assoc :cookies {"q-praise" {:value praise :max-age 5}})
               cook/cookies-response))]
     (cond
