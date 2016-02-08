@@ -804,14 +804,14 @@
           ])))
 
 (defn sum-counts [qdata]
-  (apply + (get-in qdata [:counts :val])))
+  (apply + (get-in qdata [:answers])))
 
 (defn render-single-question [qdata]
   (html [:p {:class "text-center"
              :style "font-weight: bold"}
             (:question qdata)]
         (render-question-progress-bar
-          (get-in qdata [:counts :val])
+          (get-in qdata [:answers])
           (get-in qdata [:options]))
         [:p {:class "text-center"}
          (str (sum-counts qdata) " samples.")]))
