@@ -108,6 +108,7 @@
      :question-post-link "/questions-post-lol"
      :question-get-link "/questions-lol"
      :matchup-link-start "/matchup-lol"
+     :hero-link-start "/hero-lol"
      :add-record-link-start "/questions-lol"
      :record-link-start "/show-record-lol"
      :registration-link "/questions-lol"
@@ -136,6 +137,7 @@
      :question-post-link "/questions-post-dota"
      :question-get-link "/questions-dota"
      :matchup-link-start "/matchup-dota"
+     :hero-link-start "/hero-dota"
      :add-record-link-start "/questions-dota"
      :record-link-start "/show-record-dota"
      :registration-link "/questions-dota"
@@ -343,12 +345,14 @@
            (filters-full))
          ]))
 
+(defmacro question-sign-img []
+  "http://res.cloudinary.com/ddclns6x6/image/upload/v1454935454/question-mark_ikjovc.png")
+
 (defn hero-icon [thumb-id src]
   (html [:img {:width 120 :height 120
                :src src
                :style "margin-left: 10px; margin-right: 10px;"
-               :id thumb-id
-               }]))
+               :id thumb-id}]))
 
 (defn reg-and-show-buttons []
   (html [:div {:style "margin-top: 20px;" :class "text-center"}
@@ -510,6 +514,10 @@
 (defn gen-link-matchup-filter [matchup filter-id]
   (str (:matchup-link-start (html-context))
     "/" (:user matchup) "-" (:opponent matchup) "-" filter-id))
+
+(defn gen-link-hero-filter [hero filter-id]
+  (str (:hero-link-start (html-context))
+    "/" hero "-" filter-id))
 
 (defn gen-link-question [qid-tail]
   (str (:record-link-start (html-context))
@@ -881,11 +889,43 @@
               (comments-placeholder)
               (gen-fb-comments matchup-full-link 5)))))
 
+(defn generic-render-hero-data [id]
+  (let [the-data (hero-data-split id)
+        the-hero (:hero the-data)
+        the-filter (:filter the-data)
+        hero-full-link (full-url (gen-link-hero-filter the-hero the-filter))
+        sort-func (:question-sort-function (html-context))
+        rel-data (fetch-relevant-hero-data the-hero the-filter)
+        sorted-data (into [] (sort-by sort-func > rel-data))
+        squares (get-hero-squares)
+        heroes (heroes-full)
+        hn (nth heroes the-hero)
+        hs (nth squares the-hero)]
+          (wrap-html
+            (html
+              (export-matchup-data-to-js the-hero -1)
+              (render-vs-title hn "any")
+              (render-hero-pair
+                {:src-user hs :src-opp (question-sign-img)})
+                  [:ul {:class "list-group"}
+              (->> sorted-data
+                   (map render-single-question)
+                   (map #(html
+                           [:li {:class "list-group-item"}
+                                %1])))]
+              (gen-fb-comments hero-full-link 5)))))
+
 (defn lol-render-matchup-data [id]
   (lol-ctx (generic-render-matchup-data id)))
 
 (defn dota-render-matchup-data [id]
   (dota-ctx (generic-render-matchup-data id)))
+
+(defn lol-render-hero-data [id]
+  (lol-ctx (generic-render-hero-data id)))
+
+(defn dota-render-hero-data [id]
+  (dota-ctx (generic-render-hero-data id)))
 
 (defn random-range [to-make max-num]
   (loop [the-set #{}]
@@ -1028,6 +1068,7 @@
   (GET "/comments-lol/random/:matchup" [matchup] (lol-matchup-random-comments matchup))
   (GET "/comments-lol/recent/:matchup" [matchup] (lol-matchup-recent-comments matchup))
   (GET "/matchup-lol/:id" [id] (lol-render-matchup-data id))
+  (GET "/hero-lol/:id" [id] (lol-render-hero-data id))
   (POST "/questions-post-lol" req (lol-post-questions req)))
 
 (defroutes routes-dota
@@ -1040,6 +1081,7 @@
   (GET "/comments-dota/random/:matchup" [matchup] (dota-matchup-random-comments matchup))
   (GET "/comments-dota/recent/:matchup" [matchup] (dota-matchup-recent-comments matchup))
   (GET "/matchup-dota/:id" [id] (dota-render-matchup-data id))
+  (GET "/hero-dota/:id" [id] (dota-render-hero-data id))
   (POST "/questions-post-dota" req (dota-post-questions req)))
 
 (defroutes myapp
