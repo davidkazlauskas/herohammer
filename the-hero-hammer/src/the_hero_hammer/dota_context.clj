@@ -308,6 +308,7 @@
      :matchup-comment-count dota-generate-matchup-comment-count
      :matchup-comment-id dota-generate-matchup-comment-id
      :matchup-filter-count dota-generate-filter-matchup-question-count
+     :matchup-hero-count dota-generate-filter-hero-question-count
      :matchup-most-popular-global dota-generate-most-popular-matchups
    }
    :questions {

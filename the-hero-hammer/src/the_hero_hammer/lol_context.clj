@@ -471,6 +471,7 @@
      :matchup-comment-count lol-generate-matchup-comment-count
      :matchup-comment-id lol-generate-matchup-comment-id
      :matchup-filter-count lol-generate-filter-matchup-question-count
+     :matchup-hero-count lol-generate-filter-hero-question-count
      :matchup-most-popular-global lol-generate-most-popular-matchups
    }
    :questions {
