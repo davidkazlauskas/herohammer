@@ -109,7 +109,9 @@
          }
         pop-heroes-args (merge lol-args
          {:most-popular-matchups-key (lol-generate-most-popular-heroes)
-          :turn-key-to-uniq-matchup extract-user-hero-from-key})
+          :turn-key-to-uniq-matchup extract-user-hero-from-key
+          :distinct-sort-function scon/distinct-java-array-sum
+          :matchup-question-count-func (fn [_] 1)})
         proc-heroes-args (merge lol-args
          {:glob-question-key (lol-generate-hero-stats-count)
           :id-key-gen extract-user-hero-from-key

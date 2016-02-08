@@ -109,7 +109,9 @@
          }
         pop-heroes-args (merge dota-args
          {:most-popular-matchups-key (dota-generate-most-popular-heroes)
-          :turn-key-to-uniq-matchup extract-user-hero-from-key})
+          :turn-key-to-uniq-matchup extract-user-hero-from-key
+          :distinct-sort-function scon/distinct-java-array-sum
+          :matchup-question-count-func (fn [_] 1)})
         proc-heroes-args (merge dota-args
          {:glob-question-key (dota-generate-hero-stats-count)
           :id-key-gen extract-user-hero-from-key

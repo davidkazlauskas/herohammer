@@ -117,13 +117,13 @@
 (defn most-popular-question-sort [the-arr]
   (sort-by #(if %1 (:count %1) 0) > the-arr))
 
-(defn distinct-java-array [the-arr]
+(defn distinct-java-array-generic [the-arr aggregate]
   (let [the-vec (vec the-arr)
         grouped (group-by :key the-vec)
         gfiltered (filter #(some? (get % 0)) grouped)
         mapped (mapv
          #(hash-map :key (nth %1 0)
-                    :count (apply max (map :count (nth %1 1))))
+                    :count (apply aggregate (map :count (nth %1 1))))
          gfiltered)
         dcount (count mapped)]
     (dotimes [n (count the-arr)]
@@ -132,18 +132,29 @@
         (aset the-arr n to-set))))
   the-arr)
 
+(defn distinct-java-array [the-arr]
+  (distinct-java-array-generic the-arr max))
+
+(defn distinct-java-array-sum [the-arr]
+  (distinct-java-array-generic the-arr +))
+
 (defn most-popular-matchups-proc-job
   "Argmap:
   :most-popular-matchups-key -> key for most popular matchups
   :turn-key-to-uniq-matchup -> key to unique matchup function
+  :distinct-sort-function -> sorting function
+  :matchup-question-count-func -> matchup question count function
   "
   [argmap]
    (let [most-pop-matchups-key (:most-popular-matchups-key argmap)
-         key-to-uniq-matchup (:turn-key-to-uniq-matchup argmap)]
+         key-to-uniq-matchup (:turn-key-to-uniq-matchup argmap)
+         distinct-func (:distinct-sort-function argmap distinct-java-array)
+         get-matchup-question-count-func
+           (:matchup-question-count-func argmap get-matchup-question-count)]
      {:save-key-func most-pop-matchups-key
        :map-function (fn [the-val]
                        (let [matchup (matchup-pair-from-key the-val)
-                             qcount (get-matchup-question-count matchup)]
+                             qcount (get-matchup-question-count-func matchup)]
                        {:count qcount
                         :key (key-to-uniq-matchup the-val)}))
        :initial-reduce (fn [the-val]
@@ -159,7 +170,7 @@
                        (vec the-arr))
        :reduce-function (fn [the-arr mapped]
                           (aset the-arr 10 mapped)
-                          (distinct-java-array the-arr)
+                          (distinct-func the-arr)
                           (most-popular-question-sort the-arr)
                           the-arr)
       }))
