@@ -164,14 +164,17 @@
          (mapv #(hash-map :user hero-num :opponent %)))
         q-ids (mapv :id (questions-full))
         the-keys (for [i (questions-full)]
-          (let [the-id (:id i)]
-            (->> matchups
-               (mapv #(q-filt-func % the-id filter-id)))))]
+          (let [the-id (:id i)
+                gen-keys (->> matchups
+                   (mapv #(q-filt-func % the-id filter-id)))]
+            {:question i :batch gen-keys}))]
     (->> the-keys
          (mapv (fn [key-batch]
-            (let [batch-queried (get-key-batch key-batch)]
+            (let [the-batch (:batch key-batch)
+                  batch-queried (get-key-batch the-batch)]
               (->> batch-queried
                    (filter some?)
-                   (mapv nippy/thaw))
+                   (mapv #(:val (nippy/thaw %)))
+                   )
               ))))
   ))
