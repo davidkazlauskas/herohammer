@@ -184,3 +184,47 @@
                                (apply mapv +))]
               {:question the-q
                :sum extract}))))))
+
+(defn update-all-hero-stats [hero-vec]
+  (for [flt (filters-full)
+        hero hero-vec]
+    (let [flt-id (:id flt)
+          sum-res (sum-all-matchups-with-hero hero flt-id)]
+      (println "Pezl->" flt-id sum-res)
+      )
+    )
+  )
+
+(defn sum-all-heroes-job
+  "Argmap:
+  :most-popular-matchups-key -> key for most popular matchups
+  :turn-key-to-uniq-matchup -> key to unique matchup function
+  "
+  [argmap]
+   (let [most-pop-matchups-key (:most-popular-matchups-key argmap)
+         key-to-uniq-matchup (:turn-key-to-uniq-matchup argmap)]
+     {:save-key-func most-pop-matchups-key
+       :map-function (fn [the-val]
+                       (let [matchup (matchup-pair-from-key the-val)
+                             qcount (get-matchup-question-count matchup)]
+                       {:count qcount
+                        :key (key-to-uniq-matchup the-val)}))
+       :initial-reduce (fn [the-val]
+                         (let [the-arr (object-array 11)]
+                           (if the-val
+                             (do
+                               (dotimes [i (count the-val)]
+                                 (aset the-arr i (nth the-val i)))
+                               (most-popular-question-sort the-arr)
+                               ))
+                           the-arr))
+       :final-reduce (fn [the-arr]
+                       (vec the-arr))
+       :reduce-function (fn [the-arr mapped]
+                          (aset the-arr 10 mapped)
+                          (distinct-java-array the-arr)
+                          (most-popular-question-sort the-arr)
+                          the-arr)
+      })
+  )
+
