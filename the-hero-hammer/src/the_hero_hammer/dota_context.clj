@@ -77,6 +77,12 @@
      (flatten [(pair-vec matchup-pair)
                question-id filter-id]))])
 
+(defn dota-generate-filter-hero-question-count
+  "Generate hero question count for question and filter."
+  [hero question-id filter-id]
+  ["dota" "question-hero-filter-count"
+   (str hero question-id filter-id)])
+
 (defn drop-tail-from-key [the-key]
   (clojure.string/replace (nth the-key 2) #"^(\d+)-(\d+)-.*$" "$1-$2"))
 
