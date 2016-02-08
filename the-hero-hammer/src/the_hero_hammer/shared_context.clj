@@ -178,4 +178,11 @@
                                (aset the-arr i (nth the-val i)))
                              (most-popular-question-sort the-arr)))
                          the-arr))
+     :final-reduce (fn [the-arr]
+                     (vec the-arr))
+     :reduce-function (fn [the-arr mapped]
+                        (aset the-arr 10 mapped)
+                        (distinct-java-array the-arr)
+                        (most-popular-question-sort the-arr)
+                        the-arr)
      }))

@@ -31,6 +31,9 @@
 (defn dota-generate-most-popular-matchups []
   ["dota" "glob-question-count" "most-popular"])
 
+(defn dota-generate-most-popular-heroes []
+  ["dota" "glob-question-count" "most-popular-heroes"])
+
 (defn dota-generate-matchup-question-count
   "Matchup pair - {:user 7 :opponent 7}"
   [matchup-pair]
@@ -77,6 +80,10 @@
 (defn drop-tail-from-key [the-key]
   (clojure.string/replace (nth the-key 2) #"^(\d+)-(\d+)-.*$" "$1-$2"))
 
+(defn extract-user-hero-from-key [the-key]
+  (Integer. (clojure.string/replace
+              (nth the-key 2) #"^(\d+).*$" "$1")))
+
 (defn gen-map-reduce-tasks-global [max-proc]
   (let [dota-args
         {; generic
@@ -90,7 +97,11 @@
          ; most popular
          :most-popular-matchups-key (dota-generate-most-popular-matchups)
          :turn-key-to-uniq-matchup drop-tail-from-key
-         }]
+         }
+        pop-heroes-args (merge dota-args
+         {:most-popular-matchups-key (dota-generate-most-popular-heroes)
+          :turn-key-to-uniq-matchup extract-user-hero-from-key})
+        ]
       ;:glob-question-key -> global key for questions (to db)
       ;:id-key-gen -> function with 1 arg (id) to get glob question id
       ;:max-proc -> maximum questions to process at a time
@@ -105,6 +116,8 @@
      (scon/generic-processing-job dota-args)
      ; most popular questions
      (scon/most-popular-matchups-proc-job dota-args)
+     ; most popular heroes
+     (scon/most-popular-matchups-proc-job pop-heroes-args)
      ]))
 
 (defn get-map-reduce-job [max-proc]
