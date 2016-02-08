@@ -206,6 +206,15 @@
               the-key (key-gen-func hero q-id flt-id)]
           (set-key the-key frozen)))))))
 
+(defn generic-processing-job-proc-hero-counts [argmap]
+  (generic-processing-job-final-reduce
+    (merge argmap
+           {:final-reduce-job
+            (fn [the-val]
+              (let [dist (into [] (distinct the-val))]
+                (update-all-hero-stats dist)))
+            })))
+
 (defn sum-all-heroes-job
   "Argmap:
   :most-popular-matchups-key -> key for most popular matchups
