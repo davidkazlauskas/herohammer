@@ -231,8 +231,17 @@
   []
   (get-in (*ctx-get-func*) [:queries :matchup-most-popular-global]))
 
+(defn fn-hero-most-popular-global
+  "Returns function (hero filter-id)"
+  []
+  (get-in (*ctx-get-func*) [:queries :hero-most-popular-global]))
+
 (defn get-most-popular-matchups-global []
   (let [the-data (get-key ((fn-matchup-most-popular-global)))]
+    (if the-data (butlast (:val (nippy/thaw the-data))) nil)))
+
+(defn get-most-popular-heroes-global []
+  (let [the-data (get-key ((fn-hero-most-popular-global)))]
     (if the-data (butlast (:val (nippy/thaw the-data))) nil)))
 
 (defn get-most-recent-questions [count-from-top]
