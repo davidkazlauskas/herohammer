@@ -84,7 +84,7 @@
   (let [the-job (matchup-pair-map-reduce-job argmap pair)]
     (advance-map-reduce-job the-job max-chunk)))
 
-(defn generic-processing-job
+(defn generic-processing-job-final-reduce
   "Argmap:
   :glob-question-key -> global key for questions (to db)
   :id-key-gen -> function with 1 arg (id) to get glob question id
@@ -93,18 +93,23 @@
   [argmap]
   (let [glob-question-key (:glob-question-key argmap)
         id-key-gen (:id-key-gen argmap)
-        max-proc (:max-proc argmap 128)]
+        max-proc (:max-proc argmap 128)
+        final-reduce-proc-job (:final-reduce-proc-job argmap)]
     {:save-key-func glob-question-key
      :map-function id-key-gen
      :initial-reduce (fn [the-val]
                         (java.util.ArrayList.))
      :final-reduce (fn [the-val] (let [dist (distinct the-val)]
                                     (doseq [i dist]
-                                      (process-matchup-pair argmap i max-proc)))
+                                      (final-reduce-proc-job argmap i max-proc)))
                       nil)
      :reduce-function (fn [the-val mapped]
                          (.add the-val mapped)
                          the-val)}))
+
+(defn generic-processing-job [argmap]
+  (generic-processing-job-final-reduce
+    (merge argmap {:final-reduce-proc-job process-matchup-pair})))
 
 (defn most-popular-question-sort [the-arr]
   (sort-by #(if %1 (:count %1) 0) > the-arr))
