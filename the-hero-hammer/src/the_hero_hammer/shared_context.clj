@@ -123,7 +123,7 @@
         gfiltered (filter #(some? (get % 0)) grouped)
         mapped (mapv
          #(hash-map :key (nth %1 0)
-                    :count (apply + (map :count (nth %1 1))))
+                    :count (apply max (map :count (nth %1 1))))
          gfiltered)
         dcount (count mapped)]
     (dotimes [n (count the-arr)]
