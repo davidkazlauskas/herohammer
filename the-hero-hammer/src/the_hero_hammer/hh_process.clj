@@ -57,16 +57,21 @@
        (into [])))
 
 (defn fetch-relevant-hero-data [hero filter-id]
-  (let [key-func (fn-hero-question-filter-count)
+  (let [questions (questions-full)
+        key-func (fn-hero-question-filter-count)
         the-keys (map
                    #(key-func hero (:id %) filter-id)
-                   (questions-full))
+                   questions)
         the-batch (get-key-batch the-keys)
         thawed (->> the-batch
-                    (filter some?)
-                    (mapv nippy/thaw))
+                    (mapv #(if %1 (nippy/thaw %1) nil)))
+        with-questions
+          (map-indexed #(let [the-q (nth questions %1)]
+                          (assoc the-q
+                            :answers (or %2 (empty-q-vec the-q))))
+                       thawed)
         ]
-    the-batch))
+    with-questions))
 
 ; GENRIC MAP REDUCE
 (defn map-reduce-task-context [the-range id-func nipped]

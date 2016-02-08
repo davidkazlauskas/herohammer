@@ -165,9 +165,6 @@
       })
   )
 
-(defn empty-q-vec [the-question]
-  (into [] (repeat (count (:options the-question)) 0)))
-
 (defn sum-all-matchups-with-hero [hero-num filter-id]
   (let [q-filt-func (fn-question-filter-count)
         matchups

@@ -60,6 +60,9 @@
   (get-in (*ctx-get-func*)
     [:questions :short-to-index shortname]))
 
+(defn empty-q-vec [the-question]
+  (into [] (repeat (count (:options the-question)) 0)))
+
 (defn hero-index
   "Turn shortname to index"
   [shortname]
