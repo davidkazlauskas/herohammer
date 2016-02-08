@@ -56,6 +56,18 @@
               matchup filter-id))
        (into [])))
 
+(defn fetch-relevant-hero-data [hero filter-id]
+  (let [key-func (fn-hero-question-filter-count)
+        the-keys (map
+                   #(key-func hero (:id %) filter-id)
+                   (questions-full))
+        the-batch (get-key-batch the-keys)
+        thawed (->> the-batch
+                    (filter some?)
+                    (mapv nippy/thaw))
+        ]
+    the-batch))
+
 ; GENRIC MAP REDUCE
 (defn map-reduce-task-context [the-range id-func nipped]
   {:range the-range

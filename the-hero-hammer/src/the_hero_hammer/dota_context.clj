@@ -111,7 +111,9 @@
          {:most-popular-matchups-key (dota-generate-most-popular-heroes)
           :turn-key-to-uniq-matchup extract-user-hero-from-key})
         proc-heroes-args (merge dota-args
-         {:most-popular-matchups-key (dota-generate-hero-stats-count)
+         {:glob-question-key (dota-generate-hero-stats-count)
+          :id-key-gen extract-user-hero-from-key
+          :most-popular-matchups-key (dota-generate-hero-stats-count)
           :turn-key-to-uniq-matchup extract-user-hero-from-key})
         ]
       ;:glob-question-key -> global key for questions (to db)
