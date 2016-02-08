@@ -583,7 +583,7 @@
 (defn dota2-page [req]
   (dota-ctx (generic-main-page req)))
 
-(defn render-single-most-popular-hero [arg the-num]
+(defn render-single-most-popular-hero [arg index]
   (let [link (:link arg)
         hn-user (:hn-user arg)
         sq-user (:sq-user arg)]
@@ -601,8 +601,20 @@
     the-vec {:numbers true}
     render-single-most-popular-hero))
 
+(defn wrap-most-popular-heroes [the-data]
+  (let [heroes (heroes-full)
+        squares (get-hero-squares)]
+   (->> the-data
+       (mapv
+         (fn [the-count]
+           (let [the-id (:key the-count)]
+            (merge the-count
+                  {:hn-user (nth heroes the-id)
+                   :sq-user (nth squares the-id)})))))))
+
 (defn generic-by-hero-page [req]
-  (let [rel-data (get-most-popular-heroes-global)]
+  (let [rel-data (get-most-popular-heroes-global)
+        wrapped (wrap-most-popular-heroes rel-data)]
    (wrap-html
     (wrap-in-panel
       (html
@@ -621,7 +633,7 @@
             [:div {:class "col-md-3"}]
             [:div {:class "col-md-6"}
              [:h4 "Most popular user heroes"]
-             (render-most-popular-heroes rel-data)]
+             (render-most-popular-heroes wrapped)]
             [:div {:class "col-md-3"}]]]
         (update-hero-squares-script))))))
 
