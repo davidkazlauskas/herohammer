@@ -610,7 +610,9 @@
            (let [the-id (:key the-count)]
             (merge the-count
                   {:hn-user (nth heroes the-id)
-                   :sq-user (nth squares the-id)})))))))
+                   :sq-user (nth squares the-id)
+                   :link (gen-link-hero-filter the-id 0)
+                   })))))))
 
 (defn generic-by-hero-page [req]
   (let [rel-data (get-most-popular-heroes-global)
