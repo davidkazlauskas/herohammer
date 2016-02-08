@@ -1,6 +1,8 @@
 (ns the-hero-hammer.shared_context
   (:require [the-hero-hammer.hh_process :refer :all]
             [the-hero-hammer.hh_context :refer :all]
+            [the-hero-hammer.db_context :refer :all]
+            [taoensso.nippy :as nippy]
             [co.paralleluniverse.pulsar.core :as pulsar])
   (:import [co.paralleluniverse.fibers Fiber]))
 
@@ -154,3 +156,22 @@
                           the-arr)
       })
   )
+
+(defn sum-all-matchups-with-hero [hero-num filter-id]
+  (let [q-filt-func (fn-question-filter-count)
+        matchups
+        (->> (range (count (heroes-full)))
+         (mapv #(hash-map :user hero-num :opponent %)))
+        q-ids (mapv :id (questions-full))
+        the-keys (for [i (questions-full)]
+          (let [the-id (:id i)]
+            (->> matchups
+               (mapv #(q-filt-func % the-id filter-id)))))]
+    (->> the-keys
+         (mapv (fn [key-batch]
+            (let [batch-queried (get-key-batch key-batch)]
+              (->> batch-queried
+                   (filter some?)
+                   (mapv nippy/thaw))
+              ))))
+  ))
