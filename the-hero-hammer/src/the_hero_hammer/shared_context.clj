@@ -129,13 +129,13 @@
   "
   [argmap]
    (let [most-pop-matchups-key (:most-popular-matchups-key argmap)
-         key-to-uniq-matcup (:turn-key-to-uniq-matchup argmap)]
+         key-to-uniq-matchup (:turn-key-to-uniq-matchup argmap)]
      {:save-key-func most-pop-matchups-key
        :map-function (fn [the-val]
                        (let [matchup (matchup-pair-from-key the-val)
                              qcount (get-matchup-question-count matchup)]
                        {:count qcount
-                        :key (key-to-uniq-matcup the-val)}))
+                        :key (key-to-uniq-matchup the-val)}))
        :initial-reduce (fn [the-val]
                          (let [the-arr (object-array 11)]
                            (if the-val
@@ -154,3 +154,28 @@
                           the-arr)
       })
   )
+
+(defn most-popular-heroes-proc-job
+  "Argmap:
+  :most-popular-heroes-key -> key for most popular heroes
+  :turn-key-to-user-hero -> key to user picked hero function
+  "
+  [argmap]
+  (let [most-pop-heroes-key (:most-popular-heroes-key argmap)
+        key-to-user-hero (:turn-key-to-user-hero argmap)]
+    {
+     :save-key-func most-pop-heroes-key
+     :map-function (fn [the-val]
+                     (let [matchup (matchup-pair-from-key the-val)
+                           qcount (get-matchup-question-count)]
+                       {:count qcount
+                        :key (key-to-user-hero the-val)}))
+     :initial-reduce (fn [the-val]
+                       (let [the-arr (object-array 11)]
+                         (if the-val
+                           (do
+                             (dotimes [i (count the-val)]
+                               (aset the-arr i (nth the-val i)))
+                             (most-popular-question-sort the-arr)))
+                         the-arr))
+     }))
