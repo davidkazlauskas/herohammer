@@ -94,22 +94,25 @@
   (let [glob-question-key (:glob-question-key argmap)
         id-key-gen (:id-key-gen argmap)
         max-proc (:max-proc argmap 128)
-        final-reduce-proc-job (:final-reduce-proc-job argmap)]
+        final-reduce-proc-job (:final-reduce-job argmap)]
     {:save-key-func glob-question-key
      :map-function id-key-gen
      :initial-reduce (fn [the-val]
                         (java.util.ArrayList.))
-     :final-reduce (fn [the-val] (let [dist (distinct the-val)]
-                                    (doseq [i dist]
-                                      (final-reduce-proc-job argmap i max-proc)))
-                      nil)
+     :final-reduce final-reduce-proc-job
      :reduce-function (fn [the-val mapped]
                          (.add the-val mapped)
                          the-val)}))
 
 (defn generic-processing-job [argmap]
-  (generic-processing-job-final-reduce
-    (merge argmap {:final-reduce-proc-job process-matchup-pair})))
+  (let [max-proc (:max-proc argmap 128)]
+   (generic-processing-job-final-reduce
+    (merge argmap
+           {:final-reduce-job
+             (fn [the-val]
+               (let [dist (distinct the-val)]
+                 (doseq [i dist]
+                   (process-matchup-pair argmap i max-proc))))}))))
 
 (defn most-popular-question-sort [the-arr]
   (sort-by #(if %1 (:count %1) 0) > the-arr))
