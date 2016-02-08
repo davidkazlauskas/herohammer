@@ -483,8 +483,9 @@
       [:a {:href mpage} "By matchup"]]
      [:li (is-main-tab "by-hero" curr-tab)
       [:a {:href byhero} "By hero"]]
-     [:li (is-main-tab "by-question" curr-tab)
-      [:a {:href byquestion} "By question"]]]]
+     ;[:li (is-main-tab "by-question" curr-tab)
+      ;[:a {:href byquestion} "By question"]]
+     ]]
     [:div {:class "col-md-2"}]]
    inner-html])))
 
