@@ -31,6 +31,12 @@
 (defn lol-generate-most-popular-matchups []
   ["lol" "glob-question-count" "most-popular"])
 
+(defn lol-generate-most-popular-heroes []
+  ["lol" "glob-question-count" "most-popular-heroes"])
+
+(defn lol-generate-hero-stats-count []
+  ["lol" "glob-question-count" "hero-stats-count"])
+
 (defn lol-generate-matchup-question-count
   "Matchup pair - {:user 7 :opponent 7}"
   [matchup-pair]
@@ -83,6 +89,10 @@
 (defn drop-tail-from-key [the-key]
   (clojure.string/replace (nth the-key 2) #"^(\d+)-(\d+)-.*$" "$1-$2"))
 
+(defn extract-user-hero-from-key [the-key]
+  (Integer. (clojure.string/replace
+              (nth the-key 2) #"^(\d+).*$" "$1")))
+
 (defn gen-map-reduce-tasks-global [max-proc]
   (let [lol-args
         {; generic
@@ -96,7 +106,16 @@
          ; most popular
          :most-popular-matchups-key (lol-generate-most-popular-matchups)
          :turn-key-to-uniq-matchup drop-tail-from-key
-         }]
+         }
+        pop-heroes-args (merge lol-args
+         {:most-popular-matchups-key (lol-generate-most-popular-heroes)
+          :turn-key-to-uniq-matchup extract-user-hero-from-key})
+        proc-heroes-args (merge lol-args
+         {:glob-question-key (lol-generate-hero-stats-count)
+          :id-key-gen extract-user-hero-from-key
+          :most-popular-matchups-key (lol-generate-hero-stats-count)
+          :turn-key-to-uniq-matchup extract-user-hero-from-key})
+        ]
       ;:glob-question-key -> global key for questions (to db)
       ;:id-key-gen -> function with 1 arg (id) to get glob question id
       ;:max-proc -> maximum questions to process at a time
@@ -111,6 +130,10 @@
      (scon/generic-processing-job lol-args)
      ; most popular questions
      (scon/most-popular-matchups-proc-job lol-args)
+     ; process most popular heroes
+     (scon/most-popular-matchups-proc-job pop-heroes-args)
+     ; process hero counts
+     (scon/generic-processing-job-proc-hero-counts proc-heroes-args)
      ]))
 
 (defn get-map-reduce-job [max-proc]
