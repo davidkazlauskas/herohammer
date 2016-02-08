@@ -496,6 +496,7 @@
      :matchup-filter-count lol-generate-filter-matchup-question-count
      :matchup-hero-count lol-generate-filter-hero-question-count
      :matchup-most-popular-global lol-generate-most-popular-matchups
+     :hero-most-popular-global lol-generate-most-popular-heroes
    }
    :questions {
      :full *all-questions-lol*

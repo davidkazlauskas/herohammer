@@ -320,6 +320,7 @@
      :matchup-filter-count dota-generate-filter-matchup-question-count
      :matchup-hero-count dota-generate-filter-hero-question-count
      :matchup-most-popular-global dota-generate-most-popular-matchups
+     :hero-most-popular-global dota-generate-most-popular-heroes
    }
    :questions {
      :full *all-questions-dota*
