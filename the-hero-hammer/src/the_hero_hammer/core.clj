@@ -631,7 +631,10 @@
               (hero-dropdown "hero-user"
                              {})]
              [:div {:class "col-md-4"}]]
-           (hero-icon "thumb-user" "")
+           [:div {:class "row"} (hero-icon "thumb-user" "")]
+           [:a {:class "btn btn-default"
+                :style "margin-top: 10px;"}
+            "Show stats"]
            [:div {:class "row"}
             [:div {:class "col-md-3"}]
             [:div {:class "col-md-6"}
