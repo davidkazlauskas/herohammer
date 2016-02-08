@@ -157,6 +157,9 @@
       })
   )
 
+(defn empty-q-vec [the-question]
+  (into [] (repeat (count (:options the-question)) 0)))
+
 (defn sum-all-matchups-with-hero [hero-num filter-id]
   (let [q-filt-func (fn-question-filter-count)
         matchups
@@ -170,11 +173,14 @@
             {:question i :batch gen-keys}))]
     (->> the-keys
          (mapv (fn [key-batch]
-            (let [the-batch (:batch key-batch)
-                  batch-queried (get-key-batch the-batch)]
-              (->> batch-queried
-                   (filter some?)
-                   (mapv #(:val (nippy/thaw %)))
-                   )
-              ))))
-  ))
+            (let [the-q (:question key-batch)
+                  the-batch (:batch key-batch)
+                  batch-queried (get-key-batch the-batch)
+                  extract (->> batch-queried
+                               (filterv some?)
+                               (mapv #(:val (nippy/thaw %)))
+                               (#(if (empty? %1)
+                                  [(empty-q-vec the-q)] %1))
+                               (apply mapv +))]
+              {:question the-q
+               :sum extract}))))))
