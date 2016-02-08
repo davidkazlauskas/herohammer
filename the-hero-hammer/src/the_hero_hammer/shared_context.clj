@@ -186,14 +186,17 @@
                :sum extract}))))))
 
 (defn update-all-hero-stats [hero-vec]
-  (for [flt (filters-full)
+  (let [key-gen-func (fn-hero-question-filter-count)]
+   (for [flt (filters-full)
         hero hero-vec]
     (let [flt-id (:id flt)
           sum-res (sum-all-matchups-with-hero hero flt-id)]
-      (println "Pezl->" flt-id sum-res)
-      )
-    )
-  )
+      (doseq [i sum-res]
+        (let [q-id (get-in i [:question :id])
+              r-count (:sum i)]
+          (println "Mezl->" (key-gen-func hero q-id flt-id))
+          (println "Pezl->" flt-id r-count))))
+    )))
 
 (defn sum-all-heroes-job
   "Argmap:
