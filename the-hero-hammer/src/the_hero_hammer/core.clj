@@ -416,13 +416,13 @@
                :style "cursor: pointer;"
                }
          (if index [:td {:style "width: 30px;"} "#" index])
-         [:td
+         [:td {:style "width: 110px;"}
           [:img {:height "32" :width "32" :src sq-user}]
           [:span
            {:style "margin-left: 10px; margin-right: 10px;"}
            "vs."]
           [:img {:height "32" :width "32" :src sq-opp}]]
-         [:td [:span
+         [:td {:class "text-center"} [:span
                {:style "font-size: 12px;"} hn-user " vs. " hn-opp]]
          ])))
 
@@ -594,9 +594,9 @@
                (str "window.location = '" link "';")
                  :style "cursor: pointer;"}
            (if index [:td {:style "width: 30px;"} "#" index])
-           [:td
+           [:td {:style "width: 32px;"}
             [:img {:height "32" :width "32" :src sq-user}]]
-           [:td [:span
+           [:td {:class "text-center"} [:span
                  {:style "font-size: 12px;"} hn-user]]])))
 
 (defn render-most-popular-heroes [the-vec]
