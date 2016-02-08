@@ -217,6 +217,11 @@
   []
   (get-in (*ctx-get-func*) [:queries :matchup-filter-count]))
 
+(defn fn-hero-question-filter-count
+  "Returns function (hero question-id filter-id)"
+  []
+  (get-in (*ctx-get-func*) [:queries :matchup-hero-count]))
+
 (defn fn-macthup-most-popular-global
   "Returns function (matchup-pair question-id filter-id)"
   []
