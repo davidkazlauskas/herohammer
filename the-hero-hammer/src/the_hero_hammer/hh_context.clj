@@ -4,6 +4,7 @@
 
 ; EZ START
 ;(def ^:dynamic *ctx-get-func* (fn [] the-hero-hammer.lol_context/*hh-context-lol*))
+;(def ^:dynamic *ctx-get-func* (fn [] the-hero-hammer.dota_context/*hh-context-dota*))
 
 (def ^:dynamic *hh-context* nil)
 (def ^:dynamic *ctx-get-func* nil)
