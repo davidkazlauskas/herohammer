@@ -120,7 +120,7 @@
      :question-sort-function
        (fn [the-q]
          (let [sname (:shortname the-q)
-               opt-vec (get-in the-q [:counts :val])]
+               opt-vec (get-in the-q [:answers])]
          (cond (= "mtype" sname) 200
                (= "ladder" sname) 199
                (= "position" sname) 198
@@ -149,7 +149,7 @@
      :question-sort-function
        (fn [the-q]
          (let [sname (:shortname the-q)
-               opt-vec (get-in the-q [:counts :val])]
+               opt-vec (get-in the-q [:answers])]
          (cond (= "mtype" sname) 200
                (= "ladder" sname) 199
                (= "position" sname) 198
@@ -865,7 +865,10 @@
             sort-func (:question-sort-function (html-context))
             rel-data (fetch-relevant-matchup-data
                       matchup filter-id)
-            sorted-data (into [] (sort-by sort-func > rel-data))
+            mapped (mapv
+                     #(assoc %1 :answers (get-in %1 [:counts :val]))
+                     rel-data)
+            sorted-data (into [] (sort-by sort-func > mapped))
             squares (get-hero-squares)
             heroes (heroes-full)
             hu (:user matchup)
