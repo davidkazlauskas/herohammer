@@ -12,7 +12,8 @@
             [org.httpkit.server :refer [run-server]]
             [cljs.build.api :as cljsbld]
             [clojure.data.json :as json]
-            [clj-http.client :as hclient])
+            [clj-http.client :as hclient]
+            [print.foo :as dp])
   (:use hiccup.core
         [ring.middleware.params :only [wrap-params]]
         [ring.middleware.cookies :as cook]))
