@@ -584,7 +584,17 @@
   (dota-ctx (generic-main-page req)))
 
 (defn render-single-most-popular-hero [arg the-num]
-  (html [:tr [:td "nay"]]))
+  (let [link (:link arg)
+        hn-user (:hn-user arg)
+        sq-user (:sq-user arg)]
+    (html [:tr {:onclick
+               (str "window.location = '" link "';")
+                 :style "cursor: pointer;"}
+           (if index [:td {:style "width: 30px;"} "#" index])
+           [:td
+            [:img {:height "32" :width "32" :src sq-user}]]
+           [:td [:span
+                 {:style "font-size: 12px;"} hn-user]]])))
 
 (defn render-most-popular-heroes [the-vec]
   (render-most-popular-generic
@@ -592,7 +602,8 @@
     render-single-most-popular-hero))
 
 (defn generic-by-hero-page [req]
-  (wrap-html
+  (let [rel-data (get-most-popular-heroes-global)]
+   (wrap-html
     (wrap-in-panel
       (html
         (context-js-variables)
@@ -610,9 +621,9 @@
             [:div {:class "col-md-3"}]
             [:div {:class "col-md-6"}
              [:h4 "Most popular user heroes"]
-             (render-most-popular-heroes [1 2 3])]
+             (render-most-popular-heroes rel-data)]
             [:div {:class "col-md-3"}]]]
-        (update-hero-squares-script)))))
+        (update-hero-squares-script))))))
 
 (defn dota2-by-hero-page [req]
   (dota-ctx
