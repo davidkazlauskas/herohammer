@@ -162,8 +162,7 @@
                           (distinct-java-array the-arr)
                           (most-popular-question-sort the-arr)
                           the-arr)
-      })
-  )
+      }))
 
 (defn sum-all-matchups-with-hero [hero-num filter-id]
   (let [q-filt-func (fn-question-filter-count)
