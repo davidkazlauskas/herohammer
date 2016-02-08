@@ -645,6 +645,12 @@
       (assoc (html-context) :current-tab "by-hero")
       (generic-by-hero-page req))))
 
+(defn lol-by-hero-page [req]
+  (lol-ctx
+    (rebind-html-context
+      (assoc (html-context) :current-tab "by-hero")
+      (generic-by-hero-page req))))
+
 (defn generic-by-question-page [req]
   (wrap-html
     (wrap-in-panel
@@ -1089,8 +1095,8 @@
 
 (defroutes routes-lol
   (GET "/lol" [:as req] (lol-page req))
-  (GET "/lol-by-hero" [:as req] "meow lol")
-  (GET "/lol-by-question" [:as req] "meow q")
+  (GET "/lol-by-hero" [:as req] (lol-by-hero-page req))
+  ;(GET "/lol-by-question" [:as req] "meow q")
   (GET "/questions-lol/:matchup" [matchup :as req] (lol-render-questions matchup req))
   (GET "/questions-lol" [matchup :as req] (lol-render-questions req))
   (GET "/show-record-lol/:id" [id] (lol-show-record id))
@@ -1103,7 +1109,7 @@
 (defroutes routes-dota
   (GET "/dota" [:as req] (dota2-page req))
   (GET "/dota-by-hero" [:as req] (dota2-by-hero-page req))
-  (GET "/dota-by-question" [:as req] (dota2-by-question-page req))
+  ;(GET "/dota-by-question" [:as req] (dota2-by-question-page req))
   (GET "/questions-dota/:matchup" [matchup :as req] (dota-render-questions matchup req))
   (GET "/questions-dota" [matchup :as req] (dota-render-questions req))
   (GET "/show-record-dota/:id" [id] (dota-show-record id))
