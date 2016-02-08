@@ -372,6 +372,8 @@
          (:matchup-link-start (html-context))
          "'; addRecordLink = '"
          (:add-record-link-start (html-context))
+         "'; heroStatsLink = '"
+         (:hero-link-start (html-context))
          "'; heroSquares = "
          (:squares-javascript (html-context))
          ";"]))
@@ -603,9 +605,10 @@
     render-single-most-popular-hero))
 
 (defn wrap-most-popular-heroes [the-data]
-  (let [heroes (heroes-full)
+  (let [filtered (filterv some? the-data)
+        heroes (heroes-full)
         squares (get-hero-squares)]
-   (->> the-data
+   (->> filtered
        (mapv
          (fn [the-count]
            (let [the-id (:key the-count)]
@@ -632,7 +635,8 @@
                              {})]
              [:div {:class "col-md-4"}]]
            [:div {:class "row"} (hero-icon "thumb-user" "")]
-           [:a {:class "btn btn-default"
+           [:a {:onclick "the_hero_hammer.js_client.goToHeroStats();"
+                :class "btn btn-default"
                 :style "margin-top: 10px;"}
             "Show stats"]
            [:div {:class "row"}
