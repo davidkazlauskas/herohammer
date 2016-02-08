@@ -193,10 +193,10 @@
           sum-res (sum-all-matchups-with-hero hero flt-id)]
       (doseq [i sum-res]
         (let [q-id (get-in i [:question :id])
-              r-count (:sum i)]
-          (println "Mezl->" (key-gen-func hero q-id flt-id))
-          (println "Pezl->" flt-id r-count))))
-    )))
+              r-count (:sum i)
+              frozen (nippy/freeze r-count)
+              the-key (key-gen-func hero q-id flt-id)]
+          (set-key the-key frozen)))))))
 
 (defn sum-all-heroes-job
   "Argmap:
