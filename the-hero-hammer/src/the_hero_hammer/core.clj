@@ -695,8 +695,8 @@
 
 (defn hero-data-split [the-str]
   (let [findings (re-find #"(\d+)+-(\d+)" the-str)]
-    [{:hero (Integer. (nth findings 1))
-      :filter (Integer. (nth findings 2))}]))
+    {:hero (Integer. (nth findings 1))
+     :filter (Integer. (nth findings 2))}))
 
 (defn render-answers [pairs]
   (let [questions (questions-full)]
