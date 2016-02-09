@@ -255,6 +255,14 @@
           ]
          ]))
 
+(defn ze-social-share-stuff []
+  (html [:script {:type "text/javascript"
+                  :src "https://ws.sharethis.com/button/buttons.js"}]
+        [:script {:type "text/javascript"}
+         (str "stLight.options({publisher: \"93e52f14-0d56-4edf-9dbe-b73a97dfecc6 \", "
+         "doNotHash: false, doNotCopy: false, hashAddressBar: false});")]
+        ))
+
 (defn wrap-html [towrap]
   (html [:html
          [:head
@@ -272,7 +280,9 @@
           [:script {:src "/resources/js/main.js"}]
           [:script {:src "https://www.google.com/recaptcha/api.js"}]
           (ze-analytics)
-          (fb-commentsdk)]
+          (fb-commentsdk)
+          (ze-social-share-stuff)
+          ]
          [:body
           (navbar {})
           [:div {:class "container"}
@@ -282,8 +292,21 @@
             [:div {:class "col-md-2"}]
             ]
            [:div {:class "panel"}
-            [:div {:class "panel-footer text-center"}
+            [:div {:style "margin-bottom: 20px;"
+                   :class "panel-footer text-center"}
              [:span "The Hero Hammer 2016"]]]
+           [:div {:class "navbar navbar-default navbar-fixed-bottom"}
+            [:style ".stMainServices {height: 30px !important;}"]
+            [:div {:class "container"}
+             [:span "Enjoying this site? Consider "
+              [:a "donating a record"]
+              " or sharing with others: "]
+              [:span {:class "st_facebook_hcount"
+                      :displayText "Facebook"}]
+              [:span {:class "st_twitter_hcount"
+                      :displayText "Twitter"}]
+             ]
+            ]
            ]]
          ]))
 
