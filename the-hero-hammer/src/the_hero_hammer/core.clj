@@ -124,7 +124,7 @@
        (fn [the-q]
          (let [sname (:shortname the-q)
                opt-vec (get-in the-q [:answers])]
-         (cond (= "end-red" sname) 201
+         (cond (= "end-res" sname) 201
                (= "mtype" sname) 200
                (= "ladder" sname) 199
                (= "position" sname) 198
@@ -157,7 +157,7 @@
        (fn [the-q]
          (let [sname (:shortname the-q)
                opt-vec (get-in the-q [:answers])]
-         (cond (= "end-red" sname) 201
+         (cond (= "end-res" sname) 201
                (= "mtype" sname) 200
                (= "ladder" sname) 199
                (= "position" sname) 198
