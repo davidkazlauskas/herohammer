@@ -34,6 +34,9 @@
 (defn lol-generate-most-popular-heroes []
   ["lol" "glob-question-count" "most-popular-heroes"])
 
+(defn lol-generate-most-popular-opponents []
+  ["lol" "glob-question-count" "most-popular-opponents"])
+
 (defn lol-generate-hero-stats-count []
   ["lol" "glob-question-count" "hero-stats-count"])
 
@@ -116,6 +119,11 @@
           :turn-key-to-uniq-matchup extract-user-hero-from-key
           :distinct-sort-function scon/distinct-java-array-sum
           :matchup-question-count-func (fn [_] 1)})
+        pop-opponents-args (merge lol-args
+         {:most-popular-matchups-key (lol-generate-most-popular-opponents)
+          :turn-key-to-uniq-matchup extract-opponent-hero-from-key
+          :distinct-sort-function scon/distinct-java-array-sum
+          :matchup-question-count-func (fn [_] 1)})
         proc-heroes-args (merge lol-args
          {:glob-question-key (lol-generate-hero-stats-count)
           :id-key-gen extract-user-hero-from-key
@@ -138,6 +146,8 @@
      (scon/most-popular-matchups-proc-job lol-args)
      ; process most popular heroes
      (scon/most-popular-matchups-proc-job pop-heroes-args)
+     ; process most popular opponents
+     (scon/most-popular-matchups-proc-job pop-opponents-args)
      ; process hero counts
      (scon/generic-processing-job-proc-hero-counts proc-heroes-args)
      ]))
