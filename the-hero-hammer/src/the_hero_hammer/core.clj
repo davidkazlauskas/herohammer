@@ -111,6 +111,7 @@
      :question-get-link "/questions-lol"
      :matchup-link-start "/matchup-lol"
      :hero-link-start "/hero-lol"
+     :opponent-link-start "/opponent-lol"
      :add-record-link-start "/questions-lol"
      :record-link-start "/show-record-lol"
      :registration-link "/questions-lol"
@@ -141,6 +142,7 @@
      :question-get-link "/questions-dota"
      :matchup-link-start "/matchup-dota"
      :hero-link-start "/hero-dota"
+     :opponent-link-start "/opponent-dota"
      :add-record-link-start "/questions-dota"
      :record-link-start "/show-record-dota"
      :registration-link "/questions-dota"
@@ -379,6 +381,8 @@
          (:add-record-link-start (html-context))
          "'; heroStatsLink = '"
          (:hero-link-start (html-context))
+         "'; opponentStatsLink = '"
+         (:opponent-link-start (html-context))
          "'; heroSquares = "
          (:squares-javascript (html-context))
          ";"]))
@@ -531,6 +535,10 @@
   (str (:hero-link-start (html-context))
     "/" hero "-" filter-id))
 
+(defn gen-link-opponent-filter [hero filter-id]
+  (str (:opponent-link-start (html-context))
+    "/" hero "-" filter-id))
+
 (defn gen-link-question [qid-tail]
   (str (:record-link-start (html-context))
     "/" qid-tail))
@@ -644,6 +652,49 @@
              [:div {:class "col-md-4"}]]
            [:div {:class "row"} (hero-icon "thumb-user" "")]
            [:a {:onclick "the_hero_hammer.js_client.goToHeroStats();"
+                :class "btn btn-default"
+                :style "margin-top: 10px;"}
+            "Show stats"]
+           [:div {:class "row"}
+            [:div {:class "col-md-3"}]
+            [:div {:class "col-md-6"}
+             [:h4 "Most popular user heroes"]
+             (render-most-popular-heroes wrapped)]
+            [:div {:class "col-md-3"}]]]
+        (update-hero-squares-script))))))
+
+(defn wrap-most-popular-opponents [the-data]
+  (let [filtered (filterv some? the-data)
+        heroes (heroes-full)
+        squares (get-hero-squares)]
+   (->> filtered
+       (mapv
+         (fn [the-count]
+           (let [the-id (:key the-count)]
+            (merge the-count
+                  {:hn-user (nth heroes the-id)
+                   :sq-user (nth squares the-id)
+                   :link (gen-link-opponent-filter the-id 0)
+                   })))))))
+
+(defn generic-by-opponent-page [req]
+  (let [rel-data (get-most-popular-opponents-global)
+        wrapped (wrap-most-popular-opponents rel-data)]
+   (wrap-html
+    (wrap-in-panel
+      (html
+        (context-js-variables)
+        [:div {:class "input-group col-md-12"}
+           [:h4 "View stats by hero"]
+           [:div {:class "row"
+                  :style "margin-bottom: 7px;"}
+             [:div {:class "col-md-4"}]
+             [:div {:class "col-md-4"}
+              (hero-dropdown "hero-user"
+                             {})]
+             [:div {:class "col-md-4"}]]
+           [:div {:class "row"} (hero-icon "thumb-user" "")]
+           [:a {:onclick "the_hero_hammer.js_client.goToOpponentStats();"
                 :class "btn btn-default"
                 :style "margin-top: 10px;"}
             "Show stats"]
