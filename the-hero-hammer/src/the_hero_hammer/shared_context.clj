@@ -295,3 +295,7 @@
               nipped (nippy/freeze to-save)
               to-store-key (key-gen-func qid flt-id)]
           (set-key to-store-key nipped)))))))
+
+(defn generic-processing-job-proc-question-counts [argmap]
+  (generic-processing-job-final-reduce-distinct
+    argmap (fn [_] (full-update-for-questions))))
