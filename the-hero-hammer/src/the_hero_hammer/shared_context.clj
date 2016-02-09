@@ -248,3 +248,6 @@
   (generic-processing-job-final-reduce-distinct
     argmap update-all-opponent-stats))
 
+(defn all-relevant-hero-data [filter-id]
+  (mapv #(fetch-relevant-hero-data % filter-id)
+        (range (count (heroes-full)))))
