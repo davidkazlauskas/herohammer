@@ -252,8 +252,25 @@
   (mapv #(hash-map :data (fetch-relevant-hero-data %1 filter-id) :hero-id %1)
         (range (count (heroes-full)))))
 
+(defn highest-group-comp [ans-by left right]
+  (let [ratio-left (:ratio left)
+        ratio-right (:ratio right)]
+   (if (not (= ratio-left ratio-right))
+     (> ratio-left ratio-right)
+     (> (get-in left [:answers ans-by])
+        (get-in right [:answers ans-by])))))
+
 (defn highest-for-group [data-set answer amount]
-  (into [] (take amount (sort-by #(get-in % [:answers answer]) > data-set))))
+  (let [comp-func (partial highest-group-comp answer)
+        ratios-mapped
+         (mapv #(let [ans (:answers %1)
+                      exp-count (nth ans answer)
+                      full-sum (apply + ans)
+                      divisor (if (> full-sum 0) full-sum 1)
+                      the-ratio (/ exp-count divisor)]
+                 (assoc %1 :ratio the-ratio))
+          data-set)]
+   (into [] (take amount (sort comp-func ratios-mapped)))))
 
 (defn group-by-single-question [all-rel-data the-question]
   (let [the-id (:id the-question)]
