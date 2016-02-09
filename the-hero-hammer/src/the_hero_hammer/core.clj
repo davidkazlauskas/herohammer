@@ -690,10 +690,10 @@
                   :style "margin-bottom: 7px;"}
              [:div {:class "col-md-4"}]
              [:div {:class "col-md-4"}
-              (hero-dropdown "hero-user"
+              (hero-dropdown "hero-opponent"
                              {})]
              [:div {:class "col-md-4"}]]
-           [:div {:class "row"} (hero-icon "thumb-user" "")]
+           [:div {:class "row"} (hero-icon "thumb-opponent" "")]
            [:a {:onclick "the_hero_hammer.js_client.goToOpponentStats();"
                 :class "btn btn-default"
                 :style "margin-top: 10px;"}
