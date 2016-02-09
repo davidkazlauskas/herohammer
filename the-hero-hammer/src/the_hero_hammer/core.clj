@@ -1133,9 +1133,27 @@
 
 (defn render-answers [the-data]
   (for [i the-data]
-   (let [curr-ans (:answer i)]
+   (let [curr-ans (:answer i)
+         curr-data (:data i)]
     (html [:div {:class "row text-center"}
-          [:h4 "Answer: " curr-ans]]))))
+          [:h4 "Answer: " curr-ans]
+          [:table {:class
+                   "table table-hover table-striped table-condensed"}
+           (for [data curr-data]
+             (let [answers (:answers data)
+                   hero-square (:hero-square data)
+                   hero-name (:hero-name data)
+                   sum-ans (apply + answers)]
+               [:tr
+                 [:td {:style "width: 50px;"}
+                  [:img {:width 32
+                         :height 32
+                         :src hero-square}]]
+                 [:td [:span hero-name]]
+               ])
+             )
+           ]
+          ]))))
 
 (defn generic-render-question-data [id]
   (let [the-split (split-question-and-filter id)
