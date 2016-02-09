@@ -231,6 +231,11 @@
   []
   (get-in (*ctx-get-func*) [:queries :matchup-opponent-count]))
 
+(defn fn-question-filter-top-answer-count
+  "Returns function (hero question-id filter-id)"
+  []
+  (get-in (*ctx-get-func*) [:queries :matchup-question-top-answer]))
+
 (defn fn-matchup-most-popular-global
   "Returns function (matchup-pair question-id filter-id)"
   []
