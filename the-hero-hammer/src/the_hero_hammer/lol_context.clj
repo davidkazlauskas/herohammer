@@ -40,6 +40,9 @@
 (defn lol-generate-hero-stats-count []
   ["lol" "glob-question-count" "hero-stats-count"])
 
+(defn lol-generate-opponent-stats-count []
+  ["lol" "glob-question-count" "opponent-stats-count"])
+
 (defn lol-generate-matchup-question-count
   "Matchup pair - {:user 7 :opponent 7}"
   [matchup-pair]
@@ -129,6 +132,11 @@
           :id-key-gen extract-user-hero-from-key
           :most-popular-matchups-key (lol-generate-hero-stats-count)
           :turn-key-to-uniq-matchup extract-user-hero-from-key})
+        proc-opponents-args (merge lol-args
+         {:glob-question-key (lol-generate-opponent-stats-count)
+          :id-key-gen extract-opponent-hero-from-key
+          :most-popular-matchups-key (lol-generate-opponent-stats-count)
+          :turn-key-to-uniq-matchup extract-opponent-hero-from-key})
         ]
       ;:glob-question-key -> global key for questions (to db)
       ;:id-key-gen -> function with 1 arg (id) to get glob question id
@@ -150,6 +158,8 @@
      (scon/most-popular-matchups-proc-job pop-opponents-args)
      ; process hero counts
      (scon/generic-processing-job-proc-hero-counts proc-heroes-args)
+     ; process opponent counts
+     (scon/generic-processing-job-proc-opponent-counts proc-opponents-args)
      ]))
 
 (defn get-map-reduce-job [max-proc]
