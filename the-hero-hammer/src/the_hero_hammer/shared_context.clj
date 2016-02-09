@@ -264,3 +264,8 @@
              {:hero-id h-id :answers raw-ans}
             ) all-rel-data)))
 
+(defn full-update-for-questions []
+  (for [flt (filters-full)]
+    (let [flt-id (:id flt)
+          the-dataset (all-relevant-hero-data flt-id)]
+      flt-id)))
