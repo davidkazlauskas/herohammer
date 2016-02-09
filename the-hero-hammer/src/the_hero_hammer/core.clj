@@ -497,8 +497,8 @@
       [:a {:href byhero} "By hero"]]
      [:li (is-main-tab "by-opponent" curr-tab)
       [:a {:href byopponent} "By opponent"]]
-     ;[:li (is-main-tab "by-question" curr-tab)
-      ;[:a {:href byquestion} "By question"]]
+     [:li (is-main-tab "by-question" curr-tab)
+      [:a {:href byquestion} "By question"]]
      ]]
     [:div {:class "col-md-2"}]]
    inner-html])))
