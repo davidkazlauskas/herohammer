@@ -2,6 +2,7 @@
 
 ; EZ START
 ;(def ^:dynamic *get-db-context* (fn [] the-hero-hammer.storage_ram/*storage-ram-context*))
+;(def ^:dynamic *get-db-context* (fn [] the-hero-hammer.storage_as/*storage-aes-context*))
 
 (def ^:dynamic *db-context* nil)
 

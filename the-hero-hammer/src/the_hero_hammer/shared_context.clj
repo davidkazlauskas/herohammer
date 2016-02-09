@@ -175,11 +175,8 @@
                           the-arr)
       }))
 
-(defn sum-all-matchups-with-hero [hero-num filter-id]
+(defn sum-all-matchups-generic [filter-id matchups]
   (let [q-filt-func (fn-question-filter-count)
-        matchups
-        (->> (range (count (heroes-full)))
-         (mapv #(hash-map :user hero-num :opponent %)))
         q-ids (mapv :id (questions-full))
         the-keys (for [i (questions-full)]
           (let [the-id (:id i)
@@ -199,6 +196,18 @@
                                (apply mapv +))]
               {:question the-q
                :sum extract}))))))
+
+(defn sum-all-matchups-with-hero [hero-num filter-id]
+  (let [matchups
+        (->> (range (count (heroes-full)))
+         (mapv #(hash-map :user hero-num :opponent %)))]
+   (sum-all-matchups-generic filter-id matchups)))
+
+(defn sum-all-matchups-with-opponent [opponent-num filter-id]
+  (let [matchups
+        (->> (range (count (heroes-full)))
+         (mapv #(hash-map :user % :opponent opponent-num)))]
+   (sum-all-matchups-generic filter-id matchups)))
 
 (defn update-all-hero-stats [hero-vec]
   (let [key-gen-func (fn-hero-question-filter-count)]
