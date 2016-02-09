@@ -1113,13 +1113,28 @@
     {:question (Integer. (nth findings 1))
      :filter (Integer. (nth findings 2))}))
 
+(defn map-hero-icon-and-name-to-data [index heroes squares the-data]
+  (let [the-data]))
+
+(defn wrap-question-data [question the-data]
+  (let [opts (:options question)
+        heroes (heroes-full)
+        squares (get-hero-squares)
+        idx-rng (range (count opts))]
+    (mapv #(hash-map
+             :answer %1
+             :data (map-hero-icon-and-name-to-data %3 heroes squares %2))
+          opts the-data idx-rng)))
+
 (defn generic-render-question-data [id]
   (let [the-split (split-question-and-filter id)
         question-id (:question the-split)
         flt-id (:filter the-split)
         full-q (questions-full)
         this-q (nth full-q question-id)
-        q-val (:question this-q)]
+        q-val (:question this-q)
+        rel-data (fetch-relevant-question-data
+                   question-id flt-id)]
    (wrap-html (html
                 [:div {:class "row text-center"}
                  [:h3 "Stats for question:"]]
