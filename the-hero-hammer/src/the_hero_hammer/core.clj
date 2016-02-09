@@ -733,7 +733,7 @@
 (defn generic-by-question-page [req]
   (wrap-html
     (wrap-in-panel
-      (html [:h3 "zoo"]))))
+      (html [:h4 "View stats by question"]))))
 
 (defn dota2-by-question-page [req]
   (dota-ctx
