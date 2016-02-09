@@ -152,7 +152,7 @@
           :id-key-gen extract-opponent-hero-from-key
           :most-popular-matchups-key (lol-generate-opponent-stats-count)
           :turn-key-to-uniq-matchup extract-opponent-hero-from-key})
-        proc-questions-args (merge dota-args
+        proc-questions-args (merge lol-args
          {:glob-question-key (lol-generate-question-stats-count)
           :id-key-gen extract-opponent-hero-from-key
           :most-popular-matchups-key (lol-generate-question-stats-count)
