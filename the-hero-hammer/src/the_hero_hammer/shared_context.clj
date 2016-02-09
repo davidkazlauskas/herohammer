@@ -253,7 +253,7 @@
         (range (count (heroes-full)))))
 
 (defn highest-for-group [data-set answer amount]
-  (take amount (sort-by #(get-in % [:answers answer]) > data-set)))
+  (into [] (take amount (sort-by #(get-in % [:answers answer]) > data-set))))
 
 (defn group-by-single-question [all-rel-data the-question]
   (let [the-id (:id the-question)]
@@ -268,4 +268,13 @@
   (for [flt (filters-full)]
     (let [flt-id (:id flt)
           the-dataset (all-relevant-hero-data flt-id)]
-      flt-id)))
+      (into []
+        (for [q (questions-full)]
+          (let [options (:options q)
+                grouped-single (group-by-single-question the-dataset q)]
+            (into []
+                  (map-indexed
+                    #(hash-map
+                      :option %2
+                      :results (highest-for-group grouped-single %1 10))
+                   options))))))))
