@@ -282,8 +282,8 @@
             ) all-rel-data)))
 
 (defn full-update-for-questions []
-  (for [key-gen-func (fn-question-filter-top-answer-count)
-        flt (filters-full)]
+  (let [key-gen-func (fn-question-filter-top-answer-count)]
+   (for [flt (filters-full)]
     (let [flt-id (:id flt)
           the-dataset (all-relevant-hero-data flt-id)]
       (doseq [q (questions-full)]
@@ -294,4 +294,4 @@
                         (range (count options)))
               nipped (nippy/freeze to-save)
               to-store-key (key-gen-func qid flt-id)]
-          (set-key to-store-key nipped))))))
+          (set-key to-store-key nipped)))))))
