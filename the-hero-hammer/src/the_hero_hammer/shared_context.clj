@@ -265,16 +265,16 @@
             ) all-rel-data)))
 
 (defn full-update-for-questions []
-  (for [flt (filters-full)]
+  (for [key-gen-func (fn-question-filter-top-answer-count)
+        flt (filters-full)]
     (let [flt-id (:id flt)
           the-dataset (all-relevant-hero-data flt-id)]
-      (into []
-        (for [q (questions-full)]
-          (let [options (:options q)
-                grouped-single (group-by-single-question the-dataset q)]
-            (into []
-                  (map-indexed
-                    #(hash-map
-                      :option %2
-                      :results (highest-for-group grouped-single %1 10))
-                   options))))))))
+      (doseq [q (questions-full)]
+        (let [qid (:id q)
+              options (:options q)
+              grouped-single (group-by-single-question the-dataset q)
+              to-save (mapv #(highest-for-group grouped-single %1 10)
+                        (range (count options)))
+              nipped (nippy/freeze to-save)
+              to-store-key (key-gen-func qid flt-id)]
+          (set-key to-store-key nipped))))))
