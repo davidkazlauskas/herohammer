@@ -41,6 +41,11 @@
   (str js/opponentStatsLink "/"
        hu-s "-" flt))
 
+(defn construct-link-to-question-stats
+  [hu-s flt]
+  (str js/questionStatsLink "/"
+       hu-s "-" flt))
+
 (defn construct-link-to-10-random-comments []
   (str js/randCommentsLink
        "/" js/heroUser "-" js/heroOpponent))
@@ -105,6 +110,13 @@
         hu-s (sel-value hu)]
     (aset js/window "location"
           (construct-link-to-opponent-stats hu-s 0))))
+
+; hero-user hero-opponent user-filter
+(defn ^:export goToQuestionStats []
+  (let [sel-box (by-id "question-view-selection")
+        sel-val (sel-value hu)]
+    (aset js/window "location"
+          (construct-link-to-question-stats sel-val 0))))
 
 (defn ^:export updateHeroSquares []
   (let [hu (by-id "hero-user")
