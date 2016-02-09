@@ -93,6 +93,10 @@
   (Integer. (clojure.string/replace
               (nth the-key 2) #"^(\d+).*$" "$1")))
 
+(defn extract-opponent-hero-from-key [the-key]
+  (Integer. (clojure.string/replace
+              (nth the-key 2) #"^\d+-(\d+).*$" "$1")))
+
 (defn gen-map-reduce-tasks-global [max-proc]
   (let [lol-args
         {; generic
