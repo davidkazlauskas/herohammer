@@ -1131,6 +1131,12 @@
              :data (map-hero-icon-and-name-to-data heroes squares %2))
           opts the-data)))
 
+(defn render-answers [the-data]
+  (for [i the-data]
+   (let [curr-ans (:answer i)]
+    (html [:div {:class "row text-center"}
+          [:h4 "Answer: " curr-ans]]))))
+
 (defn generic-render-question-data [id]
   (let [the-split (split-question-and-filter id)
         question-id (:question the-split)
@@ -1139,12 +1145,15 @@
         this-q (nth full-q question-id)
         q-val (:question this-q)
         rel-data (fetch-relevant-question-data
-                   question-id flt-id)]
+                   question-id flt-id)
+        wrapped (wrap-question-data this-q rel-data)
+        ]
    (wrap-html (html
                 [:div {:class "row text-center"}
                  [:h3 "Stats for question:"]]
                 [:div {:class "row text-center"}
-                 [:h4 q-val]])
+                 [:h4 q-val]]
+                (render-answers wrapped))
               )))
 
 (defn lol-render-question-data [id]
