@@ -34,6 +34,9 @@
 (defn dota-generate-most-popular-heroes []
   ["dota" "glob-question-count" "most-popular-heroes"])
 
+(defn dota-generate-most-popular-opponents []
+  ["dota" "glob-question-count" "most-popular-opponents"])
+
 (defn dota-generate-hero-stats-count []
   ["dota" "glob-question-count" "hero-stats-count"])
 
@@ -112,6 +115,11 @@
           :turn-key-to-uniq-matchup extract-user-hero-from-key
           :distinct-sort-function scon/distinct-java-array-sum
           :matchup-question-count-func (fn [_] 1)})
+        pop-opponents-args (merge dota-args
+         {:most-popular-matchups-key (dota-generate-most-popular-opponents)
+          :turn-key-to-uniq-matchup extract-opponent-hero-from-key
+          :distinct-sort-function scon/distinct-java-array-sum
+          :matchup-question-count-func (fn [_] 1)})
         proc-heroes-args (merge dota-args
          {:glob-question-key (dota-generate-hero-stats-count)
           :id-key-gen extract-user-hero-from-key
@@ -134,6 +142,8 @@
      (scon/most-popular-matchups-proc-job dota-args)
      ; most popular heroes
      (scon/most-popular-matchups-proc-job pop-heroes-args)
+     ; process most popular opponents
+     (scon/most-popular-matchups-proc-job pop-opponents-args)
      ; process hero counts
      (scon/generic-processing-job-proc-hero-counts proc-heroes-args)
      ]))
