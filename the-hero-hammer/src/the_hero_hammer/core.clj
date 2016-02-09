@@ -1125,8 +1125,7 @@
 (defn wrap-question-data [question the-data]
   (let [opts (:options question)
         heroes (heroes-full)
-        squares (get-hero-squares)
-        idx-rng (range (count opts))]
+        squares (get-hero-squares)]
     (mapv #(hash-map
              :answer %1
              :data (map-hero-icon-and-name-to-data heroes squares %2))
