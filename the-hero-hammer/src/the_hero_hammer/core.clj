@@ -479,6 +479,7 @@
   (let [curr-tab (current-tab)
         mpage (main-page-link)
         byhero (by-hero-link)
+        byopponent (by-opponent-link)
         byquestion (by-question-link)]
    (html [:div {:class "text-center"}
    [:div {:class "row"}
@@ -491,7 +492,7 @@
      [:li (is-main-tab "by-hero" curr-tab)
       [:a {:href byhero} "By hero"]]
      [:li (is-main-tab "by-opponent" curr-tab)
-      [:a {:href byhero} "By opponent"]]
+      [:a {:href byopponent} "By opponent"]]
      ;[:li (is-main-tab "by-question" curr-tab)
       ;[:a {:href byquestion} "By question"]]
      ]]
