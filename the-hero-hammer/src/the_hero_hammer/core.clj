@@ -708,7 +708,7 @@
            [:div {:class "row"}
             [:div {:class "col-md-3"}]
             [:div {:class "col-md-6"}
-             [:h4 "Most popular user heroes"]
+             [:h4 "Most popular opponent heroes"]
              (render-most-popular-heroes wrapped)]
             [:div {:class "col-md-3"}]]]
         (update-hero-squares-script))))))
