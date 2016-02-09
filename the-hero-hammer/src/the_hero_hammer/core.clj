@@ -1041,6 +1041,12 @@
 (defn dota-render-hero-data [id]
   (dota-ctx (generic-render-hero-data id)))
 
+(defn lol-render-opponent-data [id]
+  (lol-ctx (generic-render-hero-data id)))
+
+(defn dota-render-opponent-data [id]
+  (dota-ctx (generic-render-hero-data id)))
+
 (defn random-range [to-make max-num]
   (loop [the-set #{}]
     (if (or (>= (count the-set) to-make) (>= (count the-set) max-num))
@@ -1184,6 +1190,7 @@
   (GET "/comments-lol/recent/:matchup" [matchup] (lol-matchup-recent-comments matchup))
   (GET "/matchup-lol/:id" [id] (lol-render-matchup-data id))
   (GET "/hero-lol/:id" [id] (lol-render-hero-data id))
+  (GET "/opponent-lol/:id" [id] (lol-render-opponent-data id))
   (POST "/questions-post-lol" req (lol-post-questions req)))
 
 (defroutes routes-dota
@@ -1198,6 +1205,7 @@
   (GET "/comments-dota/recent/:matchup" [matchup] (dota-matchup-recent-comments matchup))
   (GET "/matchup-dota/:id" [id] (dota-render-matchup-data id))
   (GET "/hero-dota/:id" [id] (dota-render-hero-data id))
+  (GET "/opponent-dota/:id" [id] (dota-render-opponent-data id))
   (POST "/questions-post-dota" req (dota-post-questions req)))
 
 (defroutes myapp
