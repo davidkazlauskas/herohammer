@@ -1108,6 +1108,15 @@
 (defn dota-render-opponent-data [id]
   (dota-ctx (generic-render-opponent-data id)))
 
+(defn generic-render-question-data [id]
+  (html [:p "pezl"]))
+
+(defn lol-render-question-data [id]
+  (lol-ctx (generic-render-question-data id)))
+
+(defn dota-render-question-data [id]
+  (dota-ctx (generic-render-question-data id)))
+
 (defn random-range [to-make max-num]
   (loop [the-set #{}]
     (if (or (>= (count the-set) to-make) (>= (count the-set) max-num))
@@ -1252,6 +1261,7 @@
   (GET "/matchup-lol/:id" [id] (lol-render-matchup-data id))
   (GET "/hero-lol/:id" [id] (lol-render-hero-data id))
   (GET "/opponent-lol/:id" [id] (lol-render-opponent-data id))
+  (GET "/question-stats-lol/:id" [id] (lol-render-question-data id))
   (POST "/questions-post-lol" req (lol-post-questions req)))
 
 (defroutes routes-dota
@@ -1267,6 +1277,7 @@
   (GET "/matchup-dota/:id" [id] (dota-render-matchup-data id))
   (GET "/hero-dota/:id" [id] (dota-render-hero-data id))
   (GET "/opponent-dota/:id" [id] (dota-render-opponent-data id))
+  (GET "/question-stats-dota/:id" [id] (dota-render-question-data id))
   (POST "/questions-post-dota" req (dota-post-questions req)))
 
 (defroutes myapp
