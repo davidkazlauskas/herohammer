@@ -718,6 +718,18 @@
       (assoc (html-context) :current-tab "by-hero")
       (generic-by-hero-page req))))
 
+(defn dota2-by-opponent-page [req]
+  (dota-ctx
+    (rebind-html-context
+      (assoc (html-context) :current-tab "by-opponent")
+      (generic-by-opponent-page req))))
+
+(defn lol-by-opponent-page [req]
+  (lol-ctx
+    (rebind-html-context
+      (assoc (html-context) :current-tab "by-opponent")
+      (generic-by-opponent-page req))))
+
 (defn generic-by-question-page [req]
   (wrap-html
     (wrap-in-panel
