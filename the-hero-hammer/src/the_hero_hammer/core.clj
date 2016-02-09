@@ -297,7 +297,7 @@
              [:span "The Hero Hammer 2016"]]]
            [:div {:class "navbar navbar-default navbar-fixed-bottom"}
             [:style ".stMainServices {height: 30px !important;}"]
-            [:div {:class "container"}
+            [:div {:class "container text-center"}
              [:span "Enjoying this site? Consider "
               [:a "donating a record"]
               " or sharing with others: "]
