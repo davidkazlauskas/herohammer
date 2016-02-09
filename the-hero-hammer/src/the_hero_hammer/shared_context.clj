@@ -209,18 +209,24 @@
          (mapv #(hash-map :user % :opponent opponent-num)))]
    (sum-all-matchups-generic filter-id matchups)))
 
-(defn update-all-hero-stats [hero-vec]
+(defn update-all-hero-stats-generic [hero-vec sum-func]
   (let [key-gen-func (fn-hero-question-filter-count)]
    (for [flt (filters-full)
         hero hero-vec]
     (let [flt-id (:id flt)
-          sum-res (sum-all-matchups-with-hero hero flt-id)]
+          sum-res (sum-func hero flt-id)]
       (doseq [i sum-res]
         (let [q-id (get-in i [:question :id])
               r-count (:sum i)
               frozen (nippy/freeze r-count)
               the-key (key-gen-func hero q-id flt-id)]
           (set-key the-key frozen)))))))
+
+(defn update-all-hero-stats [hero-vec]
+  (update-all-hero-stats-generic hero-vec sum-all-matchups-with-hero))
+
+(defn update-all-opponent-stats [hero-vec]
+  (update-all-hero-stats-generic hero-vec sum-all-matchups-with-opponent))
 
 (defn generic-processing-job-proc-hero-counts [argmap]
   (generic-processing-job-final-reduce
