@@ -730,10 +730,29 @@
       (assoc (html-context) :current-tab "by-opponent")
       (generic-by-opponent-page req))))
 
+(defn question-dropdown []
+  (html
+    [:select {:class "form-control"}
+     (for [q (questions-full)]
+       [:option {:value (:id q)} (:question q)]
+       )]))
+
 (defn generic-by-question-page [req]
   (wrap-html
     (wrap-in-panel
-      (html [:h4 "View stats by question"]))))
+      (html [:h4 "View stats by question for user hero"]
+            [:div {:class "row"}
+             [:div {:class "col-md-2"}]
+             [:div {:class "col-md-8"}
+              (question-dropdown)]
+             [:div {:class "col-md-2"}]]
+            [:div {:class "row text-center"
+                   :style "margin-top: 10px; margin-bottom: 10px;"}
+             [:button {:type "button"
+                       :class "btn btn-default"
+                       :onclick (show-10-random-comments-js-func)}
+                  "View results"]]
+            ))))
 
 (defn dota2-by-question-page [req]
   (dota-ctx
