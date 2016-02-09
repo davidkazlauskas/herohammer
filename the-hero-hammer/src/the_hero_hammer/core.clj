@@ -1143,13 +1143,16 @@
              (let [answers (:answers data)
                    hero-square (:hero-square data)
                    hero-name (:hero-name data)
-                   sum-ans (apply + answers)]
+                   ratio (:ratio data)
+                   sum-ans (apply + answers)
+                   ]
                [:tr
                  [:td {:style "width: 50px;"}
                   [:img {:width 32
                          :height 32
                          :src hero-square}]]
                  [:td [:span hero-name]]
+                 [:td [:span (round-percent-ratio ratio) "%"]]
                ])
              )
            ]
