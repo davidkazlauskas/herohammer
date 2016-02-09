@@ -112,6 +112,7 @@
      :matchup-link-start "/matchup-lol"
      :hero-link-start "/hero-lol"
      :opponent-link-start "/opponent-lol"
+     :question-link-start "/question-stats-lol"
      :add-record-link-start "/questions-lol"
      :record-link-start "/show-record-lol"
      :registration-link "/questions-lol"
@@ -143,6 +144,7 @@
      :matchup-link-start "/matchup-dota"
      :hero-link-start "/hero-dota"
      :opponent-link-start "/opponent-dota"
+     :question-link-start "/question-stats-dota"
      :add-record-link-start "/questions-dota"
      :record-link-start "/show-record-dota"
      :registration-link "/questions-dota"
@@ -386,6 +388,8 @@
          (:hero-link-start (html-context))
          "'; opponentStatsLink = '"
          (:opponent-link-start (html-context))
+         "'; questionStatsLink = '"
+         (:question-link-start (html-context))
          "'; heroSquares = "
          (:squares-javascript (html-context))
          ";"]))
