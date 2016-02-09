@@ -43,6 +43,9 @@
 (defn dota-generate-opponent-stats-count []
   ["dota" "glob-question-count" "opponent-stats-count"])
 
+(defn dota-generate-question-stats-count []
+  ["dota" "glob-question-count" "question-proc-count"])
+
 (defn dota-generate-matchup-question-count
   "Matchup pair - {:user 7 :opponent 7}"
   [matchup-pair]
@@ -149,6 +152,11 @@
           :id-key-gen extract-opponent-hero-from-key
           :most-popular-matchups-key (dota-generate-opponent-stats-count)
           :turn-key-to-uniq-matchup extract-opponent-hero-from-key})
+        proc-questions-args (merge dota-args
+         {:glob-question-key (dota-generate-question-stats-count)
+          :id-key-gen extract-opponent-hero-from-key
+          :most-popular-matchups-key (dota-generate-question-stats-count)
+          :turn-key-to-uniq-matchup extract-opponent-hero-from-key})
         ]
       ;:glob-question-key -> global key for questions (to db)
       ;:id-key-gen -> function with 1 arg (id) to get glob question id
@@ -172,6 +180,8 @@
      (scon/generic-processing-job-proc-hero-counts proc-heroes-args)
      ; process opponent counts
      (scon/generic-processing-job-proc-opponent-counts proc-opponents-args)
+     ; process question counts
+     (generic-processing-job-proc-question-counts proc-questions-args)
      ]))
 
 (defn get-map-reduce-job [max-proc]
