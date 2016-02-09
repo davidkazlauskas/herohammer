@@ -1125,15 +1125,19 @@
 (defn wrap-question-data [question the-data]
   (let [opts (:options question)
         heroes (heroes-full)
-        squares (get-hero-squares)]
+        squares (get-hero-squares)
+        ans-range (range (count opts))
+        ]
     (mapv #(hash-map
-             :answer %1
+             :answer (nth opts %1)
+             :index %1
              :data (map-hero-icon-and-name-to-data heroes squares %2))
-          opts the-data)))
+          ans-range the-data)))
 
 (defn render-answers [the-data]
   (for [i the-data]
-   (let [curr-ans (:answer i)
+   (let [curr-idx (:index i)
+         curr-ans (:answer i)
          curr-data (:data i)]
     (html [:div {:class "row text-center"}
           [:h4 "Answer: " curr-ans]
@@ -1144,15 +1148,16 @@
                    hero-square (:hero-square data)
                    hero-name (:hero-name data)
                    ratio (:ratio data)
-                   sum-ans (apply + answers)
-                   ]
+                   curr-count (nth answers curr-idx)
+                   sum-ans (apply + answers)]
                [:tr
                  [:td {:style "width: 50px;"}
                   [:img {:width 32
                          :height 32
                          :src hero-square}]]
                  [:td [:span hero-name]]
-                 [:td [:span (round-percent-ratio ratio) "%"]]
+                 [:td [:span (round-percent-ratio ratio) "% ("
+                       curr-count " out of " sum-ans " samples)"]]
                ])
              )
            ]
