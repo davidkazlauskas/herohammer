@@ -228,12 +228,20 @@
 (defn update-all-opponent-stats [hero-vec]
   (update-all-hero-stats-generic hero-vec sum-all-matchups-with-opponent))
 
-(defn generic-processing-job-proc-hero-counts [argmap]
+(defn generic-processing-job-final-reduce-distinct [argmap the-func]
   (generic-processing-job-final-reduce
     (merge argmap
            {:final-reduce-job
             (fn [the-val]
               (let [dist (into [] (distinct the-val))]
-                (update-all-hero-stats dist)))
+                (the-func dist)))
             })))
+
+(defn generic-processing-job-proc-hero-counts [argmap]
+  (generic-processing-job-final-reduce-distinct
+    argmap update-all-hero-stats))
+
+(defn generic-processing-job-proc-opponent-counts [argmap]
+  (generic-processing-job-final-reduce-distinct
+    argmap update-all-opponent-stats))
 
