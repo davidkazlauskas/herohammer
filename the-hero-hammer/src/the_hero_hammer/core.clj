@@ -318,6 +318,9 @@
 (defn show-10-recent-comments-js-func []
   "the_hero_hammer.js_client.show10RecentComments();")
 
+(defn go-to-gero-stats-js-func []
+  "the_hero_hammer.js_client.goToQuestionStats();")
+
 (defn get-radio-set []
   (:radio-set (html-context)))
 
@@ -748,9 +751,10 @@
              [:div {:class "col-md-2"}]]
             [:div {:class "row text-center"
                    :style "margin-top: 10px; margin-bottom: 10px;"}
-             [:button {:type "button"
+             [:button {:id "question-view-selection"
+                       :type "button"
                        :class "btn btn-default"
-                       :onclick (show-10-random-comments-js-func)}
+                       :onclick (go-to-gero-stats-js-func)}
                   "View results"]]
             ))))
 
