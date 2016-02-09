@@ -263,6 +263,9 @@
          "doNotHash: false, doNotCopy: false, hashAddressBar: false});")]
         ))
 
+(defn q-post-link [] (:question-post-link (html-context)))
+(defn q-get-link [] (:question-get-link (html-context)))
+
 (defn default-q-get-link []
   (or (q-get-link) (dota-ctx (q-get-link))))
 
@@ -806,9 +809,6 @@
 
 (defn lol-page [req]
   (lol-ctx (generic-main-page req)))
-
-(defn q-post-link [] (:question-post-link (html-context)))
-(defn q-get-link [] (:question-get-link (html-context)))
 
 (defn generic-render-questions
   [matchup req]
