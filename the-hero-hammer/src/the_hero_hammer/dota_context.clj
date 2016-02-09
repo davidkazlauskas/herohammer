@@ -181,7 +181,7 @@
      ; process opponent counts
      (scon/generic-processing-job-proc-opponent-counts proc-opponents-args)
      ; process question counts
-     (generic-processing-job-proc-question-counts proc-questions-args)
+     (scon/generic-processing-job-proc-question-counts proc-questions-args)
      ]))
 
 (defn get-map-reduce-job [max-proc]
