@@ -871,7 +871,7 @@
     {:hero (Integer. (nth findings 1))
      :filter (Integer. (nth findings 2))}))
 
-(defn render-answers [pairs]
+(defn render-answers-single [pairs]
   (let [questions (questions-full)]
     (html [:table {:class "table table-condensed"}
        (for [i pairs]
@@ -916,7 +916,7 @@
             (render-hero-pair
             {:src-user square-user :src-opp square-opp})
           [:p "Date: " (date-from-unix date)]
-          (render-answers parted)
+          (render-answers-single parted)
           [:div {:class "row text-center"}
            [:div {:class "panel text-center col-md-12"}
             (if comm (html [:h4 "User comment"]
