@@ -249,5 +249,18 @@
     argmap update-all-opponent-stats))
 
 (defn all-relevant-hero-data [filter-id]
-  (mapv #(fetch-relevant-hero-data % filter-id)
+  (mapv #(hash-map :data (fetch-relevant-hero-data %1 filter-id) :hero-id %1)
         (range (count (heroes-full)))))
+
+(defn highest-for-group [data-set answer amount]
+  (take amount (sort-by #(get-in % [:answers answer]) > data-set)))
+
+(defn group-by-single-question [all-rel-data the-question]
+  (let [the-id (:id the-question)]
+    (mapv #(let [h-id (:hero-id %1)
+                 data (:data %1)
+                 this-q-ans (nth data the-id)
+                 raw-ans (:answers this-q-ans)]
+             {:hero-id h-id :answers raw-ans}
+            ) all-rel-data)))
+
