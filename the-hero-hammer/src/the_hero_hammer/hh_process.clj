@@ -75,6 +75,10 @@
   (fetch-relevant-data-generic
     (fn-hero-question-filter-count) hero filter-id))
 
+(defn fetch-relevant-opponent-data [hero filter-id]
+  (fetch-relevant-data-generic
+    (fn-opponent-question-filter-count) hero filter-id))
+
 ; GENRIC MAP REDUCE
 (defn map-reduce-task-context [the-range id-func nipped]
   {:range the-range
