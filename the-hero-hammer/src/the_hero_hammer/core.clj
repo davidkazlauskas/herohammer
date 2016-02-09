@@ -1029,6 +1029,32 @@
                                 %1])))]
               (gen-fb-comments hero-full-link 5)))))
 
+(defn generic-render-opponent-data [id]
+  (let [the-data (hero-data-split id)
+        the-hero (:hero the-data)
+        the-filter (:filter the-data)
+        hero-full-link (full-url (gen-link-opponent-filter the-hero the-filter))
+        sort-func (:question-sort-function (html-context))
+        rel-data (fetch-relevant-opponent-data the-hero the-filter)
+        sorted-data (into [] (sort-by sort-func > rel-data))
+        squares (get-hero-squares)
+        heroes (heroes-full)
+        hn (nth heroes the-hero)
+        hs (nth squares the-hero)]
+          (wrap-html
+            (html
+              (export-matchup-data-to-js the-hero -1)
+              (render-vs-title "any" hn)
+              (render-hero-pair
+                {:src-user (question-sign-img) :src-opp hs})
+                  [:ul {:class "list-group"}
+              (->> sorted-data
+                   (map render-single-question)
+                   (map #(html
+                           [:li {:class "list-group-item"}
+                                %1])))]
+              (gen-fb-comments hero-full-link 5)))))
+
 (defn lol-render-matchup-data [id]
   (lol-ctx (generic-render-matchup-data id)))
 
@@ -1042,10 +1068,10 @@
   (dota-ctx (generic-render-hero-data id)))
 
 (defn lol-render-opponent-data [id]
-  (lol-ctx (generic-render-hero-data id)))
+  (lol-ctx (generic-render-opponent-data id)))
 
 (defn dota-render-opponent-data [id]
-  (dota-ctx (generic-render-hero-data id)))
+  (dota-ctx (generic-render-opponent-data id)))
 
 (defn random-range [to-make max-num]
   (loop [the-set #{}]
