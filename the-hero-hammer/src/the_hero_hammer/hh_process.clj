@@ -81,7 +81,7 @@
 
 (defn fetch-relevant-question-data [question-id filter-id]
   (let [the-key-func (fn-question-filter-top-answer-count)
-        the-key (the-key question-id filter-id)
+        the-key (the-key-func question-id filter-id)
         pulled (get-key the-key)
         nipped (if pulled (nippy/thaw pulled) nil)]
     nipped))
