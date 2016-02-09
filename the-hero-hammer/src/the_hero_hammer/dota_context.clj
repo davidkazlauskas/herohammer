@@ -98,6 +98,12 @@
   ["dota" "question-opponent-filter-count"
    (str hero "-" question-id "-" filter-id)])
 
+(defn dota-generate-filter-question-top-count
+  "Generate hero question count for question and filter."
+  [question-id filter-id]
+  ["dota" "question-answer-filter-count"
+   (str question-id "-" filter-id)])
+
 (defn drop-tail-from-key [the-key]
   (clojure.string/replace (nth the-key 2) #"^(\d+)-(\d+)-.*$" "$1-$2"))
 
@@ -352,6 +358,7 @@
      :matchup-filter-count dota-generate-filter-matchup-question-count
      :matchup-hero-count dota-generate-filter-hero-question-count
      :matchup-opponent-count dota-generate-filter-opponent-question-count
+     :matchup-question-top-answer dota-generate-filter-question-top-count
      :matchup-most-popular-global dota-generate-most-popular-matchups
      :hero-most-popular-global dota-generate-most-popular-heroes
      :opponent-most-popular-global dota-generate-most-popular-opponents
