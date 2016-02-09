@@ -105,6 +105,7 @@
   (lol-ctx
     {:main-page-for-ctx "/lol"
      :main-page-by-hero "/lol-by-hero"
+     :main-page-by-opponent "/lol-by-opponent"
      :main-page-by-question "/lol-by-question"
      :question-post-link "/questions-post-lol"
      :question-get-link "/questions-lol"
@@ -134,6 +135,7 @@
   (dota-ctx
     {:main-page-for-ctx "/dota"
      :main-page-by-hero "/dota-by-hero"
+     :main-page-by-opponent "/dota-by-opponent"
      :main-page-by-question "/dota-by-question"
      :question-post-link "/questions-post-dota"
      :question-get-link "/questions-dota"
@@ -178,6 +180,9 @@
 
 (defn by-hero-link []
   (:main-page-by-hero (html-context)))
+
+(defn by-opponent-link []
+  (:main-page-by-opponent (html-context)))
 
 (defn by-question-link []
   (:main-page-by-question (html-context)))
@@ -485,6 +490,8 @@
       [:a {:href mpage} "By matchup"]]
      [:li (is-main-tab "by-hero" curr-tab)
       [:a {:href byhero} "By hero"]]
+     [:li (is-main-tab "by-opponent" curr-tab)
+      [:a {:href byhero} "By opponent"]]
      ;[:li (is-main-tab "by-question" curr-tab)
       ;[:a {:href byquestion} "By question"]]
      ]]
