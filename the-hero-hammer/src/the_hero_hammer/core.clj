@@ -739,7 +739,8 @@
 
 (defn question-dropdown []
   (html
-    [:select {:class "form-control"}
+    [:select {:id "question-view-selection"
+              :class "form-control"}
      (for [q (questions-full)]
        [:option {:value (:id q)} (:question q)]
        )]))
@@ -755,8 +756,7 @@
              [:div {:class "col-md-2"}]]
             [:div {:class "row text-center"
                    :style "margin-top: 10px; margin-bottom: 10px;"}
-             [:button {:id "question-view-selection"
-                       :type "button"
+             [:button {:type "button"
                        :class "btn btn-default"
                        :onclick (go-to-gero-stats-js-func)}
                   "View results"]]
