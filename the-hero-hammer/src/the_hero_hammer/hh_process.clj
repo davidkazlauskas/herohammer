@@ -56,9 +56,8 @@
               matchup filter-id))
        (into [])))
 
-(defn fetch-relevant-hero-data [hero filter-id]
+(defn fetch-relevant-data-generic [key-func hero filter-id]
   (let [questions (questions-full)
-        key-func (fn-hero-question-filter-count)
         the-keys (map
                    #(key-func hero (:id %) filter-id)
                    questions)
@@ -69,9 +68,12 @@
           (map-indexed #(let [the-q (nth questions %1)]
                           (assoc the-q
                             :answers (or %2 (empty-q-vec the-q))))
-                       thawed)
-        ]
-    with-questions))
+                       thawed)]
+      with-questions))
+
+(defn fetch-relevant-hero-data [hero filter-id]
+  (fetch-relevant-data-generic
+    (fn-hero-question-filter-count) hero filter-id))
 
 ; GENRIC MAP REDUCE
 (defn map-reduce-task-context [the-range id-func nipped]
