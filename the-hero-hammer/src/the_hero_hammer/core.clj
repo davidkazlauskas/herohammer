@@ -1143,14 +1143,16 @@
           [:h4 "Answer: " curr-ans]
           [:table {:class
                    "table table-hover table-striped table-condensed"}
-           (for [data curr-data]
-             (let [answers (:answers data)
+           (map-indexed
+             (fn [index data]
+              (let [answers (:answers data)
                    hero-square (:hero-square data)
                    hero-name (:hero-name data)
                    ratio (:ratio data)
                    curr-count (nth answers curr-idx)
                    sum-ans (apply + answers)]
                [:tr
+                 [:td {:style "width: 30px;"} "#" (inc index)]
                  [:td {:style "width: 50px;"}
                   [:img {:width 32
                          :height 32
@@ -1158,8 +1160,8 @@
                  [:td [:span hero-name]]
                  [:td [:span (round-percent-ratio ratio) "% ("
                        curr-count " out of " sum-ans " samples)"]]
-               ])
-             )
+               ]))
+             curr-data)
            ]
           ]))))
 
