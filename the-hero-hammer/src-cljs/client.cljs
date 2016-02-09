@@ -100,7 +100,7 @@
           (construct-link-to-hero-stats hu-s 0))))
 
 ; hero-user hero-opponent user-filter
-(defn ^:export goToHeroStats []
+(defn ^:export goToOpponentStats []
   (let [hu (by-id "hero-opponent")
         hu-s (sel-value hu)]
     (aset js/window "location"
