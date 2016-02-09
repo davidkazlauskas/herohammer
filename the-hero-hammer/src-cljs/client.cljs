@@ -114,7 +114,7 @@
 ; hero-user hero-opponent user-filter
 (defn ^:export goToQuestionStats []
   (let [sel-box (by-id "question-view-selection")
-        sel-val (sel-value hu)]
+        sel-val (sel-value sel-box)]
     (aset js/window "location"
           (construct-link-to-question-stats sel-val 0))))
 
