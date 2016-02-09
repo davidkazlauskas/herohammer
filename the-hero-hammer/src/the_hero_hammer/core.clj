@@ -263,6 +263,9 @@
          "doNotHash: false, doNotCopy: false, hashAddressBar: false});")]
         ))
 
+(defn default-q-get-link []
+  (or (q-get-link) (dota-ctx (q-get-link))))
+
 (defn wrap-html [towrap]
   (html [:html
          [:head
@@ -299,7 +302,7 @@
             [:style ".stMainServices {height: 30px !important;}"]
             [:div {:class "container text-center"}
              [:span "Enjoying this site? Consider "
-              [:a "donating a record"]
+              [:a {:href (default-q-get-link)} "donating a record"]
               " or sharing with others: "]
               [:span {:class "st_facebook_hcount"
                       :displayText "Facebook"}]
