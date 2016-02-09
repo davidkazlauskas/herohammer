@@ -1113,8 +1113,14 @@
     {:question (Integer. (nth findings 1))
      :filter (Integer. (nth findings 2))}))
 
-(defn map-hero-icon-and-name-to-data [index heroes squares the-data]
-  (let [the-data]))
+(defn map-hero-icon-and-name-to-data [heroes squares the-data]
+  (mapv #(let [this-idx (:hero-id %1)
+               the-name (nth heroes this-idx)
+               the-square (nth squares this-idx)]
+           (merge %1
+                {:hero-name the-name
+                 :hero-square the-square}
+                )) the-data))
 
 (defn wrap-question-data [question the-data]
   (let [opts (:options question)
@@ -1123,8 +1129,8 @@
         idx-rng (range (count opts))]
     (mapv #(hash-map
              :answer %1
-             :data (map-hero-icon-and-name-to-data %3 heroes squares %2))
-          opts the-data idx-rng)))
+             :data (map-hero-icon-and-name-to-data heroes squares %2))
+          opts the-data)))
 
 (defn generic-render-question-data [id]
   (let [the-split (split-question-and-filter id)
