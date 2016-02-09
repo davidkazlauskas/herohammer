@@ -1108,8 +1108,24 @@
 (defn dota-render-opponent-data [id]
   (dota-ctx (generic-render-opponent-data id)))
 
+(defn split-question-and-filter [the-str]
+  (let [findings (re-find #"(\d+)+-(\d+)" the-str)]
+    {:question (Integer. (nth findings 1))
+     :filter (Integer. (nth findings 2))}))
+
 (defn generic-render-question-data [id]
-  (html [:p "pezl"]))
+  (let [the-split (split-question-and-filter id)
+        question-id (:question the-split)
+        flt-id (:filter the-split)
+        full-q (questions-full)
+        this-q (nth full-q question-id)
+        q-val (:question this-q)]
+   (wrap-html (html
+                [:div {:class "row text-center"}
+                 [:h3 "Stats for question:"]]
+                [:div {:class "row text-center"}
+                 [:h4 q-val]])
+              )))
 
 (defn lol-render-question-data [id]
   (lol-ctx (generic-render-question-data id)))
