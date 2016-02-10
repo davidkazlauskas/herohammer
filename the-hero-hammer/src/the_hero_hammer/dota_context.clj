@@ -193,8 +193,8 @@
   (questions-m
     ("end-res" "Won or lost?"
            "Won" "Lost")
-    ("mtype" "Match solo queue or ranked?"
-           "Solo" "Ranked")
+    ("mtype" "Match normal or ranked?"
+           "Normal" "Ranked")
     ("poking" "I got poked a lot" "yes" "no")
     ("poking-o" "I poked my opponent a lot" "yes" "no")
     ("sustain" "I could not sustain well" "yes" "no")
