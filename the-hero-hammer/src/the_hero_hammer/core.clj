@@ -680,7 +680,7 @@
       (html
         (context-js-variables)
         [:div {:class "input-group col-md-12"}
-           [:h4 "View stats by hero"]
+           [:h4 "View stats by user hero"]
            [:div {:class "row"
                   :style "margin-bottom: 7px;"}
              [:div {:class "col-md-4"}]
@@ -723,7 +723,7 @@
       (html
         (context-js-variables)
         [:div {:class "input-group col-md-12"}
-           [:h4 "View stats by hero"]
+           [:h4 "View stats by opponent"]
            [:div {:class "row"
                   :style "margin-bottom: 7px;"}
              [:div {:class "col-md-4"}]
