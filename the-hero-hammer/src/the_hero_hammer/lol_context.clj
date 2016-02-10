@@ -193,8 +193,8 @@
   (questions-m
     ("end-res" "Won or lost?"
            "Won" "Lost")
-    ("mtype" "Match solo queue or ranked?"
-           "Solo" "Ranked")
+    ("mtype" "Match normal or ranked?"
+           "Normal" "Ranked")
     ("ladder" "What is your ranking?"
               "Bronze" "Silver" "Gold" "Platinum"
               "Diamond" "Master" "Challenger")
