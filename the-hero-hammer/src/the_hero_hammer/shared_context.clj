@@ -170,13 +170,23 @@
                        (vec the-arr))
        :reduce-function (fn [the-arr mapped]
                           (aset the-arr 10 mapped)
-                          (println "Pre reduce:" (vec the-arr))
                           (distinct-func the-arr)
-                          (println "Post distinct:" (vec the-arr))
                           (most-popular-question-sort the-arr)
-                          (println "Post sort:" (vec the-arr))
                           the-arr)
       }))
+
+(defn dummy-final-reduce-proc-job
+  "Argmap:
+  :save-key -> key for saving res to
+  :final-reduce-function -> what to call finally
+  "
+  [argmap]
+  (let [save-key (:save-key argmap)
+        final-reduce (:final-reduce-function argmap)]
+    {:map-function (fn [_] nil)
+     :initial-reduce (fn [_] nil)
+     :final-reduce (fn [_] (final-reduce))
+     :reduce-function (fn [_] nil)}))
 
 (defn sum-all-matchups-generic [filter-id matchups]
   (let [q-filt-func (fn-question-filter-count)
@@ -317,18 +327,18 @@
           (mapv #(let [this-num %1
                        the-res (get-single-hero-question-count
                                 % make-match-func)]
-                   {:hero this-num :sum the-res})
+                   {:key this-num :count the-res})
                  (range (count (heroes-full))))]
     all-sums))
 
 (defn update-most-popular-heroes []
   (let [make-match-func (fn [left right] (gen-matchup left right))
         all-sums (heroes-question-counts make-match-func)
-        sorted (take 10 (sort-by :sum > all-sums))]
+        sorted (take 10 (sort-by :count > all-sums))]
     sorted))
 
 (defn update-most-popular-opponents []
   (let [make-match-func (fn [left right] (gen-matchup right left))
         all-sums (heroes-question-counts make-match-func)
-        sorted (take 10 (sort-by :sum > all-sums))]
+        sorted (take 10 (sort-by :count > all-sums))]
     sorted))
