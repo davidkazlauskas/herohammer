@@ -183,10 +183,11 @@
   [argmap]
   (let [save-key (:save-key argmap)
         final-reduce (:final-reduce-function argmap)]
-    {:map-function (fn [_] nil)
+    {:save-key-func save-key
+     :map-function (fn [_] nil)
      :initial-reduce (fn [_] nil)
      :final-reduce (fn [_] (final-reduce))
-     :reduce-function (fn [_] nil)}))
+     :reduce-function (fn [_ _] nil)}))
 
 (defn sum-all-matchups-generic [filter-id matchups]
   (let [q-filt-func (fn-question-filter-count)
